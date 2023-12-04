@@ -14,8 +14,8 @@ export default function Header() {
             <Button
               startContent={
                 <UserIcon
-                  fill=""
-                  filled="#fff"
+                  fill="#F4F4F4"
+                  filled="#F4F4F4"
                   height="18"
                   width="18"
                   label=""
