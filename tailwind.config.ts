@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        white: "#FFFFFF",
+        white: "#F4F4F4",
         black: "#000000",
         main: "#2E2E2E",
         yellow: {
@@ -38,6 +38,9 @@ const config: Config = {
           800: "#27272A",
           900: "#18181B",
         },
+      },
+      fontSize: {
+        xxs: "10px",
       },
     },
   },
