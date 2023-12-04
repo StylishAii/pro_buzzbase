@@ -1,4 +1,5 @@
-import { Button } from "@nextui-org/react";
+import React from "react";
+import { Link, Button } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 
 export default function Header() {
@@ -8,10 +9,10 @@ export default function Header() {
         <div className="flex items-center justify-between h-full">
           <a href="">LOGO</a>
           <div className="flex items-center gap-x-4">
-            <a href="" className="text-sm">
-              ログイン
-            </a>
+            <Link href="" className="text-sm text-white">ログイン</Link>
             <Button
+              href=""
+              as={Link}
               startContent={
                 <UserIcon
                   fill="#F4F4F4"
