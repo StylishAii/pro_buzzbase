@@ -1,6 +1,0 @@
-{
-  "javascript.preferences.importModuleSpecifier": "non-relative",
-  "path-autocomplete.pathMappings": {
-    "@app/*": "${workspaceFolder}/app/*"
-  }
-}
