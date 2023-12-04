@@ -1,5 +1,6 @@
 import { UserImage } from "@app/components/user/UserImage";
 import NavigationItems from "./NavigationItems";
+import { Link, Button } from "@nextui-org/react";
 
 export default function NavigationMenu() {
   return (
@@ -8,23 +9,32 @@ export default function NavigationMenu() {
         <ul className="flex items-center justify-around">
           {NavigationItems.map((item, index) => (
             <li key={index}>
-              <a
+              <Button
+                isIconOnly
                 href={item.href}
-                className="text-xxs flex items-center flex-col gap-y-1"
+                as={Link}
+                startContent={
+                  <item.icon
+                    fill="#F4F4F4"
+                    filled="#F4F4F4"
+                    height="22"
+                    width="22"
+                    label=""
+                  />
+                }
+                className="text-xxs flex items-center flex-col gap-y-1 px-0 bg-transparent overflow-visible"
               >
-                <item.icon
-                  fill="#F4F4F4"
-                  filled="#F4F4F4"
-                  height="22"
-                  width="22"
-                  label=""
-                />
                 {item.label}
-              </a>
+              </Button>
             </li>
           ))}
           <li>
-            <a href="" className="text-xxs flex items-center flex-col gap-y-1">
+            <Button
+              isIconOnly
+              href=""
+              as={Link}
+              className="text-xxs flex items-center flex-col gap-y-1 px-0 bg-transparent isIconOnly overflow-visible"
+            >
               <UserImage
                 src={"/images/default-user-icon-yellow.svg"}
                 width={22}
@@ -32,7 +42,7 @@ export default function NavigationMenu() {
                 alt=""
               />
               マイページ
-            </a>
+            </Button>
           </li>
         </ul>
       </nav>
