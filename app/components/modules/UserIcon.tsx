@@ -2,11 +2,11 @@ import React from "react";
 
 export const UserIcon = ({
   fill = "none",
-  filled,
+  filled = "",
   size = "11",
   height = "16", 
   width = "11", 
-  label,
+  label= "",
   ...props
 }) => {
   return (
