@@ -11,7 +11,7 @@ export default function Header() {
           <div className="flex items-center gap-x-4">
             <Link href="" className="text-sm text-white">ログイン</Link>
             <Button
-              href=""
+              href="/signup"
               as={Link}
               startContent={
                 <UserIcon
