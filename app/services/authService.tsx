@@ -1,5 +1,4 @@
-import axiosInstance from "@app/api/auth/route";
-
+import axiosInstance from "@app/utils/axiosInstance";
 interface SignUpData {
   email: string;
   password: string;
