@@ -11,7 +11,11 @@ interface SignInData {
 }
 
 export const singUp = async (data: SignUpData) => {
-  return axiosInstance.post("/api/v1/auth", data);
+  return axiosInstance.post("/api/v1/auth", {
+    email: data.email,
+    password: data.password,
+    password_confirmation: data.passwordConfirmation,
+  });
 };
 
 export const signIn = async (data: SignInData) => {
