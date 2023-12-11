@@ -3,21 +3,39 @@
 import { EyeFilledIcon } from "@app/components/icon/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "@app/components/icon/EyeSlashFilledIcon";
 import { MailIcon } from "@app/components/icon/MailIcon";
-import { Input } from "@nextui-org/react";
-import React from "react";
+import { singUp } from "@app/services/authService";
+import { Button, Input } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 export default function SignUp() {
-  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = React.useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+
+  const router = useRouter();
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      await singUp({ email, password, passwordConfirmation });
+      router.push("/");
+    } catch (error) {
+      console.log("error");
+    }
+  };
+
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Input
+          onChange={(e) => setEmail(e.target.value)}
           className="caret-zinc-400"
           type="email"
           label="Email"
@@ -37,6 +55,8 @@ export default function SignUp() {
           }
         />
         <Input
+          onChange={(e) => setPassword(e.target.value)}
+          className="caret-zinc-400"
           label="Password"
           placeholder="Enter your password"
           labelPlacement="outside"
@@ -72,9 +92,9 @@ export default function SignUp() {
             </button>
           }
           type={isPasswordVisible ? "text" : "password"}
-          className="max-w-xs"
         />
         <Input
+          onChange={(e) => setPasswordConfirmation(e.target.value)}
           label="Password Confirmation"
           placeholder="Enter your password"
           labelPlacement="outside"
@@ -110,8 +130,11 @@ export default function SignUp() {
             </button>
           }
           type={isConfirmVisible ? "text" : "password"}
-          className="max-w-xs"
+          className="caret-zinc-400"
         />
+        <Button className="bg-yellow-500" type="submit">
+          登録する
+        </Button>
       </form>
     </>
   );
