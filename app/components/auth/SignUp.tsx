@@ -3,6 +3,7 @@
 import { EyeFilledIcon } from "@app/components/icon/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "@app/components/icon/EyeSlashFilledIcon";
 import { MailIcon } from "@app/components/icon/MailIcon";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { singUp } from "@app/services/authService";
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
@@ -15,6 +16,7 @@ export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
 
+  const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
 
   const togglePasswordVisibility = () =>
@@ -25,6 +27,7 @@ export default function SignUp() {
     event.preventDefault();
     try {
       await singUp({ email, password, passwordConfirmation });
+      setIsLoggedIn(true);
       router.push("/");
     } catch (error) {
       console.log("error");
