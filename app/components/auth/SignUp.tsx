@@ -16,6 +16,7 @@ export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const [value, setValue] = useState("");
 
   const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
@@ -41,14 +42,23 @@ export default function SignUp() {
     }
   };
 
+  const validateEmail = (value: string) =>
+    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+
+  const isInvalid = React.useMemo(() => {
+    if (value === "") return false;
+
+    return validateEmail(value) ? false : true;
+  }, [value]);
+
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {errors.map((error, index) => (
-          <ul key={index}>
-            <li>{error}</li>
-          </ul>
-        ))}
+        <ul>
+          {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
         <Input
           onChange={(e) => setEmail(e.target.value)}
           className="caret-zinc-400"
@@ -56,6 +66,10 @@ export default function SignUp() {
           label="Email"
           placeholder="you@example.com"
           labelPlacement="outside"
+          isInvalid={isInvalid}
+          color={isInvalid ? "danger" : "default"}
+          errorMessage={isInvalid && "有効なメールアドレスを入力してください"}
+          onValueChange={setValue}
           startContent={
             <MailIcon
               aria-hidden={true}
