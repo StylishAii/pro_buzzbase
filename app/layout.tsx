@@ -19,13 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja">
-      <body className={`${inter.className} bg-main text-white`}>
+    <html lang="ja" className="h-full">
+      <body className={`${inter.className} bg-main text-white h-full`}>
         <AuthProvider>
           <Providers>
-            <Header />
-            {children}
-            <NavigationMenu />
+            <div>
+              <Header />
+              <main>{children}</main>
+              <NavigationMenu />
+            </div>
           </Providers>
         </AuthProvider>
       </body>
