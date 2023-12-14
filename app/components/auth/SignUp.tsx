@@ -43,7 +43,7 @@ export default function SignUp() {
   };
 
   const validateEmail = (value: string) =>
-    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
   const isInvalid = React.useMemo(() => {
     if (value === "") return false;
