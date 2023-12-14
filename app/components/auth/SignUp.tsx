@@ -7,7 +7,7 @@ import { useAuthContext } from "@app/contexts/useAuthContext";
 import { singUp } from "@app/services/authService";
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -17,6 +17,7 @@ export default function SignUp() {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [value, setValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
 
   const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
@@ -42,14 +43,23 @@ export default function SignUp() {
     }
   };
 
+  // メールアドレスバリデーション
   const validateEmail = (value: string) =>
-    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+  value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
   const isInvalid = React.useMemo(() => {
     if (value === "") return false;
-
     return validateEmail(value) ? false : true;
   }, [value]);
+
+  // パスワードバリデーション
+  const validatePassword = (passwordValue: string) =>
+    /^[a-zA-Z\d]{6,}$/.test(passwordValue);
+
+  const isInvalidPassword = React.useMemo(() => {
+    if (passwordValue === "") return false;
+    return validatePassword(passwordValue) ? false : true;
+  }, [passwordValue]);
 
   return (
     <>
@@ -89,6 +99,12 @@ export default function SignUp() {
           label="Password"
           placeholder="Enter your password"
           labelPlacement="outside"
+          isInvalid={isInvalidPassword}
+          color={isInvalidPassword ? "danger" : "default"}
+          errorMessage={
+            isInvalidPassword && "6文字以上で半角英数字のみ有効です"
+          }
+          onValueChange={setPasswordValue}
           endContent={
             <button
               className="focus:outline-none"
