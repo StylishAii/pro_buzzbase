@@ -7,7 +7,7 @@ import { useAuthContext } from "@app/contexts/useAuthContext";
 import { singUp } from "@app/services/authService";
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -45,7 +45,7 @@ export default function SignUp() {
 
   // メールアドレスバリデーション
   const validateEmail = (value: string) =>
-  value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
   const isInvalid = React.useMemo(() => {
     if (value === "") return false;
