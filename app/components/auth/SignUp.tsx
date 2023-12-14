@@ -15,6 +15,7 @@ export default function SignUp() {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
@@ -25,18 +26,29 @@ export default function SignUp() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setErrors([]);
     try {
       await singUp({ email, password, passwordConfirmation });
       setIsLoggedIn(true);
       router.push("/");
-    } catch (error) {
-      console.log("error");
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrors(error.response.data.errors.full_messages);
+        console.log(error.response.data.errors);
+      } else {
+        setErrors(["登録に失敗しました"]);
+      }
     }
   };
 
   return (
     <>
       <form onSubmit={handleSubmit}>
+        {errors.map((error, index) => (
+          <ul key={index}>
+            <li>{error}</li>
+          </ul>
+        ))}
         <Input
           onChange={(e) => setEmail(e.target.value)}
           className="caret-zinc-400"
