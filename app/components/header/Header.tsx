@@ -11,7 +11,9 @@ export default function Header() {
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500">
         <div className="flex items-center justify-between h-full">
-          <a href="">LOGO</a>
+          <Link href="/">
+          LOGO
+          </Link>
           <div className="flex items-center gap-x-4">
             {isLoggedIn ? (
               <p>ログアウト</p>
