@@ -63,7 +63,10 @@ export default function SignUp() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col justify-end gap-y-4"
+      >
         <ul>
           {errors.map((error, index) => (
             <li key={index}>{error}</li>
@@ -93,53 +96,51 @@ export default function SignUp() {
             />
           }
         />
-        <div className="mt-10 mb-10">
-          <Input
-            onChange={(e) => setPassword(e.target.value)}
-            className="caret-zinc-400"
-            label="パスワード"
-            placeholder="6文字以上半角英数字のみ"
-            labelPlacement="outside"
-            isInvalid={isInvalidPassword}
-            color={isInvalidPassword ? "danger" : "default"}
-            errorMessage={
-              isInvalidPassword && "6文字以上で半角英数字のみ有効です"
-            }
-            onValueChange={setPasswordValue}
-            endContent={
-              <button
-                className="focus:outline-none"
-                type="button"
-                onClick={togglePasswordVisibility}
-              >
-                {isPasswordVisible ? (
-                  <EyeSlashFilledIcon
-                    aria-hidden={true}
-                    fill="#71717A"
-                    focusable={false}
-                    height="1em"
-                    role="presentation"
-                    viewBox="0 0 24 24"
-                    width="1em"
-                    className="text-2xl text-default-400 pointer-events-none"
-                  />
-                ) : (
-                  <EyeFilledIcon
-                    aria-hidden={true}
-                    fill="#71717A"
-                    focusable={false}
-                    height="1em"
-                    role="presentation"
-                    viewBox="0 0 24 24"
-                    width="1em"
-                    className="text-2xl text-default-400 pointer-events-none"
-                  />
-                )}
-              </button>
-            }
-            type={isPasswordVisible ? "text" : "password"}
-          />
-        </div>
+        <Input
+          onChange={(e) => setPassword(e.target.value)}
+          className="caret-zinc-400"
+          label="パスワード"
+          placeholder="6文字以上半角英数字のみ"
+          labelPlacement="outside"
+          isInvalid={isInvalidPassword}
+          color={isInvalidPassword ? "danger" : "default"}
+          errorMessage={
+            isInvalidPassword && "6文字以上で半角英数字のみ有効です"
+          }
+          onValueChange={setPasswordValue}
+          endContent={
+            <button
+              className="focus:outline-none"
+              type="button"
+              onClick={togglePasswordVisibility}
+            >
+              {isPasswordVisible ? (
+                <EyeSlashFilledIcon
+                  aria-hidden={true}
+                  fill="#71717A"
+                  focusable={false}
+                  height="1em"
+                  role="presentation"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  className="text-2xl text-default-400 pointer-events-none"
+                />
+              ) : (
+                <EyeFilledIcon
+                  aria-hidden={true}
+                  fill="#71717A"
+                  focusable={false}
+                  height="1em"
+                  role="presentation"
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  className="text-2xl text-default-400 pointer-events-none"
+                />
+              )}
+            </button>
+          }
+          type={isPasswordVisible ? "text" : "password"}
+        />
         <Input
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           label="パスワード（確認用）"
@@ -180,7 +181,7 @@ export default function SignUp() {
           className="caret-zinc-400"
         />
         <Button
-          className="bg-yellow-500 text-white text-base mt-9 mx-auto px-14 rounded-full block"
+          className="bg-yellow-500 text-white text-base mt-8 mx-auto px-14 rounded-full block"
           type="submit"
         >
           登録する
