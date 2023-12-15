@@ -23,7 +23,7 @@ export default function RootLayout({
       >
         <AuthProvider>
           <Providers>
-            <div className="h-full">
+            <div className="h-full buzz-dark">
               <Header />
               <main className="h-full">{children}</main>
               <NavigationMenu />
