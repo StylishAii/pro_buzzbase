@@ -14,6 +14,7 @@ const config: Config = {
         white: "#F4F4F4",
         black: "#000000",
         main: "#2E2E2E",
+        sub: "#424242",
         yellow: {
           50: "#FEFCE8",
           100: "#FDEDD3",
