@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@app/components/header/Header";
 import { Providers } from "@app/providers";
 import NavigationMenu from "@app/components/header/NavigationMenu";
 import { AuthProvider } from "@app/contexts/useAuthContext";
-
-const inter = Inter({ subsets: ["latin"] });
+import { inter, notoSansJP } from "@app/font";
 
 export const metadata: Metadata = {
   title: "Buzz Base",
@@ -20,12 +18,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className="h-full">
-      <body className={`${inter.className} bg-main text-white h-full`}>
+      <body
+        className={`${inter.className} ${notoSansJP.className} bg-main text-white h-full`}
+      >
         <AuthProvider>
           <Providers>
-            <div>
+            <div className="h-full">
               <Header />
-              <main>{children}</main>
+              <main className="h-full">{children}</main>
               <NavigationMenu />
             </div>
           </Providers>
