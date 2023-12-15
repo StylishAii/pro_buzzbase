@@ -73,8 +73,8 @@ export default function SignUp() {
           onChange={(e) => setEmail(e.target.value)}
           className="caret-zinc-400"
           type="email"
-          label="Email"
-          placeholder="you@example.com"
+          label="メールアドレス"
+          placeholder="buzzbase@example.com"
           labelPlacement="outside"
           isInvalid={isInvalid}
           color={isInvalid ? "danger" : "default"}
@@ -93,55 +93,57 @@ export default function SignUp() {
             />
           }
         />
-        <Input
-          onChange={(e) => setPassword(e.target.value)}
-          className="caret-zinc-400"
-          label="Password"
-          placeholder="Enter your password"
-          labelPlacement="outside"
-          isInvalid={isInvalidPassword}
-          color={isInvalidPassword ? "danger" : "default"}
-          errorMessage={
-            isInvalidPassword && "6文字以上で半角英数字のみ有効です"
-          }
-          onValueChange={setPasswordValue}
-          endContent={
-            <button
-              className="focus:outline-none"
-              type="button"
-              onClick={togglePasswordVisibility}
-            >
-              {isPasswordVisible ? (
-                <EyeSlashFilledIcon
-                  aria-hidden={true}
-                  fill="#71717A"
-                  focusable={false}
-                  height="1em"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  className="text-2xl text-default-400 pointer-events-none"
-                />
-              ) : (
-                <EyeFilledIcon
-                  aria-hidden={true}
-                  fill="#71717A"
-                  focusable={false}
-                  height="1em"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  className="text-2xl text-default-400 pointer-events-none"
-                />
-              )}
-            </button>
-          }
-          type={isPasswordVisible ? "text" : "password"}
-        />
+        <div className="mt-10 mb-10">
+          <Input
+            onChange={(e) => setPassword(e.target.value)}
+            className="caret-zinc-400"
+            label="パスワード"
+            placeholder="6文字以上半角英数字のみ"
+            labelPlacement="outside"
+            isInvalid={isInvalidPassword}
+            color={isInvalidPassword ? "danger" : "default"}
+            errorMessage={
+              isInvalidPassword && "6文字以上で半角英数字のみ有効です"
+            }
+            onValueChange={setPasswordValue}
+            endContent={
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={togglePasswordVisibility}
+              >
+                {isPasswordVisible ? (
+                  <EyeSlashFilledIcon
+                    aria-hidden={true}
+                    fill="#71717A"
+                    focusable={false}
+                    height="1em"
+                    role="presentation"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    className="text-2xl text-default-400 pointer-events-none"
+                  />
+                ) : (
+                  <EyeFilledIcon
+                    aria-hidden={true}
+                    fill="#71717A"
+                    focusable={false}
+                    height="1em"
+                    role="presentation"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    className="text-2xl text-default-400 pointer-events-none"
+                  />
+                )}
+              </button>
+            }
+            type={isPasswordVisible ? "text" : "password"}
+          />
+        </div>
         <Input
           onChange={(e) => setPasswordConfirmation(e.target.value)}
-          label="Password Confirmation"
-          placeholder="Enter your password"
+          label="パスワード（確認用）"
+          placeholder="パスワード再入力"
           labelPlacement="outside"
           endContent={
             <button
@@ -177,7 +179,10 @@ export default function SignUp() {
           type={isConfirmVisible ? "text" : "password"}
           className="caret-zinc-400"
         />
-        <Button className="bg-yellow-500" type="submit">
+        <Button
+          className="bg-yellow-500 text-white text-base mt-9 mx-auto px-14 rounded-full block"
+          type="submit"
+        >
           登録する
         </Button>
       </form>
