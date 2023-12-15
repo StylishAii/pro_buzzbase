@@ -67,11 +67,17 @@ export default function SignUp() {
         onSubmit={handleSubmit}
         className="flex flex-col justify-end gap-y-4"
       >
-        <ul>
-          {errors.map((error, index) => (
-            <li key={index}>{error}</li>
-          ))}
-        </ul>
+        {errors.length > 0 ? (
+          <ul className="w-10/12 fixed top-20 left-1/2 -translate-x-1/2 bg-danger-300 p-4 rounded-xl flex flex-col justify-center gap-y-1 z-10">
+            {errors.map((error, index) => (
+              <li key={index} className="text-xs">
+                ・{error}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          ""
+        )}
         <Input
           onChange={(e) => setEmail(e.target.value)}
           className="caret-zinc-400"
