@@ -26,6 +26,13 @@ export default function SignUp() {
     setIsPasswordVisible(!isPasswordVisible);
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 5000);
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrors([]);
@@ -35,10 +42,9 @@ export default function SignUp() {
       router.push("/");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
-        setErrors(error.response.data.errors.full_messages);
-        console.log(error.response.data.errors);
+        setErrorsWithTimeout(error.response.data.errors.full_messages);
       } else {
-        setErrors(["登録に失敗しました"]);
+        setErrorsWithTimeout(["登録に失敗しました"]);
       }
     }
   };
