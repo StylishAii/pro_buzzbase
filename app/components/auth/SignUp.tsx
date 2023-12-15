@@ -193,7 +193,7 @@ export default function SignUp() {
           className="caret-zinc-400"
         />
         <Button
-          className="bg-yellow-500 text-white text-base mt-8 mx-auto px-14 rounded-full block"
+          className="bg-yellow-500 text-white text-base mt-8 mx-auto px-14 rounded-full block font-semibold"
           type="submit"
         >
           登録する

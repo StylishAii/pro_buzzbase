@@ -34,7 +34,7 @@ export default function Header() {
                       label=""
                     />
                   }
-                  className="gap-x-1 bg-yellow-500 text-white text-sm py-1.5 px-3 h-auto rounded-lg"
+                  className="gap-x-1 bg-yellow-500 text-white text-sm py-1.5 px-3 h-auto rounded-lg font-normal"
                 >
                   新規登録
                 </Button>
