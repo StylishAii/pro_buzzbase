@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="py-2 px-3 border-b border-b-zinc-500">
+      <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main">
         <div className="flex items-center justify-between h-full">
           <Link href="/">
           LOGO
