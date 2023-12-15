@@ -15,6 +15,9 @@ export default function SignUp() {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
+  const [value, setValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
 
   const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
@@ -25,18 +28,47 @@ export default function SignUp() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setErrors([]);
     try {
       await singUp({ email, password, passwordConfirmation });
       setIsLoggedIn(true);
       router.push("/");
-    } catch (error) {
-      console.log("error");
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrors(error.response.data.errors.full_messages);
+        console.log(error.response.data.errors);
+      } else {
+        setErrors(["登録に失敗しました"]);
+      }
     }
   };
+
+  // メールアドレスバリデーション
+  const validateEmail = (value: string) =>
+    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+
+  const isInvalid = React.useMemo(() => {
+    if (value === "") return false;
+    return validateEmail(value) ? false : true;
+  }, [value]);
+
+  // パスワードバリデーション
+  const validatePassword = (passwordValue: string) =>
+    /^[a-zA-Z\d]{6,}$/.test(passwordValue);
+
+  const isInvalidPassword = React.useMemo(() => {
+    if (passwordValue === "") return false;
+    return validatePassword(passwordValue) ? false : true;
+  }, [passwordValue]);
 
   return (
     <>
       <form onSubmit={handleSubmit}>
+        <ul>
+          {errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
         <Input
           onChange={(e) => setEmail(e.target.value)}
           className="caret-zinc-400"
@@ -44,6 +76,10 @@ export default function SignUp() {
           label="Email"
           placeholder="you@example.com"
           labelPlacement="outside"
+          isInvalid={isInvalid}
+          color={isInvalid ? "danger" : "default"}
+          errorMessage={isInvalid && "有効なメールアドレスを入力してください"}
+          onValueChange={setValue}
           startContent={
             <MailIcon
               aria-hidden={true}
@@ -63,6 +99,12 @@ export default function SignUp() {
           label="Password"
           placeholder="Enter your password"
           labelPlacement="outside"
+          isInvalid={isInvalidPassword}
+          color={isInvalidPassword ? "danger" : "default"}
+          errorMessage={
+            isInvalidPassword && "6文字以上で半角英数字のみ有効です"
+          }
+          onValueChange={setPasswordValue}
           endContent={
             <button
               className="focus:outline-none"
