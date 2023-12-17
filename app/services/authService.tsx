@@ -3,10 +3,12 @@ import Cookies from "js-cookie";
 
 export const singUp = async (data: SignUpData) => {
   const response = await axiosInstance.post("/api/v1/auth", {
-    email: data.email,
-    password: data.password,
-    password_confirmation: data.passwordConfirmation,
-  });
+    registration: {
+      email: data.email,
+      password: data.password,
+      password_confirmation: data.passwordConfirmation,
+    },
+  })
 
   Cookies.set("access-token", response.headers["access-token"]);
   Cookies.set("client", response.headers["client"]);
