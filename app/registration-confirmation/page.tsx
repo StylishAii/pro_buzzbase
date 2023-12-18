@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 
 export default function RegistrationConfirmation() {
-
   return (
     <>
       <div className="px-4 pt-32">
