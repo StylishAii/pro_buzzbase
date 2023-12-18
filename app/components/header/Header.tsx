@@ -3,17 +3,21 @@ import React from "react";
 import { Link, Button } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn } = useAuthContext();
+  const pathname = usePathname();
+
+  if (pathname === "/registration-confirmation") {
+    return null;
+  }
 
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main">
         <div className="flex items-center justify-between h-full">
-          <Link href="/">
-          LOGO
-          </Link>
+          <Link href="/">LOGO</Link>
           <div className="flex items-center gap-x-4">
             {isLoggedIn ? (
               <p>ログアウト</p>
