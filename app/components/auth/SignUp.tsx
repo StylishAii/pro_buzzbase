@@ -40,7 +40,7 @@ export default function SignUp() {
     try {
       await singUp({ email, password, passwordConfirmation });
       setIsLoggedIn(true);
-      router.push("/");
+      router.push("/registration-confirmation");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrorsWithTimeout(error.response.data.errors.full_messages);
