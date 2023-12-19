@@ -8,3 +8,22 @@ interface SignInData {
   email: string;
   password: string;
 }
+
+interface EmailInputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  type?: string;
+  label?: string;
+  placeholder?: string;
+  labelPlacement?: "outside" | "outside-left" | "inside";
+  isInvalid: boolean;
+  color?:
+    | "danger"
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
+  errorMessage?: string;
+}
