@@ -14,13 +14,14 @@ const config: Config = {
         white: "#F4F4F4",
         black: "#000000",
         main: "#2E2E2E",
+        sub: "#424242",
         yellow: {
           50: "#FEFCE8",
           100: "#FDEDD3",
           200: "#FBDBA7",
           300: "#F9C97C",
           400: "#F7B750",
-          500: "#F5A524",
+          500: "#e08e0a",
           600: "#C4841D",
           700: "#936316",
           800: "#62420E",
@@ -57,6 +58,18 @@ const config: Config = {
     },
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        "buzz-dark": {
+          extend: "dark",
+          colors: {
+            background: "#2E2E2E",
+            foreground: "#F4F4F4"
+          },
+        },
+      },
+    }),
+  ],
 };
 export default config;

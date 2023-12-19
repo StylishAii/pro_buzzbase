@@ -1,5 +1,6 @@
 "use client";
 
+import { DangerIcon } from "@app/components/icon/DangerIcon";
 import { EyeFilledIcon } from "@app/components/icon/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "@app/components/icon/EyeSlashFilledIcon";
 import { MailIcon } from "@app/components/icon/MailIcon";
@@ -26,6 +27,13 @@ export default function SignUp() {
     setIsPasswordVisible(!isPasswordVisible);
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 5000);
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setErrors([]);
@@ -35,10 +43,9 @@ export default function SignUp() {
       router.push("/");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
-        setErrors(error.response.data.errors.full_messages);
-        console.log(error.response.data.errors);
+        setErrorsWithTimeout(error.response.data.errors.full_messages);
       } else {
-        setErrors(["登録に失敗しました"]);
+        setErrorsWithTimeout(["登録に失敗しました"]);
       }
     }
   };
@@ -63,18 +70,34 @@ export default function SignUp() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <ul>
-          {errors.map((error, index) => (
-            <li key={index}>{error}</li>
-          ))}
-        </ul>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col justify-end gap-y-4"
+      >
+        {errors.length > 0 ? (
+          <ul className="w-10/12 fixed top-20 left-1/2 -translate-x-1/2 bg-danger-300 p-4 rounded-xl flex flex-col justify-center gap-y-1.5 z-10">
+            {errors.map((error, index) => (
+              <li key={index} className="text-xs flex items-center gap-x-2">
+                <DangerIcon
+                  fill="#fff"
+                  filled="#fff"
+                  height="16"
+                  width="16"
+                  label=""
+                />
+                {error}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          ""
+        )}
         <Input
           onChange={(e) => setEmail(e.target.value)}
           className="caret-zinc-400"
           type="email"
-          label="Email"
-          placeholder="you@example.com"
+          label="メールアドレス"
+          placeholder="buzzbase@example.com"
           labelPlacement="outside"
           isInvalid={isInvalid}
           color={isInvalid ? "danger" : "default"}
@@ -96,8 +119,8 @@ export default function SignUp() {
         <Input
           onChange={(e) => setPassword(e.target.value)}
           className="caret-zinc-400"
-          label="Password"
-          placeholder="Enter your password"
+          label="パスワード"
+          placeholder="6文字以上半角英数字のみ"
           labelPlacement="outside"
           isInvalid={isInvalidPassword}
           color={isInvalidPassword ? "danger" : "default"}
@@ -140,8 +163,8 @@ export default function SignUp() {
         />
         <Input
           onChange={(e) => setPasswordConfirmation(e.target.value)}
-          label="Password Confirmation"
-          placeholder="Enter your password"
+          label="パスワード（確認用）"
+          placeholder="パスワード再入力"
           labelPlacement="outside"
           endContent={
             <button
@@ -177,7 +200,10 @@ export default function SignUp() {
           type={isConfirmVisible ? "text" : "password"}
           className="caret-zinc-400"
         />
-        <Button className="bg-yellow-500" type="submit">
+        <Button
+          className="bg-yellow-500 text-white text-base mt-8 mx-auto px-14 rounded-full block font-semibold"
+          type="submit"
+        >
           登録する
         </Button>
       </form>

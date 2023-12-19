@@ -9,9 +9,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="py-2 px-3 border-b border-b-zinc-500">
+      <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main">
         <div className="flex items-center justify-between h-full">
-          <a href="">LOGO</a>
+          <Link href="/">
+          LOGO
+          </Link>
           <div className="flex items-center gap-x-4">
             {isLoggedIn ? (
               <p>ログアウト</p>
@@ -32,7 +34,7 @@ export default function Header() {
                       label=""
                     />
                   }
-                  className="gap-x-1 bg-yellow-500 text-white text-sm py-1.5 px-3 h-auto rounded-lg"
+                  className="gap-x-1 bg-yellow-500 text-white text-sm py-1.5 px-3 h-auto rounded-lg font-normal"
                 >
                   新規登録
                 </Button>
