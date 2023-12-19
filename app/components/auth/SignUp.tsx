@@ -109,7 +109,6 @@ export default function SignUp() {
           label="パスワード（確認用）"
           placeholder="パスワード再入力"
           labelPlacement="outside"
-          isInvalid={isInvalidPassword}
           isConfirmVisible={isConfirmVisible}
           toggleConfirmVisibility={toggleConfirmVisibility}
           type={isConfirmVisible ? "text" : "password"}
