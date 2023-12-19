@@ -1,6 +1,7 @@
 "use client";
 
 import EmailInput from "@app/components/auth/EmailInput";
+import PasswordInput from "@app/components/auth/PasswordInput";
 import { DangerIcon } from "@app/components/icon/DangerIcon";
 import { EyeFilledIcon } from "@app/components/icon/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "@app/components/icon/EyeSlashFilledIcon";
@@ -11,7 +12,6 @@ import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
 export default function SignUp() {
-  const [value, setValue] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -19,13 +19,12 @@ export default function SignUp() {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
-  const [passwordValue, setPasswordValue] = useState("");
-
   const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
+
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
   const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
@@ -59,14 +58,13 @@ export default function SignUp() {
     return validateEmail(email) ? false : true;
   }, [email]);
 
-  // パスワードバリデーション
   const validatePassword = (passwordValue: string) =>
     /^[a-zA-Z\d]{6,}$/.test(passwordValue);
 
   const isInvalidPassword = React.useMemo(() => {
-    if (passwordValue === "") return false;
-    return validatePassword(passwordValue) ? false : true;
-  }, [passwordValue]);
+    if (password === "") return false;
+    return validatePassword(password) ? false : true;
+  }, [password]);
 
   return (
     <>
@@ -106,52 +104,23 @@ export default function SignUp() {
             isInvalid ? "有効なメールアドレスを入力してください" : ""
           }
         />
-
-        <Input
+        <PasswordInput
+          value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="caret-zinc-400"
           label="パスワード"
           placeholder="6文字以上半角英数字のみ"
           labelPlacement="outside"
           isInvalid={isInvalidPassword}
+          isPasswordVisible={isPasswordVisible}
+          togglePasswordVisibility={togglePasswordVisibility}
           color={isInvalidPassword ? "danger" : "default"}
           errorMessage={
-            isInvalidPassword && "6文字以上で半角英数字のみ有効です"
-          }
-          onValueChange={setPasswordValue}
-          endContent={
-            <button
-              className="focus:outline-none"
-              type="button"
-              onClick={togglePasswordVisibility}
-            >
-              {isPasswordVisible ? (
-                <EyeSlashFilledIcon
-                  aria-hidden={true}
-                  fill="#71717A"
-                  focusable={false}
-                  height="1em"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  className="text-2xl text-default-400 pointer-events-none"
-                />
-              ) : (
-                <EyeFilledIcon
-                  aria-hidden={true}
-                  fill="#71717A"
-                  focusable={false}
-                  height="1em"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  className="text-2xl text-default-400 pointer-events-none"
-                />
-              )}
-            </button>
+            isInvalidPassword ? "6文字以上で半角英数字のみ有効です" : ""
           }
           type={isPasswordVisible ? "text" : "password"}
         />
+
         <Input
           onChange={(e) => setPasswordConfirmation(e.target.value)}
           label="パスワード（確認用）"

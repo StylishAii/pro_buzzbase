@@ -27,3 +27,24 @@ interface EmailInputProps {
     | "warning";
   errorMessage?: string;
 }
+
+interface PasswordInputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className: string;
+  label?: string;
+  placeholder: string;
+  labelPlacement?: "outside" | "outside-left" | "inside";
+  isInvalid: boolean;
+  color?:
+    | "danger"
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
+  errorMessage?: string;
+  togglePasswordVisibility: () => void;
+  isPasswordVisible: boolean;
+  type: string;
+}
