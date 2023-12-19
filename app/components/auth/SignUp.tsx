@@ -49,16 +49,16 @@ export default function SignUp() {
     }
   };
 
-  const validateEmail = (value: string) =>
-    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+  const validateEmail = (email: string) =>
+    email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
   const isInvalid = useMemo(() => {
     if (email === "") return false;
     return validateEmail(email) ? false : true;
   }, [email]);
 
-  const validatePassword = (passwordValue: string) =>
-    /^[a-zA-Z\d]{6,}$/.test(passwordValue);
+  const validatePassword = (password: string) =>
+    /^[a-zA-Z\d]{6,}$/.test(password);
 
   const isInvalidPassword = React.useMemo(() => {
     if (password === "") return false;
@@ -109,7 +109,7 @@ export default function SignUp() {
           label="パスワード（確認用）"
           placeholder="パスワード再入力"
           labelPlacement="outside"
-          isInvalid={isInvalid}
+          isInvalid={isInvalidPassword}
           isConfirmVisible={isConfirmVisible}
           toggleConfirmVisibility={toggleConfirmVisibility}
           type={isConfirmVisible ? "text" : "password"}

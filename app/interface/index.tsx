@@ -56,8 +56,6 @@ interface PasswordConfirmationInputProps {
   label?: string;
   placeholder: string;
   labelPlacement?: "outside" | "outside-left" | "inside";
-  isInvalid: boolean;
-  errorMessage?: string;
   toggleConfirmVisibility: () => void;
   isConfirmVisible: boolean;
   type: string;

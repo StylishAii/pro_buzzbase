@@ -9,8 +9,6 @@ export default function PasswordConfirmInput({
   label,
   placeholder,
   labelPlacement,
-  isInvalid,
-  errorMessage,
   type = "password",
   isConfirmVisible,
   toggleConfirmVisibility,
@@ -23,8 +21,6 @@ export default function PasswordConfirmInput({
       label={label}
       placeholder={placeholder}
       labelPlacement={labelPlacement}
-      isInvalid={isInvalid}
-      errorMessage={isInvalid && errorMessage}
       type={isConfirmVisible ? "text" : type}
       endContent={
         <button
