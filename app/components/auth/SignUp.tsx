@@ -1,9 +1,9 @@
 "use client";
 
 import EmailInput from "@app/components/auth/EmailInput";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PasswordConfirmInput from "@app/components/auth/PasswordConfirmInput";
 import PasswordInput from "@app/components/auth/PasswordInput";
-import { DangerIcon } from "@app/components/icon/DangerIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { singUp } from "@app/services/authService";
 import { Button } from "@nextui-org/react";
@@ -71,24 +71,7 @@ export default function SignUp() {
         onSubmit={handleSubmit}
         className="flex flex-col justify-end gap-y-4"
       >
-        {errors.length > 0 ? (
-          <ul className="w-10/12 fixed top-8 left-1/2 -translate-x-1/2 bg-danger-300 p-4 rounded-xl flex flex-col justify-center gap-y-1.5 z-10">
-            {errors.map((error, index) => (
-              <li key={index} className="text-xs flex items-center gap-x-2">
-                <DangerIcon
-                  fill="#fff"
-                  filled="#fff"
-                  height="16"
-                  width="16"
-                  label=""
-                />
-                {error}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          ""
-        )}
+        <ErrorMessages errors={errors} />
         <EmailInput
           value={email}
           onChange={(e) => setEmail(e.target.value)}

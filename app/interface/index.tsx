@@ -62,3 +62,7 @@ interface PasswordConfirmationInputProps {
   isConfirmVisible: boolean;
   type: string;
 }
+
+interface ErrorMessagesProps {
+  errors: string[];
+}
