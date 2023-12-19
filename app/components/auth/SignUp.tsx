@@ -1,13 +1,12 @@
 "use client";
 
 import EmailInput from "@app/components/auth/EmailInput";
+import PasswordConfirmInput from "@app/components/auth/PasswordConfirmInput";
 import PasswordInput from "@app/components/auth/PasswordInput";
 import { DangerIcon } from "@app/components/icon/DangerIcon";
-import { EyeFilledIcon } from "@app/components/icon/EyeFilledIcon";
-import { EyeSlashFilledIcon } from "@app/components/icon/EyeSlashFilledIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { singUp } from "@app/services/authService";
-import { Button, Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
@@ -120,45 +119,17 @@ export default function SignUp() {
           }
           type={isPasswordVisible ? "text" : "password"}
         />
-
-        <Input
+        <PasswordConfirmInput
+          value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
+          className="caret-zinc-400"
           label="パスワード（確認用）"
           placeholder="パスワード再入力"
           labelPlacement="outside"
-          endContent={
-            <button
-              className="focus:outline-none"
-              type="button"
-              onClick={toggleConfirmVisibility}
-            >
-              {isConfirmVisible ? (
-                <EyeSlashFilledIcon
-                  aria-hidden={true}
-                  fill="#71717A"
-                  focusable={false}
-                  height="1em"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  className="text-2xl text-default-400 pointer-events-none"
-                />
-              ) : (
-                <EyeFilledIcon
-                  aria-hidden={true}
-                  fill="#71717A"
-                  focusable={false}
-                  height="1em"
-                  role="presentation"
-                  viewBox="0 0 24 24"
-                  width="1em"
-                  className="text-2xl text-default-400 pointer-events-none"
-                />
-              )}
-            </button>
-          }
+          isInvalid={isInvalid}
+          isConfirmVisible={isConfirmVisible}
+          toggleConfirmVisibility={toggleConfirmVisibility}
           type={isConfirmVisible ? "text" : "password"}
-          className="caret-zinc-400"
         />
         <Button
           className="bg-yellow-500 text-white text-base mt-8 mx-auto px-14 rounded-full block font-semibold"

@@ -48,3 +48,17 @@ interface PasswordInputProps {
   isPasswordVisible: boolean;
   type: string;
 }
+
+interface PasswordConfirmationInputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className: string;
+  label?: string;
+  placeholder: string;
+  labelPlacement?: "outside" | "outside-left" | "inside";
+  isInvalid: boolean;
+  errorMessage?: string;
+  toggleConfirmVisibility: () => void;
+  isConfirmVisible: boolean;
+  type: string;
+}
