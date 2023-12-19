@@ -7,11 +7,6 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn } = useAuthContext();
-  const pathname = usePathname();
-
-  if (pathname === "/registration-confirmation") {
-    return null;
-  }
 
   return (
     <>

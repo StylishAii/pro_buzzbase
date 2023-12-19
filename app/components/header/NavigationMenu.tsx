@@ -7,10 +7,6 @@ import { usePathname } from "next/navigation";
 export default function NavigationMenu() {
   const pathname = usePathname();
 
-  if (pathname === "/registration-confirmation") {
-    return null;
-  }
-
   return (
     <>
       <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500">
