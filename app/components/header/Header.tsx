@@ -18,7 +18,7 @@ export default function Header() {
               <p>ログアウト</p>
             ) : (
               <>
-                <Link href="" className="text-sm text-white">
+                <Link href="/signin" className="text-sm text-white">
                   ログイン
                 </Link>
                 <Button
