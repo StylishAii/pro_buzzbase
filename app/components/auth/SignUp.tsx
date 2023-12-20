@@ -17,8 +17,7 @@ export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
-
-  const { setIsLoggedIn } = useAuthContext();
+  
   const router = useRouter();
 
   const togglePasswordVisibility = () =>
@@ -38,7 +37,6 @@ export default function SignUp() {
     setErrors([]);
     try {
       await singUp({ email, password, passwordConfirmation });
-      setIsLoggedIn(true);
       router.push("/registration-confirmation");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
