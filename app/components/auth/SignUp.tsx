@@ -4,9 +4,9 @@ import EmailInput from "@app/components/auth/EmailInput";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PasswordConfirmInput from "@app/components/auth/PasswordConfirmInput";
 import PasswordInput from "@app/components/auth/PasswordInput";
+import SubmitButton from "@app/components/button/SendButton";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { singUp } from "@app/services/authService";
-import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
@@ -113,12 +113,11 @@ export default function SignUp() {
           toggleConfirmVisibility={toggleConfirmVisibility}
           type={isConfirmVisible ? "text" : "password"}
         />
-        <Button
-          className="bg-yellow-500 text-white text-base mt-8 mx-auto px-14 rounded-full block font-semibold"
+        <SubmitButton
+          className="bg-yellow-500 text-white text-base mt-6 mx-auto px-14 rounded-full block font-semibold"
           type="submit"
-        >
-          登録する
-        </Button>
+          text="登録する"
+        />
       </form>
     </>
   );

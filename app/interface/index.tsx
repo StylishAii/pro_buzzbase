@@ -64,3 +64,9 @@ interface PasswordConfirmationInputProps {
 interface ErrorMessagesProps {
   errors: string[];
 }
+
+interface SendButtonProps {
+  className: string;
+  type?: "submit" | "button" | "reset" | undefined;
+  text: string
+}
