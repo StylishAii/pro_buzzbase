@@ -38,7 +38,7 @@ export default function SignIn() {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrorsWithTimeout(error.response.data.errors);
       } else {
-        setErrorsWithTimeout(["登録に失敗しました"]);
+        setErrorsWithTimeout(["ログインに失敗しました"]);
       }
     }
   };
