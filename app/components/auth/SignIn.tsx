@@ -3,6 +3,7 @@ import EmailInput from "@app/components/auth/EmailInput";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PasswordInput from "@app/components/auth/PasswordInput";
 import SubmitButton from "@app/components/button/SendButton";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { signIn } from "@app/services/authService";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -13,6 +14,7 @@ export default function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
+  const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
 
   const togglePasswordVisibility = () =>
@@ -30,11 +32,11 @@ export default function SignIn() {
     setErrors([]);
     try {
       await signIn({ email, password });
+      setIsLoggedIn(true);
       router.push("/");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrorsWithTimeout(error.response.data.errors);
-        console.log(error)
       } else {
         setErrorsWithTimeout(["登録に失敗しました"]);
       }
