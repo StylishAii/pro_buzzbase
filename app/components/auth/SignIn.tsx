@@ -1,21 +1,44 @@
 "use client";
 import EmailInput from "@app/components/auth/EmailInput";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PasswordInput from "@app/components/auth/PasswordInput";
 import SubmitButton from "@app/components/button/SendButton";
+import { signIn } from "@app/services/authService";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const router = useRouter();
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
 
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 5000);
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault;
+    event.preventDefault();
+    setErrors([]);
     try {
-    } catch (error) {}
+      await signIn({ email, password });
+      router.push("/");
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorsWithTimeout(error.response.data.errors);
+        console.log(error)
+      } else {
+        setErrorsWithTimeout(["登録に失敗しました"]);
+      }
+    }
   };
 
   const validateEmail = (email: string) =>
@@ -40,6 +63,7 @@ export default function SignIn() {
         onSubmit={handleSubmit}
         className="flex flex-col justify-end gap-y-4"
       >
+        <ErrorMessages errors={errors} />
         <EmailInput
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -71,7 +95,7 @@ export default function SignIn() {
           type={isPasswordVisible ? "text" : "password"}
         />
         <SubmitButton
-          className="bg-yellow-500 text-white text-base mt-6 mx-auto px-14 rounded-full block font-semibold"
+          className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
           type="submit"
           text="ログインする"
         />
