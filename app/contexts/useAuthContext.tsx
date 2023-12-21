@@ -25,13 +25,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (accessToken && uid && client) {
         try {
-          const response = await axios.get(`${baseURL}/api/v1/auth/validate_token`, {
-            headers: {
-              "access-token": accessToken,
-              "client": client,
-              "uid": uid,
-            },
-          });
+          const response = await axios.get(
+            `${baseURL}/api/v1/auth/validate_token`,
+            {
+              headers: {
+                "access-token": accessToken,
+                client: client,
+                uid: uid,
+              },
+            }
+          );
           setIsLoggedIn(true);
         } catch (error) {
           console.log(error);
