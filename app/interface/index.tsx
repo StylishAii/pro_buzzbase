@@ -68,5 +68,9 @@ interface ErrorMessagesProps {
 interface SendButtonProps {
   className: string;
   type?: "submit" | "button" | "reset" | undefined;
-  text: string
+  text: string;
+}
+
+interface ToastSuccessProps {
+  text: string;
 }
