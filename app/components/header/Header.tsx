@@ -3,7 +3,6 @@ import React from "react";
 import { Link, Button } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
-import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn } = useAuthContext();

@@ -2,11 +2,8 @@
 import { UserImage } from "@app/components/user/UserImage";
 import NavigationItems from "./NavigationItems";
 import { Link, Button } from "@nextui-org/react";
-import { usePathname } from "next/navigation";
 
 export default function NavigationMenu() {
-  const pathname = usePathname();
-
   return (
     <>
       <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500">
