@@ -14,7 +14,7 @@ export default function Header() {
           <Link href="/">LOGO</Link>
           <div className="flex items-center gap-x-4">
             {isLoggedIn ? (
-              <p>ログアウト</p>
+              <Link href="/" className="text-sm text-white">ログアウト</Link>
             ) : (
               <>
                 <Link href="/signin" className="text-sm text-white">
