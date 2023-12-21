@@ -33,7 +33,7 @@ export default function SignIn() {
     try {
       await signIn({ email, password });
       setIsLoggedIn(true);
-      router.push("/");
+      router.push("/register-username");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrorsWithTimeout(error.response.data.errors);
