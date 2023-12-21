@@ -51,6 +51,18 @@ const config: Config = {
           800: "#610726",
           900: "#310413",
         },
+        green: {
+          50: "#E8FAF0",
+          100: "#D1F4E0",
+          200: "#A2E9C1",
+          300: "#74DFA2",
+          400: "#45D483",
+          500: "#17C964",
+          600: "#12A150",
+          700: "#0E793C",
+          800: "#095028",
+          900: "#052814",
+        },
       },
       fontSize: {
         xxs: "10px",
@@ -65,7 +77,7 @@ const config: Config = {
           extend: "dark",
           colors: {
             background: "#2E2E2E",
-            foreground: "#F4F4F4"
+            foreground: "#F4F4F4",
           },
         },
       },
