@@ -47,6 +47,15 @@ export default function RegisterUserName() {
     return validateUserId(userId) ? false : true;
   }, [userId]);
 
+  const isFormValid = useMemo(() => {
+    return (
+      userName !== "" &&
+      userId !== "" &&
+      validateUserName(userName) &&
+      validateUserId(userId)
+    );
+  }, [userName, userId, validateUserName, validateUserId]);
+
   return (
     <>
       {isLoginSuccess && <ToastSuccess text="ログイン成功！" />}
@@ -57,7 +66,7 @@ export default function RegisterUserName() {
           <span className="text-lg font-bold">ユーザーID</span>
           を登録して、BuzzBaseをはじめましょう！
         </p>
-        <div className="mt-20 w-full">
+        <div className="mt-16 w-full">
           <form className="flex flex-col gap-y-4">
             <UserNameInput
               value={userName}
@@ -95,6 +104,7 @@ export default function RegisterUserName() {
               className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
               type="submit"
               text="はじめる"
+              disabled={!isFormValid}
             />
           </form>
         </div>
