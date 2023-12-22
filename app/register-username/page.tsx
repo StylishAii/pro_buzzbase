@@ -1,4 +1,5 @@
 "use client";
+import SubmitButton from "@app/components/button/SendButton";
 import ToastSuccess from "@app/components/toast/ToastSuccess";
 import UserIdInput from "@app/components/user/UserIdInput";
 import UserNameInput from "@app/components/user/UserNameInput";
@@ -89,6 +90,11 @@ export default function RegisterUserName() {
                   ? "半角英数字、ハイフン(-)、アンダーバー(_)のみ使用可能です"
                   : ""
               }
+            />
+            <SubmitButton
+              className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
+              type="submit"
+              text="はじめる"
             />
           </form>
         </div>
