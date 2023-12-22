@@ -69,6 +69,7 @@ interface SendButtonProps {
   className: string;
   type?: "submit" | "button" | "reset" | undefined;
   text: string;
+  disabled: boolean;
 }
 
 interface ToastSuccessProps {
