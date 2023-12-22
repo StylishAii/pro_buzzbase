@@ -92,4 +92,5 @@ interface UserNameInputProps {
     | "success"
     | "warning";
   errorMessage?: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
 }
