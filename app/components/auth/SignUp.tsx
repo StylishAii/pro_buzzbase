@@ -17,7 +17,7 @@ export default function SignUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
-  
+
   const router = useRouter();
 
   const togglePasswordVisibility = () =>
@@ -62,6 +62,16 @@ export default function SignUp() {
     if (password === "") return false;
     return validatePassword(password) ? false : true;
   }, [password]);
+
+  const isFormValid = useMemo(() => {
+    return (
+      email !== "" &&
+      password !== "" &&
+      passwordConfirmation !== "" &&
+      validateEmail(email) &&
+      validatePassword(password)
+    );
+  }, [email, password, passwordConfirmation, validateEmail, validatePassword]);
 
   return (
     <>
@@ -115,6 +125,7 @@ export default function SignUp() {
           className="bg-yellow-500 text-white text-base mt-6 mx-auto px-14 rounded-full block font-semibold"
           type="submit"
           text="登録する"
+          disabled={!isFormValid}
         />
       </form>
     </>
