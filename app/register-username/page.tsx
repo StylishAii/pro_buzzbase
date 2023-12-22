@@ -100,7 +100,7 @@ export default function RegisterUserName() {
                   : ""
               }
             />
-            <span className="text-sm text-red-500">※IDは一度決めると変更できません</span>
+            <span className="text-sm text-red-500">※IDは一度決めると変更できません。</span>
             <SubmitButton
               className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
               type="submit"
