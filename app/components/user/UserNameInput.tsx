@@ -5,7 +5,7 @@ export default function UserNameInput({
   value,
   onChange,
   className,
-  type = "email",
+  type = "text",
   label,
   placeholder,
   labelPlacement,
