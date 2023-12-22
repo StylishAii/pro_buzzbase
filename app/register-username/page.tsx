@@ -1,5 +1,6 @@
 "use client";
 import ToastSuccess from "@app/components/toast/ToastSuccess";
+import UserIdInput from "@app/components/user/UserIdInput";
 import UserNameInput from "@app/components/user/UserNameInput";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { useRouter } from "next/navigation";
@@ -10,6 +11,7 @@ export default function RegisterUserName() {
   const { isLoggedIn } = useAuthContext();
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -37,6 +39,13 @@ export default function RegisterUserName() {
     return validateUserName(userName) ? false : true;
   }, [userName]);
 
+  const validateUserId = (userId: string) => /^[A-Za-z0-9_-]+$/.test(userId);
+
+  const isInvalidUserId = useMemo(() => {
+    if (userId === "") return false;
+    return validateUserId(userId) ? false : true;
+  }, [userId]);
+
   return (
     <>
       {isLoginSuccess && <ToastSuccess text="ログイン成功！" />}
@@ -48,20 +57,37 @@ export default function RegisterUserName() {
           を登録して、BuzzBaseをはじめましょう！
         </p>
         <div className="mt-20 w-full">
-          <form>
+          <form className="flex flex-col gap-y-4">
             <UserNameInput
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               className="caret-zinc-400"
               type="text"
               label="ユーザー名"
-              placeholder="山田 太郎（ニックネーム可）"
+              placeholder="大谷 一郎（ニックネーム可）"
               labelPlacement="outside"
               isInvalid={isInvalid}
               color={isInvalid ? "warning" : "default"}
               variant={"bordered"}
               errorMessage={
                 isInvalid ? "有効なユーザー名を入力してください" : ""
+              }
+            />
+            <UserIdInput
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              className="caret-zinc-400"
+              type="text"
+              label="ユーザーID"
+              placeholder="buzz_base235"
+              labelPlacement="outside"
+              isInvalid={isInvalidUserId}
+              color={isInvalid ? "warning" : "default"}
+              variant={"bordered"}
+              errorMessage={
+                isInvalidUserId
+                  ? "半角英数字、ハイフン(-)、アンダーバー(_)のみ使用可能です"
+                  : ""
               }
             />
           </form>
