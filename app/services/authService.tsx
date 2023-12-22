@@ -12,7 +12,10 @@ export const singUp = async (data: SignUpData) => {
 };
 
 export const signIn = async (data: SignInData) => {
-  const response = await axiosInstance.post("/api/v1/auth/sign_in", data);
+  const response = await axiosInstance.post("/api/v1/auth/sign_in", {
+    email: data.email,
+    password: data.password,
+  });
 
   Cookies.set("access-token", response.headers["access-token"]);
   Cookies.set("client", response.headers["client"]);

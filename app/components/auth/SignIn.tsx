@@ -1,29 +1,24 @@
 "use client";
-
 import EmailInput from "@app/components/auth/EmailInput";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
-import PasswordConfirmInput from "@app/components/auth/PasswordConfirmInput";
 import PasswordInput from "@app/components/auth/PasswordInput";
 import SubmitButton from "@app/components/button/SendButton";
 import { useAuthContext } from "@app/contexts/useAuthContext";
-import { singUp } from "@app/services/authService";
+import { signIn } from "@app/services/authService";
 import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-export default function SignUp() {
+export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
-  
+
+  const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
-
-  const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
   const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
     setErrors(newErrors);
@@ -36,13 +31,14 @@ export default function SignUp() {
     event.preventDefault();
     setErrors([]);
     try {
-      await singUp({ email, password, passwordConfirmation });
-      router.push("/registration-confirmation");
+      await signIn({ email, password });
+      setIsLoggedIn(true);
+      router.push("/");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
-        setErrorsWithTimeout(error.response.data.errors.full_messages);
+        setErrorsWithTimeout(error.response.data.errors);
       } else {
-        setErrorsWithTimeout(["登録に失敗しました"]);
+        setErrorsWithTimeout(["ログインに失敗しました"]);
       }
     }
   };
@@ -58,7 +54,7 @@ export default function SignUp() {
   const validatePassword = (password: string) =>
     /^[a-zA-Z\d]{6,}$/.test(password);
 
-  const isInvalidPassword = React.useMemo(() => {
+  const isInvalidPassword = useMemo(() => {
     if (password === "") return false;
     return validatePassword(password) ? false : true;
   }, [password]);
@@ -100,21 +96,10 @@ export default function SignUp() {
           }
           type={isPasswordVisible ? "text" : "password"}
         />
-        <PasswordConfirmInput
-          value={passwordConfirmation}
-          onChange={(e) => setPasswordConfirmation(e.target.value)}
-          className="caret-zinc-400"
-          label="パスワード（確認用）"
-          placeholder="パスワード再入力"
-          labelPlacement="outside"
-          isConfirmVisible={isConfirmVisible}
-          toggleConfirmVisibility={toggleConfirmVisibility}
-          type={isConfirmVisible ? "text" : "password"}
-        />
         <SubmitButton
-          className="bg-yellow-500 text-white text-base mt-6 mx-auto px-14 rounded-full block font-semibold"
+          className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
           type="submit"
-          text="登録する"
+          text="ログインする"
         />
       </form>
     </>

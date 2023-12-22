@@ -3,15 +3,9 @@ import React from "react";
 import { Link, Button } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
-import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { isLoggedIn } = useAuthContext();
-  const pathname = usePathname();
-
-  if (pathname === "/registration-confirmation") {
-    return null;
-  }
 
   return (
     <>
@@ -23,7 +17,7 @@ export default function Header() {
               <p>ログアウト</p>
             ) : (
               <>
-                <Link href="" className="text-sm text-white">
+                <Link href="/signin" className="text-sm text-white">
                   ログイン
                 </Link>
                 <Button
