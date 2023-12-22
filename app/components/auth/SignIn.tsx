@@ -59,6 +59,15 @@ export default function SignIn() {
     return validatePassword(password) ? false : true;
   }, [password]);
 
+  const isFormValid = useMemo(() => {
+    return (
+      email !== "" &&
+      password !== "" &&
+      validateEmail(email) &&
+      validatePassword(password)
+    );
+  }, [email, password, validateEmail, validatePassword]);
+
   return (
     <>
       <form
@@ -100,6 +109,7 @@ export default function SignIn() {
           className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
           type="submit"
           text="ログインする"
+          disabled={!isFormValid}
         />
       </form>
     </>
