@@ -1,9 +1,11 @@
 "use client";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 import SubmitButton from "@app/components/button/SendButton";
 import ToastSuccess from "@app/components/toast/ToastSuccess";
 import UserIdInput from "@app/components/user/UserIdInput";
 import UserNameInput from "@app/components/user/UserNameInput";
 import { useAuthContext } from "@app/contexts/useAuthContext";
+import { updateUser } from "@app/services/userService";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -13,6 +15,7 @@ export default function RegisterUserName() {
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -56,6 +59,29 @@ export default function RegisterUserName() {
     );
   }, [userName, userId, validateUserName, validateUserId]);
 
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 5000);
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setErrors([]);
+    try {
+      await updateUser({ name: userName, user_id: userId });
+      router.push("/");
+    } catch (error: any) {
+      console.log(error);
+      if (error.response && error.response.data && error.response.data.errors) {
+        setErrorsWithTimeout(error.response.data.errors);
+      } else {
+        setErrorsWithTimeout(["ユーザー名とユーザーIDを入力してください"]);
+      }
+    }
+  };
+
   return (
     <>
       {isLoginSuccess && <ToastSuccess text="ログイン成功！" />}
@@ -66,8 +92,9 @@ export default function RegisterUserName() {
           <span className="text-lg font-bold">ユーザーID</span>
           を登録して、BuzzBaseをはじめましょう！
         </p>
-        <div className="mt-16 w-full">
-          <form className="flex flex-col gap-y-4">
+        <div className="mt-12 w-full">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-y-4">
+            <ErrorMessages errors={errors} />
             <UserNameInput
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
@@ -100,7 +127,9 @@ export default function RegisterUserName() {
                   : ""
               }
             />
-            <span className="text-sm text-red-500">※IDは一度決めると変更できません。</span>
+            <span className="text-sm text-red-500">
+              ※IDは一度決めると変更できません。
+            </span>
             <SubmitButton
               className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
               type="submit"
