@@ -3,9 +3,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 
-const AuthContext = createContext({
-  isLoggedIn: false,
-  setIsLoggedIn: (isLoggedIn: boolean) => {},
+const AuthContext = createContext<{
+  isLoggedIn: boolean | undefined;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
+}>({
+  isLoggedIn: undefined,
+  setIsLoggedIn: () => {},
 });
 
 export const useAuthContext = () => useContext(AuthContext);
@@ -13,7 +16,7 @@ export const useAuthContext = () => useContext(AuthContext);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     const validateToken = async () => {

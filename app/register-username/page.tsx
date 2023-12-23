@@ -5,7 +5,7 @@ import ToastSuccess from "@app/components/toast/ToastSuccess";
 import UserIdInput from "@app/components/user/UserIdInput";
 import UserNameInput from "@app/components/user/UserNameInput";
 import { useAuthContext } from "@app/contexts/useAuthContext";
-import { updateUser } from "@app/services/userService";
+import { getUserData, updateUser } from "@app/services/userService";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -18,9 +18,9 @@ export default function RegisterUserName() {
   const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      // router.push("/signin");
-    } else {
+    if (isLoggedIn === false) {
+      router.push("/signin");
+    } else if (isLoggedIn === true) {
       setSuccessToastWithTimeout();
     }
   }, [isLoggedIn, router]);
@@ -71,9 +71,11 @@ export default function RegisterUserName() {
     setErrors([]);
     try {
       await updateUser({ name: userName, user_id: userId });
-      router.push("/");
+      const userData = await getUserData();
+      if (userData && userData.user_id) {
+        router.push(`/mypage/${userData.user_id}`);
+      }
     } catch (error: any) {
-      console.log(error);
       if (error.response && error.response.data && error.response.data.errors) {
         setErrorsWithTimeout(error.response.data.errors);
       } else {
