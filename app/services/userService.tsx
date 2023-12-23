@@ -20,3 +20,13 @@ export const updateUser = async (data: updateUser) => {
   );
   return response;
 };
+
+export const getUserData = async () => {
+  try {
+    const response = await axiosInstance.get("/api/v1/user/");
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
