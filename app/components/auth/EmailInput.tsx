@@ -12,6 +12,7 @@ export default function EmailInput({
   isInvalid,
   color = "default",
   errorMessage,
+  variant,
 }: EmailInputProps) {
   return (
     <Input
@@ -25,6 +26,7 @@ export default function EmailInput({
       isInvalid={isInvalid}
       color={isInvalid ? "danger" : color}
       errorMessage={isInvalid && errorMessage}
+      variant={variant}
       startContent={
         <MailIcon
           aria-hidden={true}

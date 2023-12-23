@@ -85,6 +85,7 @@ export default function SignIn() {
           labelPlacement="outside"
           isInvalid={isInvalid}
           color={isInvalid ? "danger" : "default"}
+          variant={"bordered"}
           errorMessage={
             isInvalid ? "有効なメールアドレスを入力してください" : ""
           }
@@ -100,6 +101,7 @@ export default function SignIn() {
           isPasswordVisible={isPasswordVisible}
           togglePasswordVisibility={togglePasswordVisibility}
           color={isInvalidPassword ? "danger" : "default"}
+          variant={"bordered"}
           errorMessage={
             isInvalidPassword ? "6文字以上で半角英数字のみ有効です" : ""
           }

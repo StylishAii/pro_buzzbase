@@ -26,6 +26,7 @@ interface EmailInputProps {
     | "success"
     | "warning";
   errorMessage?: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
 }
 
 interface PasswordInputProps {
@@ -47,6 +48,7 @@ interface PasswordInputProps {
   togglePasswordVisibility: () => void;
   isPasswordVisible: boolean;
   type: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
 }
 
 interface PasswordConfirmationInputProps {

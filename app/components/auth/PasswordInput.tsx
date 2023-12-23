@@ -15,6 +15,7 @@ export default function PasswordInput({
   type = "password",
   isPasswordVisible,
   togglePasswordVisibility,
+  variant,
 }: PasswordInputProps) {
   return (
     <Input
@@ -28,6 +29,7 @@ export default function PasswordInput({
       color={isInvalid ? "danger" : color}
       errorMessage={isInvalid && errorMessage}
       type={isPasswordVisible ? "text" : type}
+      variant={variant}
       endContent={
         <button
           className="focus:outline-none"
