@@ -115,3 +115,8 @@ interface UserIdInputProps {
   errorMessage?: string;
   variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
 }
+
+interface updateUser {
+  name: string;
+  user_id: string;
+}
