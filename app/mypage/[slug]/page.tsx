@@ -3,8 +3,10 @@ import { getUserData } from "@app/services/userService";
 import { useEffect, useState } from "react";
 
 type userData = {
+  image: any;
   name: string;
   user_id: string;
+  url: string;
 };
 
 export default function MyPage() {
@@ -30,6 +32,7 @@ export default function MyPage() {
     <>
       <div className="pt-20">
         <h2>マイページ</h2>
+        <img src={`${process.env.NEXT_PUBLIC_API_URL}${userData.image.url}`} alt="" />
         <p>{userData.name}</p>
         <p>@{userData.user_id}</p>
       </div>
