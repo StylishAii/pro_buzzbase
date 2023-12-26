@@ -8,7 +8,7 @@ import SubmitButton from "@app/components/button/SendButton";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { singUp } from "@app/services/authService";
 import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -47,21 +47,25 @@ export default function SignUp() {
     }
   };
 
-  const validateEmail = (email: string) =>
-    email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+  const validateEmail = useCallback(
+    (email: string) => email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i),
+    []
+  );
 
   const isInvalid = useMemo(() => {
     if (email === "") return false;
     return validateEmail(email) ? false : true;
-  }, [email]);
+  }, [email, validateEmail]);
 
-  const validatePassword = (password: string) =>
-    /^[a-zA-Z\d]{6,}$/.test(password);
+  const validatePassword = useCallback(
+    (password: string) => /^[a-zA-Z\d]{6,}$/.test(password),
+    []
+  );
 
   const isInvalidPassword = React.useMemo(() => {
     if (password === "") return false;
     return validatePassword(password) ? false : true;
-  }, [password]);
+  }, [password, validatePassword]);
 
   const isFormValid = useMemo(() => {
     return (
