@@ -122,7 +122,3 @@ interface updateUser {
   name: string;
   user_id: string;
 }
-
-interface getUserData {
-  user_id: string;
-}

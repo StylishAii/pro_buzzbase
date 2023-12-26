@@ -5,8 +5,12 @@ import { Link, Button } from "@nextui-org/react";
 import { getUserData } from "@app/services/userService";
 import { useEffect, useState } from "react";
 
+type userData = {
+  user_id: string;
+};
+
 export default function NavigationMenu() {
-  const [userData, setUserData] = useState<getUserData | null>(null);
+  const [userData, setUserData] = useState<userData | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
