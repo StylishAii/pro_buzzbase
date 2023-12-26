@@ -26,6 +26,7 @@ interface EmailInputProps {
     | "success"
     | "warning";
   errorMessage?: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
 }
 
 interface PasswordInputProps {
@@ -47,6 +48,7 @@ interface PasswordInputProps {
   togglePasswordVisibility: () => void;
   isPasswordVisible: boolean;
   type: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
 }
 
 interface PasswordConfirmationInputProps {
@@ -68,5 +70,55 @@ interface ErrorMessagesProps {
 interface SendButtonProps {
   className: string;
   type?: "submit" | "button" | "reset" | undefined;
-  text: string
+  text: string;
+  disabled: boolean;
+}
+
+interface ToastSuccessProps {
+  text: string;
+}
+
+interface UserNameInputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  type?: string;
+  label?: string;
+  placeholder?: string;
+  labelPlacement?: "outside" | "outside-left" | "inside";
+  isInvalid: boolean;
+  color?:
+    | "danger"
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
+  errorMessage?: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
+}
+
+interface UserIdInputProps {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  type?: string;
+  label?: string;
+  placeholder?: string;
+  labelPlacement?: "outside" | "outside-left" | "inside";
+  isInvalid: boolean;
+  color?:
+    | "danger"
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
+  errorMessage?: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
+}
+
+interface updateUser {
+  name: string;
+  user_id: string;
 }
