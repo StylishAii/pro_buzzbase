@@ -59,7 +59,7 @@ export default function NavigationMenu() {
               className="text-xxs flex items-center flex-col gap-y-1 px-0 bg-transparent isIconOnly overflow-visible"
             >
               <UserImage
-                src={"/images/default-user-icon-yellow.svg"}
+                src={"/images/user-default-yellow.svg"}
                 width={22}
                 height={22}
                 alt=""
