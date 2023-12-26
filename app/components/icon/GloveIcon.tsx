@@ -1,9 +1,4 @@
-export const GloveIcon = ({
-  width = "",
-  height = "",
-  fill = "",
-  ...props
-}) => {
+export const GloveIcon = ({ width = "", height = "", fill = "", ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
