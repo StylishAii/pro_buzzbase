@@ -5,6 +5,7 @@ import PasswordInput from "@app/components/auth/PasswordInput";
 import SubmitButton from "@app/components/button/SendButton";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { signIn } from "@app/services/authService";
+import { getUserData } from "@app/services/userService";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -33,7 +34,12 @@ export default function SignIn() {
     try {
       await signIn({ email, password });
       setIsLoggedIn(true);
-      router.push("/");
+      const userData = await getUserData();
+      if (userData && userData.user_id) {
+        router.push(`/mypage/${userData.user_id}`);
+      } else {
+        router.push("/register-username");
+      }
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {
         setErrorsWithTimeout(error.response.data.errors);
@@ -59,6 +65,15 @@ export default function SignIn() {
     return validatePassword(password) ? false : true;
   }, [password]);
 
+  const isFormValid = useMemo(() => {
+    return (
+      email !== "" &&
+      password !== "" &&
+      validateEmail(email) &&
+      validatePassword(password)
+    );
+  }, [email, password, validateEmail, validatePassword]);
+
   return (
     <>
       <form
@@ -76,6 +91,7 @@ export default function SignIn() {
           labelPlacement="outside"
           isInvalid={isInvalid}
           color={isInvalid ? "danger" : "default"}
+          variant={"bordered"}
           errorMessage={
             isInvalid ? "有効なメールアドレスを入力してください" : ""
           }
@@ -91,15 +107,17 @@ export default function SignIn() {
           isPasswordVisible={isPasswordVisible}
           togglePasswordVisibility={togglePasswordVisibility}
           color={isInvalidPassword ? "danger" : "default"}
+          variant={"bordered"}
           errorMessage={
             isInvalidPassword ? "6文字以上で半角英数字のみ有効です" : ""
           }
           type={isPasswordVisible ? "text" : "password"}
         />
         <SubmitButton
-          className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2 px-14 rounded-full block font-semibold"
+          className="bg-yellow-500 text-white h-auto text-base mt-6 mx-auto py-2.5 px-12 rounded-full block font-semibold"
           type="submit"
           text="ログインする"
+          disabled={!isFormValid}
         />
       </form>
     </>
