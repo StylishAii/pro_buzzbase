@@ -2,8 +2,26 @@
 import { UserImage } from "@app/components/user/UserImage";
 import NavigationItems from "./NavigationItems";
 import { Link, Button } from "@nextui-org/react";
+import { getUserData } from "@app/services/userService";
+import { useEffect, useState } from "react";
 
 export default function NavigationMenu() {
+  const [userData, setUserData] = useState<getUserData | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await getUserData();
+        setUserData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUserData();
+  }, []);
+
+  const myPageLink = userData ? `/mypage/${userData.user_id}` : "/signin";
+
   return (
     <>
       <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500">
@@ -32,7 +50,7 @@ export default function NavigationMenu() {
           <li>
             <Button
               isIconOnly
-              href=""
+              href={myPageLink}
               as={Link}
               className="text-xxs flex items-center flex-col gap-y-1 px-0 bg-transparent isIconOnly overflow-visible"
             >
