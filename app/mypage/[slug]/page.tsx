@@ -5,7 +5,6 @@ import { CrownIcon } from "@app/components/icon/CrownIcon";
 import { GloveIcon } from "@app/components/icon/GloveIcon";
 import IndividualResultsList from "@app/components/user/IndividualResultsList";
 import MatchResultList from "@app/components/user/MatchResultList";
-import SupportMessagesList from "@app/components/user/SupportMessagesList";
 import { getUserData } from "@app/services/userService";
 import { Avatar, Button, Link, Tab, Tabs } from "@nextui-org/react";
 import { useEffect, useState } from "react";
@@ -136,13 +135,13 @@ export default function MyPage() {
               <Tab key="game" title="試合" className="font-bold tracking-wide">
                 <MatchResultList />
               </Tab>
-              <Tab
+              {/* <Tab
                 key="message"
                 title="応援"
                 className="font-bold tracking-wide"
               >
                 <SupportMessagesList />
-              </Tab>
+              </Tab> */}
             </Tabs>
           </div>
         </div>
