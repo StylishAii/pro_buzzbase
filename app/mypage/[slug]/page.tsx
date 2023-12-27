@@ -38,7 +38,7 @@ export default function MyPage() {
 
   return (
     <>
-      <div className="pt-16">
+      <div className="pt-16 pb-36 bg-main">
         <div className=" px-4">
           <div className="flex gap-5">
             <Avatar
@@ -122,13 +122,13 @@ export default function MyPage() {
               シェアする
             </Button>
           </div>
-          <div className="mt-6">
+          <div className="mt-8">
             <Tabs
               color="primary"
               size="lg"
               aria-label="Tabs colors"
               radius="lg"
-              className="w-full grid"
+              className="w-full grid sticky top-10 z-50"
             >
               <Tab key="score" title="成績" className="font-bold tracking-wide">
                 <IndividualResultsList />
