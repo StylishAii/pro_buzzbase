@@ -1,11 +1,12 @@
 import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
+import BattingAverageTable from "@app/components/user/BattingAverageTable";
 import { gameType, years } from "@app/test/TestData";
 
 export default function IndividualResultsList() {
   return (
     <>
       <div className="bg-bg_sub p-4 rounded-xl">
-        <div className="flex gap-x-4 mb-4">
+        <div className="flex gap-x-4 mb-5">
           <ResultsSelectBox
             radius="full"
             defaultSelectedKeys={[years[0].label]}
@@ -29,7 +30,8 @@ export default function IndividualResultsList() {
             size="sm"
           />
         </div>
-        <h2 className="text-lg">打撃成績</h2>
+        <h2 className="text-xl">打撃成績</h2>
+        <BattingAverageTable />
       </div>
     </>
   );
