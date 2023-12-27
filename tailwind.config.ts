@@ -15,6 +15,7 @@ const config: Config = {
         black: "#000000",
         main: "#2E2E2E",
         sub: "#424242",
+        bg_sub: "#27272a",
         yellow: {
           50: "#FEFCE8",
           100: "#FDEDD3",
@@ -78,6 +79,10 @@ const config: Config = {
           colors: {
             background: "#2E2E2E",
             foreground: "#F4F4F4",
+            primary: {
+              DEFAULT: "#d08000",
+              foreground: "#F4F4F4",
+            },
           },
         },
       },
