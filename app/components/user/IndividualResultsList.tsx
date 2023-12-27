@@ -1,5 +1,6 @@
 import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
 import BattingAverageTable from "@app/components/user/BattingAverageTable";
+import PitchingRecordTable from "@app/components/user/PitchingRecordTable";
 import { gameType, years } from "@app/test/TestData";
 
 export default function IndividualResultsList() {
@@ -32,6 +33,8 @@ export default function IndividualResultsList() {
         </div>
         <h2 className="text-xl">打撃成績</h2>
         <BattingAverageTable />
+        <h2 className="text-xl mt-8">投手成績</h2>
+        <PitchingRecordTable />
       </div>
     </>
   );
