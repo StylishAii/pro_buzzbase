@@ -54,20 +54,6 @@ export default function MyPage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-x-4 mt-4">
-            <div className="flex gap-x-1">
-              <span className="text-sm font-bold">100</span>
-              <p className="text-sm font-light text-zinc-400 tracking-tighter">
-                フォロー中
-              </p>
-            </div>
-            <div className="flex gap-x-1">
-              <span className="text-sm font-bold">140</span>
-              <p className="text-sm font-light text-zinc-400 tracking-tighter">
-                フォロワー
-              </p>
-            </div>
-          </div>
           <p className="text-sm mt-4">
             私はほかそんなにこういう発展方によってものの限りになっらします。とにかく十一月よりらく目はけっしてそんなお話ましなまでをやっばいましをも相違向いうだば、
           </p>
@@ -105,6 +91,20 @@ export default function MyPage() {
               </ul>
             </li>
           </ul>
+          <div className="flex items-center gap-x-4 mt-4">
+            <div className="flex gap-x-1">
+              <span className="text-sm font-bold">100</span>
+              <p className="text-sm font-light text-zinc-400 tracking-tighter">
+                フォロー中
+              </p>
+            </div>
+            <div className="flex gap-x-1">
+              <span className="text-sm font-bold">140</span>
+              <p className="text-sm font-light text-zinc-400 tracking-tighter">
+                フォロワー
+              </p>
+            </div>
+          </div>
           <div className="flex items-center gap-x-4 mt-4">
             <Button
               href="/edit"
