@@ -3,6 +3,7 @@ import React from "react";
 import { Link, Button } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
+import Logout from "@app/components/auth/Logout";
 
 export default function Header() {
   const { isLoggedIn } = useAuthContext();
@@ -14,7 +15,7 @@ export default function Header() {
           <Link href="/">LOGO</Link>
           <div className="flex items-center gap-x-4">
             {isLoggedIn ? (
-              <Link href="/" className="text-sm text-white">ログアウト</Link>
+              <Logout />
             ) : (
               <>
                 <Link href="/signin" className="text-sm text-white">
