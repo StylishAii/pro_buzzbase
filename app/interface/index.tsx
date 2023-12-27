@@ -122,3 +122,21 @@ interface updateUser {
   name: string;
   user_id: string;
 }
+
+interface ResultsSelectBoxProps {
+  radius?: "none" | "sm" | "md" | "lg" | "full" | undefined;
+  className?: string;
+  data: { label: string }[];
+  defaultSelectedKeys: string[];
+  color?:
+    | "danger"
+    | "default"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning";
+  ariaLabel: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
+  labelPlacement?: "outside" | "outside-left" | "inside";
+  size?: "sm" | "md" | "lg" | undefined;
+}
