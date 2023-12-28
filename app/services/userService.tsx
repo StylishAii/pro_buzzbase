@@ -14,8 +14,6 @@ export const updateUser = async (data: updateUser) => {
       user: {
         name: data.name,
         user_id: data.user_id,
-        image: data.image,
-        introduction: data.introduction,
       },
     },
     { headers }
@@ -33,7 +31,6 @@ export const getUserData = async () => {
 };
 
 export const updateProfile = async (data: FormData) => {
-  const response = await axiosInstance.put("/api/v1/user", data, {
-  });
+  const response = await axiosInstance.put("/api/v1/user", data, {});
   return response;
 };
