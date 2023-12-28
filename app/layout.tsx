@@ -28,10 +28,8 @@ export default function RootLayout({
       >
         <AuthProvider>
           <Providers>
-            <div className="h-full buzz-dark">
-              <main className="h-full">{children}</main>
-              <NavigationMenu />
-            </div>
+            {children}
+            <NavigationMenu />
           </Providers>
         </AuthProvider>
       </body>

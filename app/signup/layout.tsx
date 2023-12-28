@@ -8,7 +8,9 @@ export default function SignUpLayout({
   return (
     <>
       <Header />
-      {children}
+      <div className="h-full buzz-dark">
+        <main className="h-full">{children}</main>
+      </div>
     </>
   );
 }

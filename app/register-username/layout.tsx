@@ -8,7 +8,9 @@ export default function RegisterUsernameLayout({
   return (
     <>
       <HeaderLogo />
-      {children}
+      <div className="h-full buzz-dark">
+        <main className="h-full">{children}</main>
+      </div>
     </>
   );
 }
