@@ -107,7 +107,7 @@ export default function MyPage() {
           </div>
           <div className="flex items-center gap-x-4 mt-4">
             <Button
-              href="/edit"
+              href={`${userData.user_id}/edit`}
               as={Link}
               className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
             >

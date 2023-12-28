@@ -121,6 +121,8 @@ interface UserIdInputProps {
 interface updateUser {
   name: string;
   user_id: string;
+  image: string;
+  introduction: Text;
 }
 
 interface ResultsSelectBoxProps {
