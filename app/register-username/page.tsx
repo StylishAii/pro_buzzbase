@@ -7,7 +7,7 @@ import UserNameInput from "@app/components/user/UserNameInput";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { getUserData, updateUser } from "@app/services/userService";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export default function RegisterUserName() {
   const router = useRouter();
@@ -33,22 +33,28 @@ export default function RegisterUserName() {
     return () => clearTimeout(timeout);
   };
 
-  const validateUserName = (userName: string) =>
-    /^[0-9A-Za-z\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]+$/.test(
-      userName
-    );
+  const validateUserName = useCallback(
+    (userName: string) =>
+      /^[0-9A-Za-z\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]+$/.test(
+        userName
+      ),
+    []
+  );
 
   const isInvalid = useMemo(() => {
     if (userName === "") return false;
     return validateUserName(userName) ? false : true;
-  }, [userName]);
+  }, [userName, validateUserName]);
 
-  const validateUserId = (userId: string) => /^[A-Za-z0-9_-]+$/.test(userId);
+  const validateUserId = useCallback(
+    (userId: string) => /^[A-Za-z0-9_-]+$/.test(userId),
+    []
+  );
 
   const isInvalidUserId = useMemo(() => {
     if (userId === "") return false;
     return validateUserId(userId) ? false : true;
-  }, [userId]);
+  }, [userId, validateUserId]);
 
   const isFormValid = useMemo(() => {
     return (
