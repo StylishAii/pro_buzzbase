@@ -1,4 +1,6 @@
 "use client";
+import HeaderSave from "@app/components/header/HeaderSave";
+import MyPageLayout from "@app/mypage/[slug]/layout";
 import { getUserData, updateProfile } from "@app/services/userService";
 import { Avatar, Input, Textarea } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
@@ -60,6 +62,7 @@ export default function ProfileEdit() {
     }
     try {
       await updateProfile(formData);
+      console.log("成功");
     } catch (error) {
       console.log(error);
     }
@@ -67,54 +70,56 @@ export default function ProfileEdit() {
 
   return (
     <>
-      <div className="pt-12">
-        <div>
-          <h2>プロフィール編集</h2>
-          <form onSubmit={handleSubmit}>
-            {profile.image && (
-              <Avatar
-                size="lg"
-                isBordered
-                src={
-                  profile.image.startsWith("blob:")
-                    ? profile.image
-                    : `${process.env.NEXT_PUBLIC_API_URL}${profile.image}`
-                }
-                onClick={handleImageClick}
-                className="cursor-pointer"
+      <MyPageLayout pageType="edit">
+        <HeaderSave onProfileUpdate={handleSubmit} />
+        <div className="pt-12">
+          <div>
+            <h2>プロフィール編集</h2>
+            <form>
+              {profile.image && (
+                <Avatar
+                  size="lg"
+                  isBordered
+                  src={
+                    profile.image.startsWith("blob:")
+                      ? profile.image
+                      : `${process.env.NEXT_PUBLIC_API_URL}${profile.image}`
+                  }
+                  onClick={handleImageClick}
+                  className="cursor-pointer"
+                />
+              )}
+              <input
+                type="file"
+                name="image"
+                onChange={handleChange}
+                ref={fileInputRef}
+                className="hidden"
               />
-            )}
-            <input
-              type="file"
-              name="image"
-              onChange={handleChange}
-              ref={fileInputRef}
-              className="hidden"
-            />
-            <button type="button" onClick={handleImageClick}>
-              画像を編集
-            </button>
-            <Input
-              type="text"
-              name="name"
-              variant="underlined"
-              label="名前"
-              value={profile.name}
-              onChange={handleChange}
-            />
-            <Textarea
-              name="introduction"
-              variant="underlined"
-              label="自己紹介"
-              labelPlacement="outside"
-              placeholder="自己紹介文を書いてみよう！（100文字以内）"
-              value={profile.introduction}
-              onChange={handleChange}
-            />
-            <button type="submit">保存</button>
-          </form>
+              <button type="button" onClick={handleImageClick}>
+                画像を編集
+              </button>
+              <Input
+                type="text"
+                name="name"
+                variant="underlined"
+                label="名前"
+                value={profile.name}
+                onChange={handleChange}
+              />
+              <Textarea
+                name="introduction"
+                variant="underlined"
+                label="自己紹介"
+                labelPlacement="outside"
+                placeholder="自己紹介文を書いてみよう！（100文字以内）"
+                value={profile.introduction}
+                onChange={handleChange}
+              />
+            </form>
+          </div>
         </div>
-      </div>
+      </MyPageLayout>
     </>
   );
 }
