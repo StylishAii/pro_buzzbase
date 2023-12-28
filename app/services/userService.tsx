@@ -26,7 +26,6 @@ export const getUserData = async () => {
     const response = await axiosInstance.get("/api/v1/user/");
     return response.data;
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

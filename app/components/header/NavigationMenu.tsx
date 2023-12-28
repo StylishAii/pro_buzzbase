@@ -31,7 +31,6 @@ export default function NavigationMenu() {
 
   return (
     <>
-      {console.log(pathName)}
       <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500">
         <ul className="flex items-center justify-around">
           {NavigationItems.map((item, index) => (
