@@ -1,6 +1,6 @@
 "use client";
-import { getUserData, updateUser } from "@app/services/userService";
-import { Avatar } from "@nextui-org/react";
+import { getUserData, updateProfile } from "@app/services/userService";
+import { Avatar, Input, Textarea } from "@nextui-org/react";
 import { useEffect, useRef, useState } from "react";
 
 export default function ProfileEdit() {
@@ -25,7 +25,7 @@ export default function ProfileEdit() {
       setProfile({
         name: data.name,
         image: data.image.url,
-        introduction: data.introduction,
+        introduction: data.introduction || "",
       });
     };
     fetchData();
@@ -49,20 +49,28 @@ export default function ProfileEdit() {
     }
   };
 
-  // const handleUpdate = async () => {
-  //   try {
-  //     await updateUser(profile);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("user[name]", profile.name);
+    formData.append("user[introduction]", profile.introduction);
+    const file = fileInputRef.current?.files?.[0];
+    if (profile.image && profile.image.startsWith("blob:") && file) {
+      formData.append("user[image]", file);
+    }
+    try {
+      await updateProfile(formData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <div className="pt-12">
         <div>
           <h2>プロフィール編集</h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             {profile.image && (
               <Avatar
                 size="lg"
@@ -86,6 +94,24 @@ export default function ProfileEdit() {
             <button type="button" onClick={handleImageClick}>
               画像を編集
             </button>
+            <Input
+              type="text"
+              name="name"
+              variant="underlined"
+              label="名前"
+              value={profile.name}
+              onChange={handleChange}
+            />
+            <Textarea
+              name="introduction"
+              variant="underlined"
+              label="自己紹介"
+              labelPlacement="outside"
+              placeholder="自己紹介文を書いてみよう！（100文字以内）"
+              value={profile.introduction}
+              onChange={handleChange}
+            />
+            <button type="submit">保存</button>
           </form>
         </div>
       </div>

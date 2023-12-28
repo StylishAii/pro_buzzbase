@@ -31,3 +31,9 @@ export const getUserData = async () => {
     throw error;
   }
 };
+
+export const updateProfile = async (data: FormData) => {
+  const response = await axiosInstance.put("/api/v1/user", data, {
+  });
+  return response;
+};
