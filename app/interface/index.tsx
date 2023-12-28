@@ -142,3 +142,7 @@ interface ResultsSelectBoxProps {
   labelPlacement?: "outside" | "outside-left" | "inside";
   size?: "sm" | "md" | "lg" | undefined;
 }
+
+interface HeaderSaveProps {
+  onProfileUpdate: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
