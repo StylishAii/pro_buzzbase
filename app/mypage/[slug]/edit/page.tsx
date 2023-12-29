@@ -1,9 +1,10 @@
 "use client";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderSave from "@app/components/header/HeaderSave";
 import MyPageLayout from "@app/mypage/[slug]/layout";
 import { getUserData, updateProfile } from "@app/services/userService";
 import { Avatar, Input, Textarea } from "@nextui-org/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export default function ProfileEdit() {
   const [profile, setProfile] = useState<{
@@ -16,6 +17,7 @@ export default function ProfileEdit() {
     introduction: "",
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -51,8 +53,19 @@ export default function ProfileEdit() {
     }
   };
 
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 5000);
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if (isInvalid) {
+      setErrorsWithTimeout(["名前が未入力、または無効です。"]);
+      return;
+    }
     const formData = new FormData();
     formData.append("user[name]", profile.name);
     formData.append("user[introduction]", profile.introduction);
@@ -60,6 +73,7 @@ export default function ProfileEdit() {
     if (profile.image && profile.image.startsWith("blob:") && file) {
       formData.append("user[image]", file);
     }
+    setErrors([]);
     try {
       await updateProfile(formData);
       console.log("成功");
@@ -68,11 +82,25 @@ export default function ProfileEdit() {
     }
   };
 
+  // バリデーション
+  const validateUserName = useCallback(
+    (name: string) =>
+      /^[0-9A-Za-z\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]+$/.test(
+        name
+      ),
+    []
+  );
+
+  const isInvalid = useMemo(() => {
+    return profile.name === "" || !validateUserName(profile.name);
+  }, [profile.name, validateUserName]);
+
   return (
     <>
       <MyPageLayout pageType="edit">
         <HeaderSave onProfileUpdate={handleSubmit} />
-        <div className="pt-12">
+        <div className="pt-12 relative">
+        <ErrorMessages errors={errors} />
           <div>
             <h2>プロフィール編集</h2>
             <form>
@@ -106,6 +134,14 @@ export default function ProfileEdit() {
                 label="名前"
                 value={profile.name}
                 onChange={handleChange}
+                isInvalid={isInvalid}
+                color={isInvalid ? "danger" : "primary"}
+                errorMessage={
+                  isInvalid
+                    ? "半角英数字、ハイフン(-)、アンダーバー(_)のみ使用可能です"
+                    : ""
+                }
+                isRequired
               />
               <Textarea
                 name="introduction"
@@ -115,6 +151,7 @@ export default function ProfileEdit() {
                 placeholder="自己紹介文を書いてみよう！（100文字以内）"
                 value={profile.introduction}
                 onChange={handleChange}
+                color="primary"
               />
             </form>
           </div>
