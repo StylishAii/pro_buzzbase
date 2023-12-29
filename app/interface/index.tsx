@@ -96,6 +96,7 @@ interface UserNameInputProps {
     | "warning";
   errorMessage?: string;
   variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
+  isRequired: boolean;
 }
 
 interface UserIdInputProps {
@@ -116,6 +117,7 @@ interface UserIdInputProps {
     | "warning";
   errorMessage?: string;
   variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
+  isRequired: boolean;
 }
 
 interface updateUser {

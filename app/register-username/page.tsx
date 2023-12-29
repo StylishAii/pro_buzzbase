@@ -117,6 +117,7 @@ export default function RegisterUserName() {
               errorMessage={
                 isInvalid ? "有効なユーザー名を入力してください" : ""
               }
+              isRequired
             />
             <UserIdInput
               value={userId}
@@ -134,6 +135,7 @@ export default function RegisterUserName() {
                   ? "半角英数字、ハイフン(-)、アンダーバー(_)のみ使用可能です"
                   : ""
               }
+              isRequired
             />
             <span className="text-sm text-red-500">
               ※IDは一度決めると変更できません。

@@ -13,6 +13,7 @@ export default function UserNameInput({
   color = "default",
   errorMessage,
   variant,
+  isRequired,
 }: UserNameInputProps) {
   return (
     <>
@@ -28,6 +29,7 @@ export default function UserNameInput({
         color={isInvalid ? "danger" : color}
         errorMessage={isInvalid && errorMessage}
         variant={variant}
+        isRequired={isRequired}
         startContent={
           <UserIcon
             fill="#e08e0a"
