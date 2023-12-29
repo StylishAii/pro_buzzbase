@@ -1,9 +1,11 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderSave from "@app/components/header/HeaderSave";
+import SaveSpinner from "@app/components/spinner/SavingSpinner";
 import MyPageLayout from "@app/mypage/[slug]/layout";
 import { getUserData, updateProfile } from "@app/services/userService";
 import { Avatar, Input, Textarea } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export default function ProfileEdit() {
@@ -11,13 +13,17 @@ export default function ProfileEdit() {
     name: string;
     image: string | null;
     introduction: string;
+    user_id: string;
   }>({
     name: "",
     image: null,
     introduction: "",
+    user_id: "",
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [save, setSave] = useState(false);
+  const router = useRouter();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -30,6 +36,7 @@ export default function ProfileEdit() {
         name: data.name,
         image: data.image.url,
         introduction: data.introduction || "",
+        user_id: data.user_id,
       });
     };
     fetchData();
@@ -76,7 +83,10 @@ export default function ProfileEdit() {
     setErrors([]);
     try {
       await updateProfile(formData);
-      console.log("成功");
+      setSave(true);
+      setTimeout(() => {
+        router.push(`/mypage/${profile.user_id}`);
+      }, 1000);
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +110,8 @@ export default function ProfileEdit() {
       <MyPageLayout pageType="edit">
         <HeaderSave onProfileUpdate={handleSubmit} />
         <div className="pt-12 relative">
-        <ErrorMessages errors={errors} />
+          <ErrorMessages errors={errors} />
+          <SaveSpinner saved={save} />
           <div>
             <h2>プロフィール編集</h2>
             <form>
