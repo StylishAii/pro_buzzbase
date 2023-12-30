@@ -168,6 +168,7 @@ export default function ProfileEdit() {
                 value={profile.introduction}
                 onChange={handleChange}
                 color="primary"
+                maxLength={100}
               />
             </form>
           </div>
