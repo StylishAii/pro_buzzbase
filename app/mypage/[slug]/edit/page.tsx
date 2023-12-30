@@ -112,8 +112,8 @@ export default function ProfileEdit() {
         <div className="pt-12 relative">
           <ErrorMessages errors={errors} />
           <SaveSpinner saved={save} />
-          <div>
-            <h2>プロフィール編集</h2>
+          <div className="px-4 py-10">
+            <h2 className="text-xl font-bold text-center">プロフィール編集</h2>
             <form>
               {profile.image && (
                 <Avatar
@@ -125,7 +125,7 @@ export default function ProfileEdit() {
                       : `${process.env.NEXT_PUBLIC_API_URL}${profile.image}`
                   }
                   onClick={handleImageClick}
-                  className="cursor-pointer"
+                  className="cursor-pointer mx-auto mt-6"
                 />
               )}
               <input
@@ -135,7 +135,11 @@ export default function ProfileEdit() {
                 ref={fileInputRef}
                 className="hidden"
               />
-              <button type="button" onClick={handleImageClick}>
+              <button
+                type="button"
+                onClick={handleImageClick}
+                className="text-sm text-center text-yellow-500 mt-2 mx-auto mb-4 block"
+              >
                 画像を編集
               </button>
               <Input
@@ -153,6 +157,7 @@ export default function ProfileEdit() {
                     : ""
                 }
                 isRequired
+                className="mb-4"
               />
               <Textarea
                 name="introduction"
