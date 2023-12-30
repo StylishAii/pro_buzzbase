@@ -7,7 +7,7 @@ import { useAuthContext } from "@app/contexts/useAuthContext";
 import { signIn } from "@app/services/authService";
 import { getUserData } from "@app/services/userService";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -49,21 +49,25 @@ export default function SignIn() {
     }
   };
 
-  const validateEmail = (email: string) =>
-    email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
+  const validateEmail = useCallback(
+    (email: string) => email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i),
+    []
+  );
 
   const isInvalid = useMemo(() => {
     if (email === "") return false;
     return validateEmail(email) ? false : true;
-  }, [email]);
+  }, [email, validateEmail]);
 
-  const validatePassword = (password: string) =>
-    /^[a-zA-Z\d]{6,}$/.test(password);
+  const validatePassword = useCallback(
+    (password: string) => /^[a-zA-Z\d]{6,}$/.test(password),
+    []
+  );
 
   const isInvalidPassword = useMemo(() => {
     if (password === "") return false;
     return validatePassword(password) ? false : true;
-  }, [password]);
+  }, [password, validatePassword]);
 
   const isFormValid = useMemo(() => {
     return (

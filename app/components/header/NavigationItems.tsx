@@ -5,9 +5,9 @@ import { GroupIcon } from "@app/components/icon/GroupIcon";
 
 const NavigationItems = [
   { href: "", label: "新着", icon: HomeIcon },
-  { href: "", label: "ランキング", icon: RankingIcon },
-  { href: "", label: "記録", icon: RecordIcon },
-  { href: "", label: "グループ", icon: GroupIcon },
+  { href: "/ranking", label: "ランキング", icon: RankingIcon },
+  { href: "/record", label: "記録", icon: RecordIcon },
+  { href: "/group", label: "グループ", icon: GroupIcon },
 ];
 
 export default NavigationItems;
