@@ -16,6 +16,7 @@ type userData = {
   name: string;
   user_id: string;
   url: string;
+  introduction: string;
 };
 
 export default function MyPage() {
@@ -61,9 +62,13 @@ export default function MyPage() {
                 </p>
               </div>
             </div>
-            <p className="text-sm mt-4">
-              私はほかそんなにこういう発展方によってものの限りになっらします。とにかく十一月よりらく目はけっしてそんなお話ましなまでをやっばいましをも相違向いうだば、
-            </p>
+            {userData.introduction.length > 1 ? (
+              <>
+                <p className="text-sm mt-4">{userData.introduction}</p>
+              </>
+            ) : (
+              ""
+            )}
             <ul className="mt-4 grid gap-y-1">
               <li className="flex items-start gap-x-1.5">
                 <CrownIcon width="22" height="22" fill="#e08e0ad0" />
