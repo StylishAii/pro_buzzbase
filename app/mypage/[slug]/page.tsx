@@ -69,15 +69,7 @@ export default function MyPage() {
             ) : (
               ""
             )}
-            <ul className="mt-4 grid gap-y-1">
-              <li className="flex items-start gap-x-1.5">
-                <CrownIcon width="22" height="22" fill="#e08e0ad0" />
-                <p className="text-sm text-zinc-400">
-                  都市対抗野球大会MVP（2022）/ 都市対抗野球大会MVP（2023）
-                </p>
-              </li>
-            </ul>
-            <ul className="flex items-center gap-x-1.5 mt-2 relative -left-0.5">
+            <ul className="flex items-center gap-x-1.5 mt-4 relative -left-0.5">
               <li>
                 <GloveIcon width="18" height="18" fill="#F4F4F4d0" />
               </li>
@@ -103,7 +95,15 @@ export default function MyPage() {
                 </ul>
               </li>
             </ul>
-            <div className="flex items-center gap-x-4 mt-4">
+            <ul className="mt-2 grid gap-y-1">
+              <li className="flex items-start gap-x-1.5">
+                <CrownIcon width="22" height="22" fill="#e08e0ad0" />
+                <p className="text-sm text-zinc-400">
+                  都市対抗野球大会MVP（2022）/ 都市対抗野球大会MVP（2023）
+                </p>
+              </li>
+            </ul>
+            <div className="flex items-center gap-x-4 mt-2">
               <div className="flex gap-x-1">
                 <span className="text-sm font-bold">100</span>
                 <p className="text-sm font-light text-zinc-400 tracking-tighter">
