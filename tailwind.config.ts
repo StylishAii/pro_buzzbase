@@ -15,6 +15,7 @@ const config: Config = {
         black: "#000000",
         main: "#2E2E2E",
         sub: "#424242",
+        bg_sub: "#27272a",
         yellow: {
           50: "#FEFCE8",
           100: "#FDEDD3",
@@ -63,6 +64,18 @@ const config: Config = {
           800: "#095028",
           900: "#052814",
         },
+        blue: {
+          50: "#E6F1FE",
+          100: "#CCE3FD",
+          200: "#99C7FB",
+          300: "#66AAF9",
+          400: "#338EF7",
+          500: "#006FEE",
+          600: "#005BC4",
+          700: "#004493",
+          800: "#002E62",
+          900: "#001731",
+        },
       },
       fontSize: {
         xxs: "10px",
@@ -78,6 +91,10 @@ const config: Config = {
           colors: {
             background: "#2E2E2E",
             foreground: "#F4F4F4",
+            primary: {
+              DEFAULT: "#d08000",
+              foreground: "#F4F4F4",
+            },
           },
         },
       },
