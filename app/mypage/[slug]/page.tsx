@@ -3,6 +3,7 @@
 import { BallIcon } from "@app/components/icon/BallIcon";
 import { CrownIcon } from "@app/components/icon/CrownIcon";
 import { GloveIcon } from "@app/components/icon/GloveIcon";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import IndividualResultsList from "@app/components/user/IndividualResultsList";
 import MatchResultList from "@app/components/user/MatchResultList";
 import MyPageLayout from "@app/mypage/[slug]/layout";
@@ -33,7 +34,11 @@ export default function MyPage() {
   }, []);
 
   if (!userData) {
-    return <div>ローディング中....</div>;
+    return (
+      <>
+        <LoadingSpinner />
+      </>
+    );
   }
 
   return (
