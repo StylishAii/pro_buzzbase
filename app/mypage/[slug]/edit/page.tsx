@@ -4,9 +4,10 @@ import HeaderSave from "@app/components/header/HeaderSave";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
 import MyPageLayout from "@app/mypage/[slug]/layout";
 import { getUserData, updateProfile } from "@app/services/userService";
-import { Avatar, Input, Textarea } from "@nextui-org/react";
+import { Avatar, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { positions } from "@app/data/Position";
 
 export default function ProfileEdit() {
   const [profile, setProfile] = useState<{
@@ -157,7 +158,7 @@ export default function ProfileEdit() {
                     : ""
                 }
                 isRequired
-                className="mb-4"
+                className="mb-5"
               />
               <Textarea
                 name="introduction"
@@ -169,7 +170,21 @@ export default function ProfileEdit() {
                 onChange={handleChange}
                 color="primary"
                 maxLength={100}
+                className="mb-2"
               />
+              <Select
+                variant="underlined"
+                label="ポジション（複数選択可）"
+                color="primary"
+                selectionMode="multiple"
+                className=""
+              >
+                {positions.map((position) => (
+                  <SelectItem key={position.id} value={position.name}>
+                    {position.name}
+                  </SelectItem>
+                ))}
+              </Select>
             </form>
           </div>
         </div>
