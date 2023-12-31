@@ -1,7 +1,7 @@
 import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
 import BattingAverageTable from "@app/components/table/BattingAverageTable";
 import PitchingRecordTable from "@app/components/table/PitchingRecordTable";
-import { gameType, years } from "@app/test/TestData";
+import { gameType, years } from "@app/data/TestData";
 
 export default function IndividualResultsList() {
   return (

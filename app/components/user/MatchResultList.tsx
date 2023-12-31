@@ -1,6 +1,6 @@
 import MatchResultsItem from "@app/components/listItem/MatchResultsItem";
 import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
-import { gameType, years } from "@app/test/TestData";
+import { gameType, years } from "@app/data/TestData";
 
 export default function MatchResultList() {
   return (
