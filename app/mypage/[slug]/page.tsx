@@ -62,7 +62,7 @@ export default function MyPage() {
                 </p>
               </div>
             </div>
-            {userData.introduction.length > 1 ? (
+            {userData.introduction?.length > 1 ? (
               <>
                 <p className="text-sm mt-4">{userData.introduction}</p>
               </>
