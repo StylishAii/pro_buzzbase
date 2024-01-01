@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import Header from "@app/components/header/Header";
 import { Providers } from "@app/providers";
 import NavigationMenu from "@app/components/header/NavigationMenu";
 import { AuthProvider } from "@app/contexts/useAuthContext";
@@ -29,11 +28,8 @@ export default function RootLayout({
       >
         <AuthProvider>
           <Providers>
-            <div className="h-full buzz-dark">
-              <Header />
-              <main className="h-full">{children}</main>
-              <NavigationMenu />
-            </div>
+            {children}
+            <NavigationMenu />
           </Providers>
         </AuthProvider>
       </body>

@@ -9,6 +9,8 @@ import { usePathname } from "next/navigation";
 
 type userData = {
   user_id: string;
+  image: any;
+  url: string;
 };
 
 export default function NavigationMenu() {
@@ -66,10 +68,14 @@ export default function NavigationMenu() {
               } `}
             >
               <UserImage
-                src={"/images/user-default-yellow.svg"}
+                src={
+                  userData?.image.url
+                    ? `${process.env.NEXT_PUBLIC_API_URL}${userData.image.url}`
+                    : "/images/user-default-yellow.svg"
+                }
                 width={22}
                 height={22}
-                alt=""
+                alt="" 
                 active={pathName.includes("/mypage") ? true : false}
               />
               マイページ

@@ -96,6 +96,7 @@ interface UserNameInputProps {
     | "warning";
   errorMessage?: string;
   variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
+  isRequired: boolean;
 }
 
 interface UserIdInputProps {
@@ -116,6 +117,7 @@ interface UserIdInputProps {
     | "warning";
   errorMessage?: string;
   variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
+  isRequired: boolean;
 }
 
 interface updateUser {
@@ -139,4 +141,8 @@ interface ResultsSelectBoxProps {
   variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
   labelPlacement?: "outside" | "outside-left" | "inside";
   size?: "sm" | "md" | "lg" | undefined;
+}
+
+interface HeaderSaveProps {
+  onProfileUpdate: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
