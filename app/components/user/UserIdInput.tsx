@@ -13,6 +13,7 @@ export default function UserIdInput({
   color = "default",
   errorMessage,
   variant,
+  isRequired,
 }: UserIdInputProps) {
   return (
     <>
@@ -28,6 +29,7 @@ export default function UserIdInput({
         color={isInvalid ? "danger" : color}
         errorMessage={isInvalid && errorMessage}
         variant={variant}
+        isRequired={isRequired}
         startContent={
           <AtMarkIcon width="18" height="18" fill="none" stroke="#e08e0a" />
         }
