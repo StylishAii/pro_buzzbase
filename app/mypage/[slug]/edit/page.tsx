@@ -3,11 +3,19 @@ import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderSave from "@app/components/header/HeaderSave";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
 import MyPageLayout from "@app/mypage/[slug]/layout";
+import {
+  getPositions,
+  updateUserPositions,
+} from "@app/services/positionService";
 import { getUserData, updateProfile } from "@app/services/userService";
 import { Avatar, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { positions } from "@app/data/Position";
+
+type Position = {
+  userId: string;
+  position_id: number;
+};
 
 export default function ProfileEdit() {
   const [profile, setProfile] = useState<{
@@ -15,15 +23,19 @@ export default function ProfileEdit() {
     image: string | null;
     introduction: string;
     user_id: string;
+    id: string;
   }>({
     name: "",
     image: null,
     introduction: "",
     user_id: "",
+    id: "",
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [save, setSave] = useState(false);
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [selectedPositionIds, setSelectedPositionIds] = useState([]);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -38,10 +50,31 @@ export default function ProfileEdit() {
         image: data.image.url,
         introduction: data.introduction || "",
         user_id: data.user_id,
+        id: data.id,
       });
     };
     fetchData();
   }, []);
+
+  // ポジション取得
+  useEffect(() => {
+    const fetchPositions = async () => {
+      try {
+        const positionsData = await getPositions();
+        setPositions(positionsData);
+      } catch (error) {
+        console.error("Error in component fetching positions:", error);
+      }
+    };
+
+    fetchPositions();
+  }, []);
+
+  // ポジション選択
+  const handleSelectChange = (event: any) => {
+    const selectedOptions = event.target.value.split(",").map(Number);
+    setSelectedPositionIds(selectedOptions);
+  };
 
   const handleChange = (e: any) => {
     if (e.target.name === "image") {
@@ -85,6 +118,12 @@ export default function ProfileEdit() {
     try {
       await updateProfile(formData);
       setSave(true);
+      // ポジション保存
+      console.log(selectedPositionIds);
+      await updateUserPositions({
+        userId: profile.id,
+        positionIds: selectedPositionIds,
+      });
       setTimeout(() => {
         router.push(`/mypage/${profile.user_id}`);
       }, 1000);
@@ -177,10 +216,11 @@ export default function ProfileEdit() {
                 label="ポジション（複数選択可）"
                 color="primary"
                 selectionMode="multiple"
+                onChange={handleSelectChange}
                 className=""
               >
                 {positions.map((position) => (
-                  <SelectItem key={position.id} value={position.name}>
+                  <SelectItem key={position.id} value={position.id}>
                     {position.name}
                   </SelectItem>
                 ))}
