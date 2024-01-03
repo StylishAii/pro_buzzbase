@@ -1,24 +1,31 @@
 import axiosInstance from "@app/utils/axiosInstance";
-import Cookies from "js-cookie";
 
-interface positionIds {
-  id: string[];
+interface updateUserPositions {
+  userId: string;
+  positionIds: number[];
 }
 
-export const updateUserPositions = async (positionIds: positionIds) => {
-  const headers = {
-    "access-token": Cookies.get("access-token"),
-    client: Cookies.get("client"),
-    uid: Cookies.get("uid"),
-  };
-
+export const getPositions = async () => {
   try {
-    const response = await axiosInstance.put(
-      "/api/v1/user/update_positions",
-      { positionIds },
-      { headers }
-    );
+    const response = await axiosInstance.get("/api/v1/positions");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching positions:", error);
+    throw error;
+  }
+};
+
+export const updateUserPositions = async ({
+  userId,
+  positionIds,
+}: updateUserPositions) => {
+  try {
+    await axiosInstance.post("/api/v1/user_positions", {
+      user_id: userId,
+      position_ids: positionIds,
+    });
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
