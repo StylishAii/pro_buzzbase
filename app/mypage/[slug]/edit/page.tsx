@@ -15,6 +15,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 type Position = {
   userId: string;
   position_id: number;
+  id: string;
+  name: string[];
 };
 
 export default function ProfileEdit() {
@@ -35,45 +37,43 @@ export default function ProfileEdit() {
   const [errors, setErrors] = useState<string[]>([]);
   const [save, setSave] = useState(false);
   const [positions, setPositions] = useState<Position[]>([]);
-  const [selectedPositionIds, setSelectedPositionIds] = useState([]);
+  const [selectedPositionIds, setSelectedPositionIds] = useState<string[]>([]);
   const router = useRouter();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
+  // ユーザーデータ取得
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getUserData();
-      setProfile({
-        name: data.name,
-        image: data.image.url,
-        introduction: data.introduction || "",
-        user_id: data.user_id,
-        id: data.id,
-      });
+      try {
+        const data = await getUserData();
+        setProfile({
+          name: data.name,
+          image: data.image.url,
+          introduction: data.introduction || "",
+          user_id: data.user_id,
+          id: data.id,
+        });
+
+        const positionsData = await getPositions();
+        setPositions(positionsData);
+
+        const positionIds = data.positions.map((position: any) =>
+          position.id.toString()
+        );
+        setSelectedPositionIds(positionIds);
+      } catch (error: any) {
+        setErrors(error);
+      }
     };
     fetchData();
   }, []);
 
-  // ポジション取得
-  useEffect(() => {
-    const fetchPositions = async () => {
-      try {
-        const positionsData = await getPositions();
-        setPositions(positionsData);
-      } catch (error) {
-        console.error("Error in component fetching positions:", error);
-      }
-    };
-
-    fetchPositions();
-  }, []);
-
   // ポジション選択
-  const handleSelectChange = (event: any) => {
-    const selectedOptions = event.target.value.split(",").map(Number);
-    setSelectedPositionIds(selectedOptions);
+  const handleSelectChange = (keys: any) => {
+    setSelectedPositionIds(Array.from(keys).map(String));
   };
 
   const handleChange = (e: any) => {
@@ -119,10 +119,9 @@ export default function ProfileEdit() {
       await updateProfile(formData);
       setSave(true);
       // ポジション保存
-      console.log(selectedPositionIds);
       await updateUserPositions({
         userId: profile.id,
-        positionIds: selectedPositionIds,
+        positionIds: selectedPositionIds.map((id) => parseInt(id)),
       });
       setTimeout(() => {
         router.push(`/mypage/${profile.user_id}`);
@@ -216,11 +215,16 @@ export default function ProfileEdit() {
                 label="ポジション（複数選択可）"
                 color="primary"
                 selectionMode="multiple"
-                onChange={handleSelectChange}
+                selectedKeys={selectedPositionIds}
+                onSelectionChange={handleSelectChange}
                 className=""
               >
                 {positions.map((position) => (
-                  <SelectItem key={position.id} value={position.id}>
+                  <SelectItem
+                    key={position.id}
+                    value={position.id}
+                    textValue={position.name.toString()}
+                  >
                     {position.name}
                   </SelectItem>
                 ))}

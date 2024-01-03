@@ -146,3 +146,12 @@ interface ResultsSelectBoxProps {
 interface HeaderSaveProps {
   onProfileUpdate: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
+
+interface updateUserPositions {
+  userId: string;
+  positionIds: number[];
+}
+
+interface getUserPositions {
+  userId: string;
+}
