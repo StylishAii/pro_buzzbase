@@ -9,7 +9,12 @@ import MatchResultList from "@app/components/user/MatchResultList";
 import MyPageLayout from "@app/mypage/[slug]/layout";
 import { getUserData } from "@app/services/userService";
 import { Avatar, Button, Link, Tab, Tabs } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+
+type Position = {
+  id: string;
+  name: string;
+};
 
 type userData = {
   image: any;
@@ -17,6 +22,7 @@ type userData = {
   user_id: string;
   url: string;
   introduction: string;
+  positions: Position[];
 };
 
 export default function MyPage() {
@@ -69,18 +75,37 @@ export default function MyPage() {
             ) : (
               ""
             )}
-            <ul className="flex items-center gap-x-1.5 mt-4 relative -left-0.5">
-              <li>
-                <GloveIcon width="18" height="18" fill="#F4F4F4d0" />
-              </li>
-              <li>
-                <ul className="flex items-center">
+            {userData.positions?.length > 1 ? (
+              <>
+                <ul className="flex items-center gap-x-2 mt-4 relative -left-0.5">
                   <li>
-                    <p className="text-sm text-zinc-400">一塁手/捕手</p>
+                    <GloveIcon width="18" height="18" fill="#F4F4F4d0" />
+                  </li>
+                  <li>
+                    <ul className="flex items-center">
+                      {userData.positions.map((position, index) => (
+                        <React.Fragment key={position.id}>
+                          <li>
+                            <p className="text-sm text-zinc-400">
+                              {position.name}
+                            </p>
+                          </li>
+                          {index < userData.positions.length - 1 && (
+                            <li>
+                              <p className="text-sm text-zinc-400">
+                                &nbsp;/&nbsp;
+                              </p>
+                            </li>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </ul>
                   </li>
                 </ul>
-              </li>
-            </ul>
+              </>
+            ) : (
+              ""
+            )}
             <ul className="flex gap-x-1.5 mt-1.5">
               <li>
                 <BallIcon width="18" height="18" fill="#F4F4F4d0" />
