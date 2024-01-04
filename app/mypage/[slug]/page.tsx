@@ -68,14 +68,14 @@ export default function MyPage() {
                 </p>
               </div>
             </div>
-            {userData.introduction?.length > 1 ? (
+            {userData.introduction?.length > 0 ? (
               <>
                 <p className="text-sm mt-4">{userData.introduction}</p>
               </>
             ) : (
               ""
             )}
-            {userData.positions?.length > 1 ? (
+            {userData.positions?.length > 0 ? (
               <>
                 <ul className="flex items-center gap-x-2 mt-4 relative -left-0.5">
                   <li>
