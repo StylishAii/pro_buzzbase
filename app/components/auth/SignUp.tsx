@@ -5,8 +5,7 @@ import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PasswordConfirmInput from "@app/components/auth/PasswordConfirmInput";
 import PasswordInput from "@app/components/auth/PasswordInput";
 import SubmitButton from "@app/components/button/SendButton";
-import { useAuthContext } from "@app/contexts/useAuthContext";
-import { singUp } from "@app/services/authService";
+import { signUp } from "@app/services/authService";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useMemo, useState } from "react";
 
@@ -36,7 +35,12 @@ export default function SignUp() {
     event.preventDefault();
     setErrors([]);
     try {
-      await singUp({ email, password, passwordConfirmation });
+      await signUp({
+        email,
+        password,
+        passwordConfirmation,
+        confirm_success_url: process.env.NEXT_PUBLIC_CONFIRM_SUCCESS_URL,
+      });
       router.push("/registration-confirmation");
     } catch (error: any) {
       if (error.response && error.response.data && error.response.data.errors) {

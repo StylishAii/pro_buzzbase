@@ -1,11 +1,12 @@
 import axiosInstance from "@app/utils/axiosInstance";
 import Cookies from "js-cookie";
 
-export const singUp = async (data: SignUpData) => {
+export const signUp = async (data: SignUpData) => {
   const response = await axiosInstance.post("/api/v1/auth", {
     email: data.email,
     password: data.password,
     password_confirmation: data.passwordConfirmation,
+    confirm_success_url: process.env.NEXT_PUBLIC_CONFIRM_SUCCESS_URL,
   });
 
   return response;
