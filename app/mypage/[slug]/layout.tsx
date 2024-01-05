@@ -6,7 +6,7 @@ interface MyPageLayoutProps {
   pageType: "mypage" | "edit";
 }
 
-const MyPageLayout: React.FC<MyPageLayoutProps> = ({ children, pageType }) => {
+const MyPageLayout = ({ children, pageType }: MyPageLayoutProps) => {
   return (
     <>
       {pageType === "mypage" && <Header />}
