@@ -1,9 +1,9 @@
 import Header from "@app/components/header/Header";
 
-interface MyPageLayoutProps {
+type MyPageLayoutProps = {
   children?: React.ReactNode;
   pageType: "mypage" | "edit";
-}
+};
 
 const MyPageLayout = ({ children, pageType }: MyPageLayoutProps) => {
   return (
