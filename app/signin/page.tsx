@@ -16,7 +16,7 @@ export default function Page() {
       setSuccessToastWithTimeout();
       setMessage("ログアウトしました");
     }
-  }, []);
+  }, [logoutParams]);
 
   const setSuccessToastWithTimeout = () => {
     setLogoutSuccess(true);

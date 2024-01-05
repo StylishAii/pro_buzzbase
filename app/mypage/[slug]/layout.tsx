@@ -1,13 +1,12 @@
 import Header from "@app/components/header/Header";
-import HeaderSave from "@app/components/header/HeaderSave";
+import { ReactNode } from "react";
 
-export default function MyPageLayout({
-  children,
-  pageType,
-}: {
-  children: React.ReactNode;
+interface MyPageLayoutProps {
+  children: ReactNode;
   pageType: "mypage" | "edit";
-}) {
+}
+
+const MyPageLayout: React.FC<MyPageLayoutProps> = ({ children, pageType }) => {
   return (
     <>
       {pageType === "mypage" && <Header />}
@@ -17,4 +16,6 @@ export default function MyPageLayout({
       </div>
     </>
   );
-}
+};
+
+export default MyPageLayout;
