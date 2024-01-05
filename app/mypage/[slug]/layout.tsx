@@ -1,6 +1,14 @@
 import Header from "@app/components/header/Header";
 
-const MyPageLayout = ({ children, pageType }: MyPageLayoutProps) => {
+interface MyPageLayoutProps {
+  children: React.ReactNode;
+  pageType: "mypage" | "edit";
+}
+
+export default function MyPageLayout({
+  children,
+  pageType,
+}: MyPageLayoutProps) {
   return (
     <>
       {pageType === "mypage" && <Header />}
@@ -10,6 +18,4 @@ const MyPageLayout = ({ children, pageType }: MyPageLayoutProps) => {
       </div>
     </>
   );
-};
-
-export default MyPageLayout;
+}
