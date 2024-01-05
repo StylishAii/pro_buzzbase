@@ -3,10 +3,21 @@ import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderSave from "@app/components/header/HeaderSave";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
 import MyPageLayout from "@app/mypage/[slug]/layout";
+import {
+  getPositions,
+  updateUserPositions,
+} from "@app/services/positionService";
 import { getUserData, updateProfile } from "@app/services/userService";
-import { Avatar, Input, Textarea } from "@nextui-org/react";
+import { Avatar, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+type Position = {
+  userId: string;
+  position_id: number;
+  id: string;
+  name: string[];
+};
 
 export default function ProfileEdit() {
   const [profile, setProfile] = useState<{
@@ -14,33 +25,56 @@ export default function ProfileEdit() {
     image: string | null;
     introduction: string;
     user_id: string;
+    id: string;
   }>({
     name: "",
     image: null,
     introduction: "",
     user_id: "",
+    id: "",
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [save, setSave] = useState(false);
+  const [positions, setPositions] = useState<Position[]>([]);
+  const [selectedPositionIds, setSelectedPositionIds] = useState<string[]>([]);
   const router = useRouter();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
   };
 
+  // ユーザーデータ取得
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getUserData();
-      setProfile({
-        name: data.name,
-        image: data.image.url,
-        introduction: data.introduction || "",
-        user_id: data.user_id,
-      });
+      try {
+        const data = await getUserData();
+        setProfile({
+          name: data.name,
+          image: data.image.url,
+          introduction: data.introduction || "",
+          user_id: data.user_id,
+          id: data.id,
+        });
+
+        const positionsData = await getPositions();
+        setPositions(positionsData);
+
+        const positionIds = data.positions.map((position: any) =>
+          position.id.toString()
+        );
+        setSelectedPositionIds(positionIds);
+      } catch (error: any) {
+        setErrors(error);
+      }
     };
     fetchData();
   }, []);
+
+  // ポジション選択
+  const handleSelectChange = (keys: any) => {
+    setSelectedPositionIds(Array.from(keys).map(String));
+  };
 
   const handleChange = (e: any) => {
     if (e.target.name === "image") {
@@ -84,6 +118,11 @@ export default function ProfileEdit() {
     try {
       await updateProfile(formData);
       setSave(true);
+      // ポジション保存
+      await updateUserPositions({
+        userId: profile.id,
+        positionIds: selectedPositionIds.map((id) => parseInt(id)),
+      });
       setTimeout(() => {
         router.push(`/mypage/${profile.user_id}`);
       }, 1000);
@@ -157,7 +196,7 @@ export default function ProfileEdit() {
                     : ""
                 }
                 isRequired
-                className="mb-4"
+                className="mb-5"
               />
               <Textarea
                 name="introduction"
@@ -169,7 +208,27 @@ export default function ProfileEdit() {
                 onChange={handleChange}
                 color="primary"
                 maxLength={100}
+                className="mb-2"
               />
+              <Select
+                variant="underlined"
+                label="ポジション（複数選択可）"
+                color="primary"
+                selectionMode="multiple"
+                selectedKeys={selectedPositionIds}
+                onSelectionChange={handleSelectChange}
+                className=""
+              >
+                {positions.map((position) => (
+                  <SelectItem
+                    key={position.id}
+                    value={position.id}
+                    textValue={position.name.toString()}
+                  >
+                    {position.name}
+                  </SelectItem>
+                ))}
+              </Select>
             </form>
           </div>
         </div>
