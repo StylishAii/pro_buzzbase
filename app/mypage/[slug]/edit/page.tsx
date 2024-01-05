@@ -2,7 +2,6 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderSave from "@app/components/header/HeaderSave";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
-import MyPageLayout from "@app/mypage/[slug]/layout";
 import {
   getPositions,
   updateUserPositions,
@@ -145,94 +144,98 @@ export default function ProfileEdit() {
   }, [profile.name, validateUserName]);
 
   return (
-    <>
-      <MyPageLayout pageType="edit">
-        <HeaderSave onProfileUpdate={handleSubmit} />
-        <div className="pt-12 relative">
-          <ErrorMessages errors={errors} />
-          <SaveSpinner saved={save} />
-          <div className="px-4 py-10">
-            <h2 className="text-xl font-bold text-center">プロフィール編集</h2>
-            <form>
-              {profile.image && (
-                <Avatar
-                  size="lg"
-                  isBordered
-                  src={
-                    profile.image.startsWith("blob:")
-                      ? profile.image
-                      : `${process.env.NEXT_PUBLIC_API_URL}${profile.image}`
-                  }
-                  onClick={handleImageClick}
-                  className="cursor-pointer mx-auto mt-6"
+    <div className="buzz-dark">
+      <HeaderSave onProfileUpdate={handleSubmit} />
+      <div className="h-full buzz-dark">
+        <main className="h-full">
+          <div className="pt-12 relative">
+            <ErrorMessages errors={errors} />
+            <SaveSpinner saved={save} />
+            <div className="px-4 py-10">
+              <h2 className="text-xl font-bold text-center">
+                プロフィール編集
+              </h2>
+              <form>
+                {profile.image && (
+                  <Avatar
+                    size="lg"
+                    isBordered
+                    src={
+                      profile.image.startsWith("blob:")
+                        ? profile.image
+                        : `${process.env.NEXT_PUBLIC_API_URL}${profile.image}`
+                    }
+                    onClick={handleImageClick}
+                    className="cursor-pointer mx-auto mt-6"
+                  />
+                )}
+                <input
+                  type="file"
+                  name="image"
+                  onChange={handleChange}
+                  ref={fileInputRef}
+                  className="hidden"
                 />
-              )}
-              <input
-                type="file"
-                name="image"
-                onChange={handleChange}
-                ref={fileInputRef}
-                className="hidden"
-              />
-              <button
-                type="button"
-                onClick={handleImageClick}
-                className="text-sm text-center text-yellow-500 mt-2 mx-auto mb-4 block"
-              >
-                画像を編集
-              </button>
-              <Input
-                type="text"
-                name="name"
-                variant="underlined"
-                label="名前"
-                value={profile.name}
-                onChange={handleChange}
-                isInvalid={isInvalid}
-                color={isInvalid ? "danger" : "primary"}
-                errorMessage={
-                  isInvalid
-                    ? "半角英数字、ハイフン(-)、アンダーバー(_)のみ使用可能です"
-                    : ""
-                }
-                isRequired
-                className="mb-5"
-              />
-              <Textarea
-                name="introduction"
-                variant="underlined"
-                label="自己紹介"
-                labelPlacement="outside"
-                placeholder="自己紹介文を書いてみよう！（100文字以内）"
-                value={profile.introduction}
-                onChange={handleChange}
-                color="primary"
-                maxLength={100}
-                className="mb-2"
-              />
-              <Select
-                variant="underlined"
-                label="ポジション（複数選択可）"
-                color="primary"
-                selectionMode="multiple"
-                selectedKeys={selectedPositionIds}
-                onSelectionChange={handleSelectChange}
-                className=""
-              >
-                {positions.map((position) => (
-                  <SelectItem
-                    key={position.id}
-                    value={position.id}
-                    textValue={position.name.toString()}
-                  >
-                    {position.name}
-                  </SelectItem>
-                ))}
-              </Select>
-            </form>
+                <button
+                  type="button"
+                  onClick={handleImageClick}
+                  className="text-sm text-center text-yellow-500 mt-2 mx-auto mb-4 block"
+                >
+                  画像を編集
+                </button>
+                <Input
+                  type="text"
+                  name="name"
+                  variant="underlined"
+                  label="名前"
+                  value={profile.name}
+                  onChange={handleChange}
+                  isInvalid={isInvalid}
+                  color={isInvalid ? "danger" : "primary"}
+                  errorMessage={
+                    isInvalid
+                      ? "半角英数字、ハイフン(-)、アンダーバー(_)のみ使用可能です"
+                      : ""
+                  }
+                  isRequired
+                  className="mb-5"
+                />
+                <Textarea
+                  name="introduction"
+                  variant="underlined"
+                  label="自己紹介"
+                  labelPlacement="outside"
+                  placeholder="自己紹介文を書いてみよう！（100文字以内）"
+                  value={profile.introduction}
+                  onChange={handleChange}
+                  color="primary"
+                  maxLength={100}
+                  className="mb-2"
+                />
+                <Select
+                  variant="underlined"
+                  label="ポジション（複数選択可）"
+                  color="primary"
+                  selectionMode="multiple"
+                  selectedKeys={selectedPositionIds}
+                  onSelectionChange={handleSelectChange}
+                  className=""
+                >
+                  {positions.map((position) => (
+                    <SelectItem
+                      key={position.id}
+                      value={position.id}
+                      textValue={position.name.toString()}
+                    >
+                      {position.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </form>
+            </div>
           </div>
-        </div>
-      </MyPageLayout>
-    </>
+        </main>
+      </div>
+    </div>
   );
 }
