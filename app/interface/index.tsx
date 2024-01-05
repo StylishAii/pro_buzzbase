@@ -155,3 +155,8 @@ interface updateUserPositions {
 interface getUserPositions {
   userId: string;
 }
+
+interface MyPageLayoutProps {
+  children: React.ReactNode;
+  pageType: "mypage" | "edit";
+}

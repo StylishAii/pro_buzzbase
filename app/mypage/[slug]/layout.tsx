@@ -1,10 +1,4 @@
 import Header from "@app/components/header/Header";
-import { ReactNode } from "react";
-
-interface MyPageLayoutProps {
-  children: ReactNode;
-  pageType: "mypage" | "edit";
-}
 
 const MyPageLayout = ({ children, pageType }: MyPageLayoutProps) => {
   return (
