@@ -101,6 +101,7 @@ export default function SignUp() {
           errorMessage={
             isInvalid ? "有効なメールアドレスを入力してください" : ""
           }
+          variant={"bordered"}
         />
         <PasswordInput
           value={password}
@@ -117,6 +118,7 @@ export default function SignUp() {
             isInvalidPassword ? "6文字以上で半角英数字のみ有効です" : ""
           }
           type={isPasswordVisible ? "text" : "password"}
+          variant={"bordered"}
         />
         <PasswordConfirmInput
           value={passwordConfirmation}
@@ -128,6 +130,7 @@ export default function SignUp() {
           isConfirmVisible={isConfirmVisible}
           toggleConfirmVisibility={toggleConfirmVisibility}
           type={isConfirmVisible ? "text" : "password"}
+          variant={"bordered"}
         />
         <SubmitButton
           className="bg-yellow-500 text-white text-base mt-6 mx-auto px-14 rounded-full block font-semibold"

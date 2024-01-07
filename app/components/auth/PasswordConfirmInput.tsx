@@ -12,6 +12,7 @@ export default function PasswordConfirmInput({
   type = "password",
   isConfirmVisible,
   toggleConfirmVisibility,
+  variant,
 }: PasswordConfirmationInputProps) {
   return (
     <Input
@@ -22,6 +23,7 @@ export default function PasswordConfirmInput({
       placeholder={placeholder}
       labelPlacement={labelPlacement}
       type={isConfirmVisible ? "text" : type}
+      variant={variant}
       endContent={
         <button
           className="focus:outline-none"
