@@ -62,6 +62,7 @@ interface PasswordConfirmationInputProps {
   toggleConfirmVisibility: () => void;
   isConfirmVisible: boolean;
   type: string;
+  variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
 }
 
 interface ErrorMessagesProps {
