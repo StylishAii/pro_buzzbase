@@ -62,12 +62,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const confirmAccount = async (token: string) => {
     try {
       const response = await confirmAccountApi(token);
+      console.log("Response data:", response.data);
       if (response.data.redirect_url) {
         window.location.href = response.data.redirect_url;
       } else {
         setConfirmationMessage(response.data.message);
       }
     } catch (error: any) {
+      console.error("Error:", error.response || error);
       setConfirmationError(error.message);
     }
   };
