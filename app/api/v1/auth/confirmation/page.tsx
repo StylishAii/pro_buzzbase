@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
+import LoadingSpinnerText from "@app/components/spinner/LoadingSpinnerText";
 
 const EmailConfirmation = () => {
   const router = useRouter();
@@ -26,8 +27,17 @@ const EmailConfirmation = () => {
 
   return (
     <div>
-      {confirmationError && <p>エラーが発生しました: {confirmationError}</p>}
-      {!confirmationMessage && <p>アカウントを確認しています...</p>}
+      {confirmationError && (
+        <>
+          <div className="px-4 pt-14">
+            <p className="text-red-500">エラーが発生しました: {confirmationError}</p>
+            {/* <p className="pt-6">メールアドレスを再送してください。</p> */}
+          </div>
+        </>
+      )}
+      {!confirmationMessage && (
+        <LoadingSpinnerText spinnerText="アカウント確認中" />
+      )}
     </div>
   );
 };
