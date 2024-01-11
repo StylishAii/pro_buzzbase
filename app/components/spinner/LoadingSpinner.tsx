@@ -3,7 +3,7 @@ import { Spinner } from "@nextui-org/react";
 export default function LoadingSpinner() {
   return (
     <div className="buzz-dark">
-      <div className="fixed top-0 left-0 w-full h-full bg-main z-60"></div>
+      <div className="fixed top-0 left-0 w-full h-full bg-main z-60 opacity-70"></div>
       <Spinner
         label="Loading..."
         labelColor="primary"

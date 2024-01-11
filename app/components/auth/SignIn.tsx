@@ -3,6 +3,7 @@ import EmailInput from "@app/components/auth/EmailInput";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PasswordInput from "@app/components/auth/PasswordInput";
 import SubmitButton from "@app/components/button/SendButton";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { signIn } from "@app/services/authService";
 import { getUserData } from "@app/services/userService";
@@ -14,6 +15,7 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { setIsLoggedIn } = useAuthContext();
   const router = useRouter();
@@ -30,6 +32,7 @@ export default function SignIn() {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
     setErrors([]);
     try {
       await signIn({ email, password });
@@ -46,6 +49,8 @@ export default function SignIn() {
       } else {
         setErrorsWithTimeout(["ログインに失敗しました"]);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,6 +85,7 @@ export default function SignIn() {
 
   return (
     <>
+      {isLoading && <LoadingSpinner />}
       <form
         onSubmit={handleSubmit}
         className="flex flex-col justify-end gap-y-4"
