@@ -1,5 +1,4 @@
 import axiosInstance from "@app/utils/axiosInstance";
-import { Position } from "postcss";
 
 export const getPositions = async () => {
   try {
