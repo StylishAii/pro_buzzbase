@@ -2,6 +2,7 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderSave from "@app/components/header/HeaderSave";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
+import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import {
   getPositions,
   updateUserPositions,
@@ -35,6 +36,14 @@ type Prefecture = {
   alphabet: string;
 };
 
+type BaseballCategory = {
+  id: number;
+  name: string;
+  hiragana: string;
+  katakana: string;
+  alphabet: string;
+};
+
 export default function ProfileEdit() {
   const [profile, setProfile] = useState<{
     name: string;
@@ -55,6 +64,10 @@ export default function ProfileEdit() {
   const [positions, setPositions] = useState<Position[]>([]);
   const [selectedPositionIds, setSelectedPositionIds] = useState<string[]>([]);
   const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
+  const [baseballCategories, setBaseballCategories] = useState<
+    BaseballCategory[]
+  >([]);
+  const [baseballCategoryValue, setBaseballCategoryValue] = useState("");
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -81,6 +94,10 @@ export default function ProfileEdit() {
         // チーム都道府県一覧取得
         const prefectureData = await getPrefectures();
         setPrefectures(prefectureData);
+
+        // 野球カテゴリ一覧取得
+        const baseballCategoryData = await getBaseballCategory();
+        setBaseballCategories(baseballCategoryData);
 
         const positionIds = data.positions.map((position: any) =>
           position.id.toString()
@@ -165,6 +182,11 @@ export default function ProfileEdit() {
   const isInvalid = useMemo(() => {
     return profile.name === "" || !validateUserName(profile.name);
   }, [profile.name, validateUserName]);
+
+  const handleBaseballCategoryChange = (value: string) => {
+    const trimmedValue = value.split("|")[0];
+    setBaseballCategoryValue(trimmedValue);
+  };
 
   return (
     <div className="buzz-dark">
@@ -257,16 +279,35 @@ export default function ProfileEdit() {
                 </Select>
                 {/* チーム */}
                 <p className="text-lg font-bold mt-8">チーム設定</p>
+                <Autocomplete
+                  variant="underlined"
+                  label="所属カテゴリー（年代 / リーグ / 連盟）"
+                  color="primary"
+                  className="pt-0.5"
+                  inputValue={baseballCategoryValue}
+                  onInputChange={handleBaseballCategoryChange}
+                >
+                  {baseballCategories.map((baseballCategory) => (
+                    <AutocompleteItem
+                      key={baseballCategory.id}
+                      value={baseballCategory.id}
+                      textValue={`${baseballCategory.name}|${baseballCategory.hiragana} ${baseballCategory.katakana} ${baseballCategory.alphabet}`}
+                    >
+                      {baseballCategory.name}
+                      <span className="hidden">{`(${baseballCategory.hiragana},${baseballCategory.katakana},${baseballCategory.alphabet})`}</span>
+                    </AutocompleteItem>
+                  ))}
+                </Autocomplete>
                 <Select
                   variant="underlined"
                   label="所属地域（都道府県）"
                   color="primary"
-                  className=""
+                  className="pt-2"
                 >
                   {prefectures.map((prefecture) => (
                     <SelectItem
                       key={prefecture.id}
-                      value={prefecture.id}
+                      value={prefecture.id.toString()}
                       textValue={prefecture.name}
                     >
                       {prefecture.name}
