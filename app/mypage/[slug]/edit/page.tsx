@@ -6,8 +6,17 @@ import {
   getPositions,
   updateUserPositions,
 } from "@app/services/positionService";
+import { getPrefectures } from "@app/services/prefectureService";
 import { getUserData, updateProfile } from "@app/services/userService";
-import { Avatar, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Avatar,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -16,6 +25,14 @@ type Position = {
   position_id: number;
   id: string;
   name: string[];
+};
+
+type Prefecture = {
+  id: number;
+  name: string;
+  hiragana: string;
+  katakana: string;
+  alphabet: string;
 };
 
 export default function ProfileEdit() {
@@ -37,6 +54,7 @@ export default function ProfileEdit() {
   const [save, setSave] = useState(false);
   const [positions, setPositions] = useState<Position[]>([]);
   const [selectedPositionIds, setSelectedPositionIds] = useState<string[]>([]);
+  const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -56,8 +74,13 @@ export default function ProfileEdit() {
           id: data.id,
         });
 
+        // ポジション一覧取得
         const positionsData = await getPositions();
         setPositions(positionsData);
+
+        // チーム都道府県一覧取得
+        const prefectureData = await getPrefectures();
+        setPrefectures(prefectureData);
 
         const positionIds = data.positions.map((position: any) =>
           position.id.toString()
@@ -212,6 +235,7 @@ export default function ProfileEdit() {
                   maxLength={100}
                   className="mb-2"
                 />
+                {/* ポジション */}
                 <Select
                   variant="underlined"
                   label="ポジション（複数選択可）"
@@ -228,6 +252,24 @@ export default function ProfileEdit() {
                       textValue={position.name.toString()}
                     >
                       {position.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+                {/* チーム */}
+                <p className="text-lg font-bold mt-8">チーム設定</p>
+                <Select
+                  variant="underlined"
+                  label="所属地域（都道府県）"
+                  color="primary"
+                  className=""
+                >
+                  {prefectures.map((prefecture) => (
+                    <SelectItem
+                      key={prefecture.id}
+                      value={prefecture.id}
+                      textValue={prefecture.name}
+                    >
+                      {prefecture.name}
                     </SelectItem>
                   ))}
                 </Select>
