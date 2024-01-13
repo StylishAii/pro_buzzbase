@@ -8,6 +8,7 @@ import {
   updateUserPositions,
 } from "@app/services/positionService";
 import { getPrefectures } from "@app/services/prefectureService";
+import { getTeams } from "@app/services/teamsService";
 import { getUserData, updateProfile } from "@app/services/userService";
 import {
   Autocomplete,
@@ -44,6 +45,11 @@ type BaseballCategory = {
   alphabet: string;
 };
 
+type Teams = {
+  id: number;
+  name: string;
+};
+
 export default function ProfileEdit() {
   const [profile, setProfile] = useState<{
     name: string;
@@ -68,6 +74,9 @@ export default function ProfileEdit() {
     BaseballCategory[]
   >([]);
   const [baseballCategoryValue, setBaseballCategoryValue] = useState("");
+  const [teams, setTeams] = useState<Teams[] | undefined>(undefined);
+  const [teamName, setTeamName] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -99,6 +108,10 @@ export default function ProfileEdit() {
         const baseballCategoryData = await getBaseballCategory();
         setBaseballCategories(baseballCategoryData);
 
+        // チーム一覧取得
+        const teamsData = await getTeams();
+        setTeams(teamsData);
+
         const positionIds = data.positions.map((position: any) =>
           position.id.toString()
         );
@@ -109,6 +122,11 @@ export default function ProfileEdit() {
     };
     fetchData();
   }, []);
+
+  // disabled制御
+  useEffect(() => {
+    setIsDisabled(teamName.length === 0);
+  }, [teamName]);
 
   // ポジション選択
   const handleSelectChange = (keys: any) => {
@@ -280,12 +298,30 @@ export default function ProfileEdit() {
                 {/* チーム */}
                 <p className="text-lg font-bold mt-8">チーム設定</p>
                 <Autocomplete
+                  allowsCustomValue
+                  label="チーム名"
+                  variant="underlined"
+                  color="primary"
+                  className="pt-0.5"
+                  defaultItems={teams}
+                  onInputChange={(value) => setTeamName(value)}
+                >
+                  {teams
+                    ? teams.map((team) => (
+                        <AutocompleteItem key={team.id} value={team.id}>
+                          {team.name}
+                        </AutocompleteItem>
+                      ))
+                    : []}
+                </Autocomplete>
+                <Autocomplete
                   variant="underlined"
                   label="所属カテゴリー（年代 / リーグ / 連盟）"
                   color="primary"
-                  className="pt-0.5"
+                  className="pt-2"
                   inputValue={baseballCategoryValue}
                   onInputChange={handleBaseballCategoryChange}
+                  isDisabled={isDisabled}
                 >
                   {baseballCategories.map((baseballCategory) => (
                     <AutocompleteItem
@@ -303,6 +339,7 @@ export default function ProfileEdit() {
                   label="所属地域（都道府県）"
                   color="primary"
                   className="pt-2"
+                  isDisabled={isDisabled}
                 >
                   {prefectures.map((prefecture) => (
                     <SelectItem
