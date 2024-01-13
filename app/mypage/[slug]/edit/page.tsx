@@ -85,6 +85,9 @@ export default function ProfileEdit() {
   const [selectedPrefectureId, setSelectedPrefectureId] = useState<
     number | undefined
   >(undefined);
+  const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(
+    undefined
+  );
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -132,6 +135,7 @@ export default function ProfileEdit() {
           );
           if (userTeam) {
             setTeamName(userTeam.name);
+            setSelectedTeamId(userTeam.id);
             setSelectedCategoryId(userTeam.category_id);
             setSelectedPrefectureId(userTeam.prefecture_id);
             const category = baseballCategoryData.find(
@@ -188,6 +192,21 @@ export default function ProfileEdit() {
     e.preventDefault();
     if (isInvalid) {
       setErrorsWithTimeout(["名前が未入力、または無効です。"]);
+      return;
+    }
+    // チーム設定バリデーション
+    if (
+      !teamName &&
+      selectedTeamId === undefined &&
+      (selectedCategoryId || selectedPrefectureId)
+    ) {
+      setErrorsWithTimeout(["チーム名が未入力です。"]);
+      return;
+    }
+    if (teamName && (!selectedCategoryId || !selectedPrefectureId)) {
+      setErrorsWithTimeout([
+        "所属カテゴリーと所属地域の両方を入力してください。",
+      ]);
       return;
     }
 
@@ -271,6 +290,7 @@ export default function ProfileEdit() {
     const selectedTeam = teams?.find((team) => team.id === teamId);
     if (selectedTeam) {
       setTeamName(selectedTeam.name);
+      setSelectedTeamId(selectedTeam.id);
       const category = baseballCategories.find(
         (category) => category.id === selectedTeam.category_id
       );
@@ -284,6 +304,9 @@ export default function ProfileEdit() {
       if (prefecture) {
         setSelectedPrefectureId(prefecture.id);
       }
+    } else {
+      setTeamName("");
+      setSelectedTeamId(undefined);
     }
   };
 
@@ -387,8 +410,13 @@ export default function ProfileEdit() {
                   inputValue={teamName}
                   defaultItems={teams}
                   onInputChange={(value) => setTeamName(value)}
-                  onSelectionChange={(value) =>
-                    handleTeamSelectionChange(Number(value))
+                  onSelectionChange={(value) => {
+                    handleTeamSelectionChange(Number(value));
+                  }}
+                  selectedKey={
+                    selectedTeamId !== undefined
+                      ? selectedTeamId.toString()
+                      : null
                   }
                 >
                   {teams
