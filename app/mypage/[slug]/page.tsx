@@ -10,6 +10,9 @@ import { getUserData } from "@app/services/userService";
 import { Avatar, Button, Link, Tab, Tabs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import Header from "@app/components/header/Header";
+import { getTeams } from "@app/services/teamsService";
+import { getBaseballCategory } from "@app/services/baseballCategoryService";
+import { getPrefectures } from "@app/services/prefectureService";
 
 type Position = {
   id: string;
@@ -23,16 +26,50 @@ type userData = {
   url: string;
   introduction: string;
   positions: Position[];
+  team_id: number;
+};
+
+type Team = {
+  id: number;
+  name: string;
+  category_id: number;
+  prefecture_id: number;
 };
 
 export default function MyPage() {
   const [userData, setUserData] = useState<userData | null>(null);
+  const [teamData, setTeamData] = useState<Team[]>([]);
+  const [teamCategoryName, setTeamCategoryName] = useState("");
+  const [teamPrefectureName, setTeamPrefectureName] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getUserData();
         setUserData(data);
+        if (data.team_id) {
+          const teamsData = await getTeams();
+          const baseballCategoryData = await getBaseballCategory();
+          const prefectureData = await getPrefectures();
+          const userTeam = teamsData.find(
+            (team: { id: any }) => team.id === data.team_id
+          );
+          if (userTeam) {
+            setTeamData([userTeam]);
+          }
+          const category = baseballCategoryData.find(
+            (category: { id: number }) => category.id === userTeam.category_id
+          );
+          if (category) {
+            setTeamCategoryName(category.name);
+          }
+          const prefecture = prefectureData.find(
+            (prefecture: {id: number}) => prefecture.id === userTeam.prefecture_id
+          )
+          if (prefecture) {
+            setTeamPrefectureName(prefecture.name);
+          }
+        }
       } catch (error) {
         console.log(error);
       }
@@ -108,21 +145,30 @@ export default function MyPage() {
               ) : (
                 ""
               )}
-              <ul className="flex gap-x-1.5 mt-1.5">
-                <li>
-                  <BallIcon width="18" height="18" fill="#F4F4F4d0" />
-                </li>
-                <li>
-                  <ul className="flex items-center gap-x-1">
+              {userData.team_id ? (
+                <>
+                  <ul className="flex items-center gap-x-1.5 mt-1.5">
                     <li>
-                      <p className="text-sm text-zinc-400">
-                        北中学 / 二子玉川高校 / ワシントン大学 /
-                        バンデーズクラブ
-                      </p>
+                      <BallIcon width="18" height="18" fill="#F4F4F4d0" />
+                    </li>
+                    <li>
+                      <ul className="flex items-center gap-x-1">
+                        {teamData?.map((team) => (
+                          <React.Fragment key={team.id}>
+                            <li>
+                              <p className="text-sm text-zinc-400">
+                                {`${team.name}（${teamPrefectureName}）｜ ${teamCategoryName}`}
+                              </p>
+                            </li>
+                          </React.Fragment>
+                        ))}
+                      </ul>
                     </li>
                   </ul>
-                </li>
-              </ul>
+                </>
+              ) : (
+                ""
+              )}
               <ul className="mt-2 grid gap-y-1">
                 <li className="flex items-start gap-x-1.5">
                   <CrownIcon width="22" height="22" fill="#e08e0ad0" />
