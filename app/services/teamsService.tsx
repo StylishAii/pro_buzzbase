@@ -19,16 +19,3 @@ export const createOrUpdateTeam = async (teamData: teamData) => {
     throw error;
   }
 };
-
-export const updateUserTeam = async (userTeamData: userTeamData) => {
-  try {
-    const response = await axiosInstance.put(
-      `/api/v1/user_teams/${userTeamData.user_team.user_id}`,
-      userTeamData
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};

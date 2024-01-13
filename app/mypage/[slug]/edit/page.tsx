@@ -8,11 +8,7 @@ import {
   updateUserPositions,
 } from "@app/services/positionService";
 import { getPrefectures } from "@app/services/prefectureService";
-import {
-  createOrUpdateTeam,
-  getTeams,
-  updateUserTeam,
-} from "@app/services/teamsService";
+import { createOrUpdateTeam, getTeams } from "@app/services/teamsService";
 import { getUserData, updateProfile } from "@app/services/userService";
 import {
   Autocomplete,
@@ -23,16 +19,8 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { Key } from "@react-types/shared";
 import { useRouter } from "next/navigation";
-import {
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type Position = {
   userId: string;
@@ -58,6 +46,8 @@ type BaseballCategory = {
 };
 
 type Teams = {
+  prefecture_id: number;
+  category_id: number;
   id: number;
   name: string;
 };
@@ -67,7 +57,7 @@ export default function ProfileEdit() {
     name: string;
     image: string | null;
     introduction: string;
-    user_id: string;
+    user_id: string | number;
     id: string;
   }>({
     name: "",
@@ -92,7 +82,9 @@ export default function ProfileEdit() {
   const [selectedCategoryId, setSelectedCategoryId] = useState<
     number | undefined
   >();
-  const [selectedPrefectureId, setSelectedPrefectureId] = useState();
+  const [selectedPrefectureId, setSelectedPrefectureId] = useState<
+    number | undefined
+  >(undefined);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -132,6 +124,24 @@ export default function ProfileEdit() {
           position.id.toString()
         );
         setSelectedPositionIds(positionIds);
+
+        // チーム初期値設定
+        if (data.team_id) {
+          const userTeam = teamsData.find(
+            (team: { id: any }) => team.id === data.team_id
+          );
+          if (userTeam) {
+            setTeamName(userTeam.name);
+            setSelectedCategoryId(userTeam.category_id);
+            setSelectedPrefectureId(userTeam.prefecture_id);
+            const category = baseballCategoryData.find(
+              (category: { id: number }) => category.id === userTeam.category_id
+            );
+            if (category) {
+              setBaseballCategoryValue(category.name);
+            }
+          }
+        }
       } catch (error: any) {
         setErrors(error);
       }
@@ -141,7 +151,7 @@ export default function ProfileEdit() {
 
   // disabled制御
   useEffect(() => {
-    setIsDisabled(teamName.length === 0);
+    setIsDisabled(!teamName || teamName.length === 0);
   }, [teamName]);
 
   // ポジション選択
@@ -180,13 +190,35 @@ export default function ProfileEdit() {
       setErrorsWithTimeout(["名前が未入力、または無効です。"]);
       return;
     }
+
     const formData = new FormData();
     formData.append("user[name]", profile.name);
     formData.append("user[introduction]", profile.introduction);
+    formData.append("user[user_id]", profile.user_id.toString());
     const file = fileInputRef.current?.files?.[0];
     if (profile.image && profile.image.startsWith("blob:") && file) {
       formData.append("user[image]", file);
     }
+
+    let teamId;
+    // チーム保存
+    if (teamName.trim() !== "") {
+      const team = await createOrUpdateTeam({
+        team: {
+          name: teamName,
+          category_id: selectedCategoryId,
+          prefecture_id: selectedPrefectureId,
+        },
+      });
+      if (team && team.data) {
+        teamId = team.data.id;
+      }
+    }
+
+    if (teamId) {
+      formData.append("user[team_id]", teamId.toString());
+    }
+
     setErrors([]);
     try {
       await updateProfile(formData);
@@ -196,22 +228,7 @@ export default function ProfileEdit() {
         userId: profile.id,
         positionIds: selectedPositionIds.map((id) => parseInt(id)),
       });
-      // チーム保存
-      if (teamName.trim() !== "") {
-        const team = await createOrUpdateTeam({
-          team: {
-            name: teamName,
-            category_id: selectedCategoryId,
-            prefecture_id: selectedPrefectureId,
-          },
-        });
-        await updateUserTeam({
-          user_team: {
-            team_id: team.data.id,
-            user_id: profile.id,
-          },
-        });
-      }
+
       setTimeout(() => {
         router.push(`/mypage/${profile.user_id}`);
       }, 1000);
@@ -233,17 +250,41 @@ export default function ProfileEdit() {
     return profile.name === "" || !validateUserName(profile.name);
   }, [profile.name, validateUserName]);
 
+  // カテゴリーをフィルタリング
   const handleBaseballCategoryChange = (value: string) => {
     const trimmedValue = value.split("|")[0];
     setBaseballCategoryValue(trimmedValue);
   };
 
+  // category_id set
   const handleBaseballCategoryIdChange = (value: number) => {
     setSelectedCategoryId(value);
   };
 
+  // prefecture_id set
   const handlePrefectureChange = (event: { target: { value: any } }) => {
     setSelectedPrefectureId(event.target.value);
+  };
+
+  // 既にdbに保存されているチーム名選択時の処理
+  const handleTeamSelectionChange = async (teamId: number) => {
+    const selectedTeam = teams?.find((team) => team.id === teamId);
+    if (selectedTeam) {
+      setTeamName(selectedTeam.name);
+      const category = baseballCategories.find(
+        (category) => category.id === selectedTeam.category_id
+      );
+      const prefecture = prefectures.find(
+        (prefecture) => prefecture.id === selectedTeam.prefecture_id
+      );
+      if (category) {
+        setBaseballCategoryValue(category.name);
+        setSelectedCategoryId(category.id);
+      }
+      if (prefecture) {
+        setSelectedPrefectureId(prefecture.id);
+      }
+    }
   };
 
   return (
@@ -343,8 +384,12 @@ export default function ProfileEdit() {
                   variant="underlined"
                   color="primary"
                   className="pt-0.5"
+                  inputValue={teamName}
                   defaultItems={teams}
                   onInputChange={(value) => setTeamName(value)}
+                  onSelectionChange={(value) =>
+                    handleTeamSelectionChange(Number(value))
+                  }
                 >
                   {teams
                     ? teams.map((team) => (
@@ -369,6 +414,11 @@ export default function ProfileEdit() {
                   onSelectionChange={(value) =>
                     handleBaseballCategoryIdChange(Number(value))
                   }
+                  selectedKey={
+                    selectedCategoryId !== undefined
+                      ? selectedCategoryId.toString()
+                      : null
+                  }
                 >
                   {baseballCategories.map((baseballCategory) => (
                     <AutocompleteItem
@@ -388,6 +438,11 @@ export default function ProfileEdit() {
                   className="pt-2"
                   isDisabled={isDisabled}
                   onChange={handlePrefectureChange}
+                  selectedKeys={
+                    selectedPrefectureId !== undefined
+                      ? [selectedPrefectureId.toString()]
+                      : []
+                  }
                 >
                   {prefectures.map((prefecture) => (
                     <SelectItem

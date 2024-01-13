@@ -165,10 +165,3 @@ interface teamData {
     prefecture_id: number | undefined;
   };
 }
-
-interface userTeamData {
-  user_team: {
-    team_id: number;
-    user_id: string;
-  };
-}
