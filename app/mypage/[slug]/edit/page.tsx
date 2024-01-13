@@ -8,7 +8,11 @@ import {
   updateUserPositions,
 } from "@app/services/positionService";
 import { getPrefectures } from "@app/services/prefectureService";
-import { getTeams } from "@app/services/teamsService";
+import {
+  createOrUpdateTeam,
+  getTeams,
+  updateUserTeam,
+} from "@app/services/teamsService";
 import { getUserData, updateProfile } from "@app/services/userService";
 import {
   Autocomplete,
@@ -19,8 +23,16 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
+import { Key } from "@react-types/shared";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 type Position = {
   userId: string;
@@ -77,6 +89,10 @@ export default function ProfileEdit() {
   const [teams, setTeams] = useState<Teams[] | undefined>(undefined);
   const [teamName, setTeamName] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<
+    number | undefined
+  >();
+  const [selectedPrefectureId, setSelectedPrefectureId] = useState();
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -180,6 +196,20 @@ export default function ProfileEdit() {
         userId: profile.id,
         positionIds: selectedPositionIds.map((id) => parseInt(id)),
       });
+      // チーム保存
+      const team = await createOrUpdateTeam({
+        team: {
+          name: teamName,
+          category_id: selectedCategoryId,
+          prefecture_id: selectedPrefectureId,
+        },
+      });
+      await updateUserTeam({
+        user_team: {
+          team_id: team.data.id,
+          user_id: profile.id,
+        },
+      });
       setTimeout(() => {
         router.push(`/mypage/${profile.user_id}`);
       }, 1000);
@@ -204,6 +234,14 @@ export default function ProfileEdit() {
   const handleBaseballCategoryChange = (value: string) => {
     const trimmedValue = value.split("|")[0];
     setBaseballCategoryValue(trimmedValue);
+  };
+
+  const handleBaseballCategoryIdChange = (value: number) => {
+    setSelectedCategoryId(value);
+  };
+
+  const handlePrefectureChange = (event: { target: { value: any } }) => {
+    setSelectedPrefectureId(event.target.value);
   };
 
   return (
@@ -308,7 +346,11 @@ export default function ProfileEdit() {
                 >
                   {teams
                     ? teams.map((team) => (
-                        <AutocompleteItem key={team.id} value={team.id}>
+                        <AutocompleteItem
+                          key={team.id}
+                          value={team.id}
+                          textValue={team.name}
+                        >
                           {team.name}
                         </AutocompleteItem>
                       ))
@@ -322,12 +364,15 @@ export default function ProfileEdit() {
                   inputValue={baseballCategoryValue}
                   onInputChange={handleBaseballCategoryChange}
                   isDisabled={isDisabled}
+                  onSelectionChange={(value) =>
+                    handleBaseballCategoryIdChange(Number(value))
+                  }
                 >
                   {baseballCategories.map((baseballCategory) => (
                     <AutocompleteItem
                       key={baseballCategory.id}
                       value={baseballCategory.id}
-                      textValue={`${baseballCategory.name}|${baseballCategory.hiragana} ${baseballCategory.katakana} ${baseballCategory.alphabet}`}
+                      textValue={`${baseballCategory.name}| ${baseballCategory.hiragana} ${baseballCategory.katakana} ${baseballCategory.alphabet}`}
                     >
                       {baseballCategory.name}
                       <span className="hidden">{`(${baseballCategory.hiragana},${baseballCategory.katakana},${baseballCategory.alphabet})`}</span>
@@ -340,6 +385,7 @@ export default function ProfileEdit() {
                   color="primary"
                   className="pt-2"
                   isDisabled={isDisabled}
+                  onChange={handlePrefectureChange}
                 >
                   {prefectures.map((prefecture) => (
                     <SelectItem

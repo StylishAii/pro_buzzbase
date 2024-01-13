@@ -157,3 +157,18 @@ interface updateUserPositions {
 interface getUserPositions {
   userId: string;
 }
+
+interface teamData {
+  team: {
+    name: string;
+    category_id: number | undefined;
+    prefecture_id: number | undefined;
+  };
+}
+
+interface userTeamData {
+  user_team: {
+    team_id: number;
+    user_id: string;
+  };
+}
