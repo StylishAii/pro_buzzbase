@@ -197,19 +197,21 @@ export default function ProfileEdit() {
         positionIds: selectedPositionIds.map((id) => parseInt(id)),
       });
       // チーム保存
-      const team = await createOrUpdateTeam({
-        team: {
-          name: teamName,
-          category_id: selectedCategoryId,
-          prefecture_id: selectedPrefectureId,
-        },
-      });
-      await updateUserTeam({
-        user_team: {
-          team_id: team.data.id,
-          user_id: profile.id,
-        },
-      });
+      if (teamName.trim() !== "") {
+        const team = await createOrUpdateTeam({
+          team: {
+            name: teamName,
+            category_id: selectedCategoryId,
+            prefecture_id: selectedPrefectureId,
+          },
+        });
+        await updateUserTeam({
+          user_team: {
+            team_id: team.data.id,
+            user_id: profile.id,
+          },
+        });
+      }
       setTimeout(() => {
         router.push(`/mypage/${profile.user_id}`);
       }, 1000);
