@@ -1,5 +1,6 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
+import PlusButton from "@app/components/button/PlusButton";
 import HeaderSave from "@app/components/header/HeaderSave";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
 import { getBaseballCategory } from "@app/services/baseballCategoryService";
@@ -88,6 +89,7 @@ export default function ProfileEdit() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(
     undefined
   );
+  const [awards, setAwards] = useState([""]);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -310,8 +312,19 @@ export default function ProfileEdit() {
     }
   };
 
+  // 受賞歴追加
+  const handleAwardChange = (index, value) => {
+    const newAwards = [...awards];
+    newAwards[index] = value;
+    setAwards(newAwards);
+  };
+
+  const addAward = () => {
+    setAwards([...awards, ""]);
+  };
+
   return (
-    <div className="buzz-dark">
+    <div className="buzz-dark bg-main pb-24">
       <HeaderSave onProfileUpdate={handleSubmit} />
       <div className="h-full buzz-dark">
         <main className="h-full">
@@ -482,6 +495,27 @@ export default function ProfileEdit() {
                     </SelectItem>
                   ))}
                 </Select>
+                {/* 受賞歴 */}
+                <p className="text-lg font-bold mt-8">受賞歴</p>
+                {awards.map((award, index) => (
+                  <Input
+                    key={index}
+                    type="text"
+                    variant="underlined"
+                    label="受賞（チーム成績・個人タイトル）"
+                    value={award}
+                    onChange={(e) => handleAwardChange(index, e.target.value)}
+                    color={isInvalid ? "danger" : "primary"}
+                    className="mt-1"
+                    endContent={
+                      <PlusButton
+                        className=""
+                        type="button"
+                        onClick={addAward}
+                      />
+                    }
+                  />
+                ))}
               </form>
             </div>
           </div>

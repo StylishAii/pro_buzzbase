@@ -165,3 +165,9 @@ interface teamData {
     prefecture_id: number | undefined;
   };
 }
+
+interface PlusButtonProps {
+  className: string;
+  type?: "submit" | "button" | "reset" | undefined;
+  onClick: any;
+}
