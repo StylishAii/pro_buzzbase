@@ -152,7 +152,11 @@ export default function ProfileEdit() {
 
         // 受賞歴初期値
         const userAwards = await getUserAwards(data.id);
-        setAwards(userAwards.map((award: { title: string }) => award.title));
+        if (userAwards.length > 0) {
+          setAwards(userAwards.map((award: { title: string }) => award.title));
+        } else {
+          setAwards([""]);
+        }
       } catch (error: any) {
         setErrors(error);
       }

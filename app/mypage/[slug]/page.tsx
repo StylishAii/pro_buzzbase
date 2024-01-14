@@ -75,7 +75,6 @@ export default function MyPage() {
         }
 
         const awardData = await getUserAwards(data.id);
-        console.log(awardData);
         if (awardData) {
           setUserAwards(awardData);
         }
@@ -178,7 +177,7 @@ export default function MyPage() {
               ) : (
                 ""
               )}
-              {userAwards ? (
+              {userAwards[0] ? (
                 <>
                   <ul className="mt-2 grid gap-y-1">
                     <li className="flex items-start gap-x-1.5">
