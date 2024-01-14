@@ -171,3 +171,10 @@ interface PlusButtonProps {
   type?: "submit" | "button" | "reset" | undefined;
   onClick: any;
 }
+
+interface AwardData {
+  award: {
+    title: string;
+    userId: string;
+  };
+}

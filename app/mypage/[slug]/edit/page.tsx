@@ -3,6 +3,7 @@ import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PlusButton from "@app/components/button/PlusButton";
 import HeaderSave from "@app/components/header/HeaderSave";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
+import { createAward, getUserAwards } from "@app/services/awardsService";
 import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import {
   getPositions,
@@ -148,6 +149,10 @@ export default function ProfileEdit() {
             }
           }
         }
+
+        // 受賞歴初期値
+        const userAwards = await getUserAwards(data.id);
+        setAwards(userAwards.map((award: { title: string }) => award.title));
       } catch (error: any) {
         setErrors(error);
       }
@@ -250,6 +255,18 @@ export default function ProfileEdit() {
         positionIds: selectedPositionIds.map((id) => parseInt(id)),
       });
 
+      // 受賞歴保存
+      for (const award of awards) {
+        if (award) {
+          await createAward({
+            award: {
+              title: award,
+              userId: profile.id,
+            },
+          });
+        }
+      }
+
       setTimeout(() => {
         router.push(`/mypage/${profile.user_id}`);
       }, 1000);
@@ -313,7 +330,7 @@ export default function ProfileEdit() {
   };
 
   // 受賞歴追加
-  const handleAwardChange = (index, value) => {
+  const handleAwardChange = (index: number, value: string) => {
     const newAwards = [...awards];
     newAwards[index] = value;
     setAwards(newAwards);
@@ -503,6 +520,7 @@ export default function ProfileEdit() {
                     type="text"
                     variant="underlined"
                     label="受賞（チーム成績・個人タイトル）"
+                    placeholder="投手 ベストナイン賞（東京六大学 2023 秋）"
                     value={award}
                     onChange={(e) => handleAwardChange(index, e.target.value)}
                     color={isInvalid ? "danger" : "primary"}
