@@ -13,6 +13,7 @@ import Header from "@app/components/header/Header";
 import { getTeams } from "@app/services/teamsService";
 import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import { getPrefectures } from "@app/services/prefectureService";
+import { getUserAwards } from "@app/services/awardsService";
 
 type Position = {
   id: string;
@@ -41,6 +42,7 @@ export default function MyPage() {
   const [teamData, setTeamData] = useState<Team[]>([]);
   const [teamCategoryName, setTeamCategoryName] = useState("");
   const [teamPrefectureName, setTeamPrefectureName] = useState("");
+  const [userAwards, setUserAwards] = useState<UserAwards[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,11 +66,18 @@ export default function MyPage() {
             setTeamCategoryName(category.name);
           }
           const prefecture = prefectureData.find(
-            (prefecture: {id: number}) => prefecture.id === userTeam.prefecture_id
-          )
+            (prefecture: { id: number }) =>
+              prefecture.id === userTeam.prefecture_id
+          );
           if (prefecture) {
             setTeamPrefectureName(prefecture.name);
           }
+        }
+
+        const awardData = await getUserAwards(data.id);
+        console.log(awardData);
+        if (awardData) {
+          setUserAwards(awardData);
         }
       } catch (error) {
         console.log(error);
@@ -169,14 +178,32 @@ export default function MyPage() {
               ) : (
                 ""
               )}
-              <ul className="mt-2 grid gap-y-1">
-                <li className="flex items-start gap-x-1.5">
-                  <CrownIcon width="22" height="22" fill="#e08e0ad0" />
-                  <p className="text-sm text-zinc-400">
-                    都市対抗野球大会MVP（2022）/ 都市対抗野球大会MVP（2023）
-                  </p>
-                </li>
-              </ul>
+              {userAwards ? (
+                <>
+                  <ul className="mt-2 grid gap-y-1">
+                    <li className="flex items-start gap-x-1.5">
+                      <CrownIcon
+                        width="20"
+                        height="20"
+                        fill="#e08e0ad0"
+                        className="min-w-min"
+                      />
+                      <ul className="flex flex-wrap items-center gap-x-1">
+                        {userAwards.map((award) => (
+                          <li key={award.id}>
+                            <p className="text-sm text-zinc-400">
+                              {award.title}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  </ul>
+                </>
+              ) : (
+                ""
+              )}
+
               <div className="flex items-center gap-x-4 mt-2">
                 <div className="flex gap-x-1">
                   <span className="text-sm font-bold">100</span>

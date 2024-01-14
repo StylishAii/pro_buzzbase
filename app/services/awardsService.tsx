@@ -13,7 +13,7 @@ export const createAward = async (awardData: AwardData) => {
   }
 };
 
-export const getUserAwards = async (userId: string) => {
+export const getUserAwards = async (userId: UserAwards) => {
   try {
     const response = await axiosInstance.get(`/api/v1/users/${userId}/awards`);
     return response.data;

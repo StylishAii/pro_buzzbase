@@ -178,3 +178,8 @@ interface AwardData {
     userId: string;
   };
 }
+
+interface UserAwards {
+  id: string;
+  title: string;
+}
