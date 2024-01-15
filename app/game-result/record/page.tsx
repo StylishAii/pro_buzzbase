@@ -44,20 +44,6 @@ const defensivePositions = [
 ];
 
 export default function GameRecord() {
-  const [size, setSize] = useState(window.innerWidth <= 400 ? "sm" : "md");
-
-  useEffect(() => {
-    const handleResize = () => {
-      setSize(window.innerWidth <= 400 ? "sm" : "md");
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <>
       <div>
@@ -104,7 +90,7 @@ export default function GameRecord() {
                 placeholder="大会名を入力！"
                 labelPlacement="outside-left"
                 className="[&>div]:justify-between"
-                size={size}
+                size="md"
               >
                 {testTournamentData.map((data) => (
                   <AutocompleteItem key={data.id} value={data.name}>
@@ -121,7 +107,7 @@ export default function GameRecord() {
                 placeholder="自分のチーム名を入力！"
                 labelPlacement="outside-left"
                 className="[&>div]:justify-between"
-                size={size}
+                size="sm"
               >
                 {testTournamentData.map((data) => (
                   <AutocompleteItem key={data.id} value={data.name}>
@@ -138,7 +124,7 @@ export default function GameRecord() {
                 placeholder="相手のチーム名を入力！"
                 labelPlacement="outside-left"
                 className="[&>div]:justify-between"
-                size={size}
+                size="sm"
               >
                 {testTournamentData.map((data) => (
                   <AutocompleteItem key={data.id} value={data.name}>
@@ -205,7 +191,6 @@ export default function GameRecord() {
                   </SelectItem>
                 ))}
               </Select>
-              
             </form>
           </div>
         </div>
