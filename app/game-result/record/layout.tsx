@@ -1,4 +1,3 @@
-import Header from "@app/components/header/Header";
 import HeaderNext from "@app/components/header/HeaderNext";
 
 export default function RecordLayout({
