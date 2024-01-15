@@ -2,8 +2,13 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PlusButton from "@app/components/button/PlusButton";
 import HeaderSave from "@app/components/header/HeaderSave";
+import { DeleteIcon } from "@app/components/icon/DeleteIcon";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
-import { createAward, getUserAwards } from "@app/services/awardsService";
+import {
+  createAward,
+  deleteAward,
+  getUserAwards,
+} from "@app/services/awardsService";
 import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import {
   getPositions,
@@ -16,6 +21,7 @@ import {
   Autocomplete,
   AutocompleteItem,
   Avatar,
+  Button,
   Input,
   Select,
   SelectItem,
@@ -90,7 +96,7 @@ export default function ProfileEdit() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(
     undefined
   );
-  const [awards, setAwards] = useState([""]);
+  const [awards, setAwards] = useState<UserAwards[]>([]);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -153,9 +159,9 @@ export default function ProfileEdit() {
         // 受賞歴初期値
         const userAwards = await getUserAwards(data.id);
         if (userAwards.length > 0) {
-          setAwards(userAwards.map((award: { title: string }) => award.title));
+          setAwards(userAwards);
         } else {
-          setAwards([""]);
+          setAwards([{ id: Date.now(), title: "" }]);
         }
       } catch (error: any) {
         setErrors(error);
@@ -247,6 +253,8 @@ export default function ProfileEdit() {
 
     if (teamId) {
       formData.append("user[team_id]", teamId.toString());
+    } else {
+      formData.append("user[team_id]", "");
     }
 
     setErrors([]);
@@ -261,11 +269,11 @@ export default function ProfileEdit() {
 
       // 受賞歴保存
       for (const award of awards) {
-        if (award) {
+        if (award.title && award.title.trim() !== "") {
           await createAward({
             award: {
-              title: award,
               userId: profile.id,
+              title: award.title,
             },
           });
         }
@@ -335,13 +343,24 @@ export default function ProfileEdit() {
 
   // 受賞歴追加
   const handleAwardChange = (index: number, value: string) => {
-    const newAwards = [...awards];
-    newAwards[index] = value;
+    const newAwards = awards.map((award, idx) =>
+      idx === index ? { ...award, title: value } : award
+    );
     setAwards(newAwards);
   };
 
   const addAward = () => {
-    setAwards([...awards, ""]);
+    setAwards([...awards, { id: Date.now(), title: "" }]);
+  };
+  // 受賞削除
+  const handleDeleteAward = async (awardId: number, index: number) => {
+    try {
+      await deleteAward(profile.id, awardId);
+      const newAwards = awards.filter((_, idx) => idx !== index);
+      setAwards(newAwards);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -525,19 +544,33 @@ export default function ProfileEdit() {
                     variant="underlined"
                     label="受賞（チーム成績・個人タイトル）"
                     placeholder="投手 ベストナイン賞（東京六大学 2023 秋）"
-                    value={award}
-                    onChange={(e) => handleAwardChange(index, e.target.value)}
+                    value={award.title}
+                    onChange={(e) => handleAwardChange(0, e.target.value)}
                     color={isInvalid ? "danger" : "primary"}
                     className="mt-1"
                     endContent={
-                      <PlusButton
-                        className=""
-                        type="button"
-                        onClick={addAward}
-                      />
+                      <>
+                        <Button
+                          className="p-0 w-auto min-w-max h-auto border-none block bg-transparent"
+                          color="primary"
+                          variant="faded"
+                          size="sm"
+                          isIconOnly
+                          onClick={() => handleDeleteAward(award.id, index)}
+                          endContent={
+                            <DeleteIcon
+                              width="24"
+                              height="24"
+                              fill="#d0d0d0"
+                              stroke="fff"
+                            />
+                          }
+                        ></Button>
+                      </>
                     }
                   />
                 ))}
+                <PlusButton className="mt-2 ml-auto mr-1 " type="button" onClick={addAward} />
               </form>
             </div>
           </div>

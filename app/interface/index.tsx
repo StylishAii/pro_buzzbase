@@ -180,6 +180,6 @@ interface AwardData {
 }
 
 interface UserAwards {
-  id: string;
+  id: number;
   title: string;
 }
