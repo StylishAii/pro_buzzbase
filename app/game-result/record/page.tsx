@@ -10,7 +10,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { SetStateAction, useState } from "react";
 
 const testTournamentData = [
   { id: 1, name: "甲子園" },
@@ -53,6 +53,12 @@ export default function GameRecord() {
     const day = today.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   });
+  // 日付入力
+  const handleDateChange = (event: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setGameDate(event.target.value);
+  };
 
   return (
     <>
@@ -79,6 +85,7 @@ export default function GameRecord() {
                 labelPlacement="outside-left"
                 className="flex justify-between items-center"
                 value={gameDate}
+                onChange={handleDateChange}
               />
               <Divider className="my-4" />
               <RadioGroup
