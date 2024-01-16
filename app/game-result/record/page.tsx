@@ -8,6 +8,7 @@ import {
   RadioGroup,
   Select,
   SelectItem,
+  Textarea,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
@@ -46,7 +47,7 @@ const defensivePositions = [
 export default function GameRecord() {
   return (
     <>
-      <div>
+      <div className="pb-32">
         <div className="pt-20 px-4">
           <h2 className="text-xl font-bold text-center">
             試合結果を入力しよう！
@@ -87,7 +88,7 @@ export default function GameRecord() {
                 allowsCustomValue
                 label="大会名"
                 variant="bordered"
-                placeholder="大会名を入力！"
+                placeholder="大会名を入力"
                 labelPlacement="outside-left"
                 className="[&>div]:justify-between"
                 size="md"
@@ -104,7 +105,7 @@ export default function GameRecord() {
                 allowsCustomValue
                 label="自チーム"
                 variant="bordered"
-                placeholder="自分のチーム名を入力！"
+                placeholder="自分のチーム名を入力"
                 labelPlacement="outside-left"
                 className="[&>div]:justify-between"
                 size="sm"
@@ -121,7 +122,7 @@ export default function GameRecord() {
                 allowsCustomValue
                 label="相手チーム"
                 variant="bordered"
-                placeholder="相手のチーム名を入力！"
+                placeholder="相手のチーム名を入力"
                 labelPlacement="outside-left"
                 className="[&>div]:justify-between"
                 size="sm"
@@ -191,6 +192,14 @@ export default function GameRecord() {
                   </SelectItem>
                 ))}
               </Select>
+              <Divider className="my-4" />
+              <Textarea
+                variant="bordered"
+                label="メモ"
+                labelPlacement="outside"
+                placeholder="試合の中で気づいたこと、感じたことをメモしておこう！"
+                className="col-span-12 md:col-span-6 mb-6 md:mb-0"
+              />
             </form>
           </div>
         </div>
