@@ -1,4 +1,5 @@
 "use client";
+import { getPositions } from "@app/services/positionService";
 import { getTeams } from "@app/services/teamsService";
 import { getUserData } from "@app/services/userService";
 import {
@@ -33,28 +34,34 @@ const battingOrder = [
   { id: 9, turn: "9番" },
 ];
 
-const defensivePositions = [
-  { id: 1, position: "投手" },
-  { id: 2, position: "捕手" },
-  { id: 3, position: "一塁手" },
-  { id: 4, position: "二塁手" },
-  { id: 5, position: "三塁手" },
-  { id: 6, position: "遊撃手" },
-  { id: 7, position: "左翼手" },
-  { id: 8, position: "中堅手" },
-  { id: 9, position: "右翼手" },
-  { id: 10, position: "指名打者" },
-];
-
 type Team = {
   id: string;
   name: string;
 };
 
+type Position = {
+  userId: string;
+  position_id: number;
+  id: string;
+  name: string;
+};
+
+type userData = {
+  image: any;
+  name: string;
+  user_id: string;
+  url: string;
+  introduction: string;
+  positions: Position[];
+  team_id: number;
+};
+
 export default function GameRecord() {
-  const [userDate, setUserDate] = useState();
+  const [userDate, setUserDate] = useState<userData | null>(null);
   const [myTeam, setMyTeam] = useState("");
   const [teamsDate, setTeamsData] = useState<Team[]>([]);
+  const [positionData, setPositionData] = useState<Position[]>([]);
+  const [myPosition, setMyPosition] = useState("");
 
   const fetchData = async () => {
     try {
@@ -70,6 +77,9 @@ export default function GameRecord() {
       if (userTeam) {
         setMyTeam(userTeam.name);
       }
+
+      const positionDataList = await getPositions();
+      setPositionData(positionDataList);
     } catch (error) {
       throw error;
     }
@@ -78,6 +88,20 @@ export default function GameRecord() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    // 守備位置設定
+    if (userDate && positionData.length > 0) {
+      const userPositionFirstId = userDate.positions[0].id;
+      const userPosition = positionData.find(
+        (position) => position.id === userPositionFirstId
+      );
+      console.log(userPosition);
+      if (userPosition) {
+        setMyPosition(userPosition.id.toString());
+      }
+    }
+  }, [userDate, positionData]);
 
   // 今日の日付
   const [gameDate, setGameDate] = useState(() => {
@@ -230,11 +254,16 @@ export default function GameRecord() {
                 labelPlacement="outside-left"
                 size="md"
                 fullWidth={false}
+                selectedKeys={myPosition}
                 className="grid justify-between items-center grid-cols-[auto_110px]"
               >
-                {defensivePositions.map((position) => (
-                  <SelectItem key={position.id} value={position.id.toString()}>
-                    {position.position}
+                {positionData.map((position) => (
+                  <SelectItem
+                    key={position.id}
+                    value={position.id.toString()}
+                    textValue={position.name}
+                  >
+                    {position.name}
                   </SelectItem>
                 ))}
               </Select>
