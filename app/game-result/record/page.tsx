@@ -46,10 +46,15 @@ const defensivePositions = [
   { id: 10, position: "指名打者" },
 ];
 
+type Team = {
+  id: string;
+  name: string;
+};
+
 export default function GameRecord() {
   const [userDate, setUserDate] = useState();
   const [myTeam, setMyTeam] = useState("");
-  const [teamsDate, setTeamsData] = useState([]);
+  const [teamsDate, setTeamsData] = useState<Team[]>([]);
 
   const fetchData = async () => {
     try {
@@ -168,7 +173,7 @@ export default function GameRecord() {
                 className="[&>div]:justify-between"
                 size="sm"
               >
-                {testTournamentData.map((data) => (
+                {teamsDate.map((data) => (
                   <AutocompleteItem key={data.id} value={data.name}>
                     {data.name}
                   </AutocompleteItem>
