@@ -1,4 +1,6 @@
 "use client";
+import { getTeams } from "@app/services/teamsService";
+import { getUserData } from "@app/services/userService";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -10,7 +12,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 
 const testTournamentData = [
   { id: 1, name: "甲子園" },
@@ -45,6 +47,33 @@ const defensivePositions = [
 ];
 
 export default function GameRecord() {
+  const [userDate, setUserDate] = useState();
+  const [myTeam, setMyTeam] = useState("");
+  const [teamsDate, setTeamsData] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const currentUserData = await getUserData();
+      setUserDate(currentUserData);
+      const userTeamId = currentUserData.team_id;
+      const getTeamsList = await getTeams();
+      setTeamsData(getTeamsList);
+      // マイチーム名取得
+      const userTeam = getTeamsList.find(
+        (team: { id: string }) => team.id === userTeamId
+      );
+      if (userTeam) {
+        setMyTeam(userTeam.name);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   // 今日の日付
   const [gameDate, setGameDate] = useState(() => {
     const today = new Date();
@@ -117,22 +146,17 @@ export default function GameRecord() {
                 ))}
               </Autocomplete>
               <Divider className="my-4" />
-              <Autocomplete
+              <Input
                 isRequired
-                allowsCustomValue
-                label="自チーム"
-                variant="bordered"
-                placeholder="自分のチーム名を入力"
-                labelPlacement="outside-left"
-                className="[&>div]:justify-between"
+                type="text"
                 size="sm"
-              >
-                {testTournamentData.map((data) => (
-                  <AutocompleteItem key={data.id} value={data.name}>
-                    {data.name}
-                  </AutocompleteItem>
-                ))}
-              </Autocomplete>
+                variant="bordered"
+                label="自チーム"
+                labelPlacement="outside-left"
+                placeholder="自分のチーム名を入力"
+                className="flex justify-between items-center"
+                value={myTeam}
+              />
               <Divider className="my-4" />
               <Autocomplete
                 isRequired
