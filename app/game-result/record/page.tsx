@@ -45,6 +45,15 @@ const defensivePositions = [
 ];
 
 export default function GameRecord() {
+  // 今日の日付
+  const [gameDate, setGameDate] = useState(() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, "0");
+    const day = today.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
+
   return (
     <>
       <div className="pb-32">
@@ -66,9 +75,10 @@ export default function GameRecord() {
                 type="date"
                 size="md"
                 variant="bordered"
-                label="試合日時"
+                label="試合日付"
                 labelPlacement="outside-left"
                 className="flex justify-between items-center"
+                value={gameDate}
               />
               <Divider className="my-4" />
               <RadioGroup
