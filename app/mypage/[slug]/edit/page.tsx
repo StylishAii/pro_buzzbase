@@ -545,7 +545,7 @@ export default function ProfileEdit() {
                     label="受賞（チーム成績・個人タイトル）"
                     placeholder="投手 ベストナイン賞（東京六大学 2023 秋）"
                     value={award.title}
-                    onChange={(e) => handleAwardChange(0, e.target.value)}
+                    onChange={(e) => handleAwardChange(index, e.target.value)}
                     color={isInvalid ? "danger" : "primary"}
                     className="mt-1"
                     endContent={
@@ -570,7 +570,11 @@ export default function ProfileEdit() {
                     }
                   />
                 ))}
-                <PlusButton className="mt-2 ml-auto mr-1 " type="button" onClick={addAward} />
+                <PlusButton
+                  className="mt-2 ml-auto mr-1 "
+                  type="button"
+                  onClick={addAward}
+                />
               </form>
             </div>
           </div>
