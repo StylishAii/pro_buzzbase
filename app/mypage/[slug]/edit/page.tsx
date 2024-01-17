@@ -97,6 +97,7 @@ export default function ProfileEdit() {
     undefined
   );
   const [awards, setAwards] = useState<UserAwards[]>([]);
+  const [deletedAwards, setDeletedAwards] = useState<number[]>([]);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -205,6 +206,7 @@ export default function ProfileEdit() {
     }, 5000);
   };
 
+  // データ送信
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (isInvalid) {
@@ -276,6 +278,15 @@ export default function ProfileEdit() {
               title: award.title,
             },
           });
+        }
+      }
+
+      // 受賞削除
+      for (const awardId of deletedAwards) {
+        try {
+          await deleteAward(profile.id, awardId);
+        } catch (error) {
+          console.log(error);
         }
       }
 
@@ -355,7 +366,7 @@ export default function ProfileEdit() {
   // 受賞削除
   const handleDeleteAward = async (awardId: number, index: number) => {
     try {
-      await deleteAward(profile.id, awardId);
+      setDeletedAwards([...deletedAwards, awardId]);
       const newAwards = awards.filter((_, idx) => idx !== index);
       setAwards(newAwards);
     } catch (error) {

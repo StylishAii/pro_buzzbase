@@ -28,7 +28,39 @@ export const deleteAward = async (userId: string, awardId: number) => {
     const response = await axiosInstance.delete(
       `/api/v1/users/${userId}/awards/${awardId}`
     );
-    return response.data;
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const updatePutAward = async (
+  userId: number,
+  awardId: number,
+  data: { title: string }
+) => {
+  try {
+    const response = await axiosInstance.put(
+      `/api/v1/users/${userId}/awards/${awardId}`
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const updatePatchAward = async (
+  userId: number,
+  awardId: number,
+  data: { title: string }
+) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/api/v1/users/${userId}/awards/${awardId}`
+    );
+    return response;
   } catch (error) {
     console.log(error);
     throw error;
