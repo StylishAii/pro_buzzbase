@@ -16,7 +16,11 @@ import {
   updateUserPositions,
 } from "@app/services/positionService";
 import { getPrefectures } from "@app/services/prefectureService";
-import { createOrUpdateTeam, getTeams } from "@app/services/teamsService";
+import {
+  createOrUpdateTeam,
+  getTeams,
+  updateTeam,
+} from "@app/services/teamsService";
 import { getUserData, updateProfile } from "@app/services/userService";
 import {
   Autocomplete,
@@ -240,18 +244,23 @@ export default function ProfileEdit() {
       formData.append("user[image]", file);
     }
 
-    let teamId;
+    let teamId = selectedTeamId;
     // チーム保存
     if (teamName.trim() !== "") {
-      const team = await createOrUpdateTeam({
+      const teamData = {
         team: {
           name: teamName,
           category_id: selectedCategoryId,
           prefecture_id: selectedPrefectureId,
         },
-      });
-      if (team && team.data) {
-        teamId = team.data.id;
+      };
+      if (selectedTeamId) {
+        await updateTeam(selectedTeamId, teamData);
+      } else {
+        const team = await createOrUpdateTeam(teamData);
+        if (team && team.data) {
+          teamId = team.data.id;
+        }
       }
     }
 
@@ -327,12 +336,18 @@ export default function ProfileEdit() {
   // カテゴリーをフィルタリング
   const handleBaseballCategoryChange = (value: string) => {
     const trimmedValue = value.split("|")[0];
+    console.log(trimmedValue);
     setBaseballCategoryValue(trimmedValue);
   };
 
   // category_id set
   const handleBaseballCategoryIdChange = (value: number) => {
-    setSelectedCategoryId(value);
+    const category = baseballCategories.find((c) => c.id === value);
+    console.log(category);
+    if (category) {
+      setSelectedCategoryId(category.id);
+      setBaseballCategoryValue(category.name);
+    }
   };
 
   // prefecture_id set
