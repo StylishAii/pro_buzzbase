@@ -150,7 +150,7 @@ interface HeaderSaveProps {
 }
 
 interface updateUserPositions {
-  userId: string;
+  userId: number;
   positionIds: number[];
 }
 

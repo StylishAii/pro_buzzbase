@@ -23,7 +23,7 @@ export const getUserAwards = async (userId: UserAwards) => {
   }
 };
 
-export const deleteAward = async (userId: string, awardId: number) => {
+export const deleteAward = async (userId: number, awardId: number) => {
   try {
     const response = await axiosInstance.delete(
       `/api/v1/users/${userId}/awards/${awardId}`
@@ -42,7 +42,8 @@ export const updatePutAward = async (
 ) => {
   try {
     const response = await axiosInstance.put(
-      `/api/v1/users/${userId}/awards/${awardId}`
+      `/api/v1/users/${userId}/awards/${awardId}`,
+      { award: data }
     );
     return response;
   } catch (error) {

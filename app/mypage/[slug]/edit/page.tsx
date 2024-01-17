@@ -8,6 +8,7 @@ import {
   createAward,
   deleteAward,
   getUserAwards,
+  updatePutAward,
 } from "@app/services/awardsService";
 import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import {
@@ -66,13 +67,13 @@ export default function ProfileEdit() {
     image: string | null;
     introduction: string;
     user_id: string | number;
-    id: string;
+    id: number;
   }>({
     name: "",
     image: null,
     introduction: "",
     user_id: "",
-    id: "",
+    id: 0,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<string[]>([]);
@@ -96,8 +97,9 @@ export default function ProfileEdit() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(
     undefined
   );
-  const [awards, setAwards] = useState<UserAwards[]>([]);
   const [deletedAwards, setDeletedAwards] = useState<number[]>([]);
+  const [awards, setAwards] = useState<UserAwards[]>([]);
+  const [updatedAwards, setUpdatedAwards] = useState<UserAwards[]>([]);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -270,14 +272,25 @@ export default function ProfileEdit() {
       });
 
       // 受賞歴保存
-      for (const award of awards) {
-        if (award.title && award.title.trim() !== "") {
-          await createAward({
-            award: {
-              userId: profile.id,
-              title: award.title,
-            },
-          });
+      if (awards.length > 0) {
+        for (const award of awards) {
+          try {
+            if (award.id && award.id.toString().length < 13) {
+              await updatePutAward(profile.id, award.id, {
+                title: award.title,
+              });
+            } else {
+              const awardData: AwardData = {
+                award: {
+                  title: award.title,
+                  userId: profile.id.toString(),
+                },
+              };
+              await createAward(awardData);
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
       }
 
@@ -354,10 +367,19 @@ export default function ProfileEdit() {
 
   // 受賞歴追加
   const handleAwardChange = (index: number, value: string) => {
-    const newAwards = awards.map((award, idx) =>
-      idx === index ? { ...award, title: value } : award
-    );
+    const newAwards = awards.map((award, idx) => {
+      if (idx === index) {
+        return award.id
+          ? { id: award.id, title: value }
+          : { id: Date.now(), title: value };
+      }
+      return award;
+    });
     setAwards(newAwards);
+    if (awards[index].id) {
+      const updatedAward = { id: awards[index].id, title: value };
+      setUpdatedAwards((prevAwards) => [...prevAwards, updatedAward]);
+    }
   };
 
   const addAward = () => {
