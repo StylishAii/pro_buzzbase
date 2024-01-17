@@ -188,10 +188,11 @@ export default function MyPage() {
                         className="min-w-min"
                       />
                       <ul className="flex flex-wrap items-center gap-x-1">
-                        {userAwards.map((award) => (
+                        {userAwards.map((award, index) => (
                           <li key={award.id}>
                             <p className="text-sm text-zinc-400">
-                              {award.title} /
+                              {award.title}{" "}
+                              {index < userAwards.length - 1 ? "/" : ""}
                             </p>
                           </li>
                         ))}
