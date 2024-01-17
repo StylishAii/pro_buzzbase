@@ -191,7 +191,7 @@ export default function MyPage() {
                         {userAwards.map((award) => (
                           <li key={award.id}>
                             <p className="text-sm text-zinc-400">
-                              {award.title}
+                              {award.title} /
                             </p>
                           </li>
                         ))}
