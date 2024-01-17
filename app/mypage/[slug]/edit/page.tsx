@@ -336,14 +336,12 @@ export default function ProfileEdit() {
   // カテゴリーをフィルタリング
   const handleBaseballCategoryChange = (value: string) => {
     const trimmedValue = value.split("|")[0];
-    console.log(trimmedValue);
     setBaseballCategoryValue(trimmedValue);
   };
 
   // category_id set
   const handleBaseballCategoryIdChange = (value: number) => {
     const category = baseballCategories.find((c) => c.id === value);
-    console.log(category);
     if (category) {
       setSelectedCategoryId(category.id);
       setBaseballCategoryValue(category.name);
