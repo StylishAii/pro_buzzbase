@@ -10,12 +10,11 @@ export const getTournaments = async () => {
   }
 };
 
-export const createTournament = async (tournamentData: { name: string }) => {
+export const createTournament = async ({ name }: { name: string }) => {
   try {
-    const response = await axiosInstance.post(
-      "/api/v1/tournaments",
-      tournamentData
-    );
+    const response = await axiosInstance.post("/api/v1/tournaments", {
+      tournament: { name },
+    });
     return response.data as TournamentData;
   } catch (error) {
     console.log(error);

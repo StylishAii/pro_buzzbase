@@ -70,6 +70,7 @@ export default function GameRecord() {
   const [matchBattingOrder, setMatchBattingOrder] = useState("");
   const [defensivePosition, setDefensivePosition] = useState<string>("");
   const [tournament, setTournament] = useState<number | null>(null);
+  const [inputTournamentName, setInputTournamentName] = useState("");
   const [matchMemo, setMatchMemo] = useState<Text | null>(null);
   const router = useRouter();
 
@@ -146,23 +147,11 @@ export default function GameRecord() {
     setOpponentTeam(event);
   };
 
-  // 大会名設定
-  const handleTournamentChange = async (value: any) => {
-    let existingTournament = tournamentData.find((t) => t.name === value);
-    if (!existingTournament) {
-      try {
-        const newTournament = await createTournament({ name: value });
-        if (newTournament) {
-          setTournamentData([...tournamentData, newTournament]);
-          existingTournament = newTournament;
-        }
-      } catch (error) {
-        console.log("tournament:", error);
-      }
-    }
-    if (existingTournament) {
-      setTournament(existingTournament.id);
-    }
+  const handleTournamentInputChange = (value: string) => {
+    setInputTournamentName(value);
+  };
+  const handleTournamentSelectionChange = (value: any) => {
+    setTournament(value);
   };
 
   // 自分チーム得点
@@ -205,12 +194,18 @@ export default function GameRecord() {
       }
 
       // 大会保存
-      let tournamentId: number | null = tournament;
-      if (!tournamentId) {
-        const selectedTournament = tournamentData.find(
-          (t) => t.id === tournament
-        );
-        tournamentId = selectedTournament ? selectedTournament.id : null;
+      let tournamentId = tournament;
+      const existingTournament = tournamentData.find(
+        (t) => t.name === inputTournamentName
+      );
+      if (!existingTournament && inputTournamentName) {
+        const newTournament = await createTournament({
+          name: inputTournamentName,
+        });
+        if (newTournament) {
+          setTournamentData([...tournamentData, newTournament]);
+          tournamentId = newTournament.id;
+        }
       }
 
       // 相手チーム保存
@@ -219,8 +214,8 @@ export default function GameRecord() {
         const newTeamResponse = await createOrUpdateTeam({
           team: {
             name: opponentTeam,
-            category_id: undefined, // カテゴリーIDを適切に設定する必要があれば追加
-            prefecture_id: undefined, // 都道府県IDを適切に設定する必要があれば追加
+            category_id: undefined,
+            prefecture_id: undefined,
           },
         });
         opponentTeamId = newTeamResponse.data.id;
@@ -309,7 +304,8 @@ export default function GameRecord() {
                   labelPlacement="outside-left"
                   className="[&>div]:justify-between"
                   size="md"
-                  onSelectionChange={handleTournamentChange}
+                  onInputChange={handleTournamentInputChange}
+                  onSelectionChange={handleTournamentSelectionChange}
                 >
                   {tournamentData.map((data) => (
                     <AutocompleteItem key={data.id} value={data.name}>
