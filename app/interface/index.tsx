@@ -154,7 +154,7 @@ interface HeaderNextProps {
 }
 
 interface updateUserPositions {
-  userId: string;
+  userId: number;
   positionIds: number[];
 }
 

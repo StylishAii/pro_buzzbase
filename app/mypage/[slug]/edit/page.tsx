@@ -8,6 +8,7 @@ import {
   createAward,
   deleteAward,
   getUserAwards,
+  updatePutAward,
 } from "@app/services/awardsService";
 import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import {
@@ -15,7 +16,11 @@ import {
   updateUserPositions,
 } from "@app/services/positionService";
 import { getPrefectures } from "@app/services/prefectureService";
-import { createOrUpdateTeam, getTeams } from "@app/services/teamsService";
+import {
+  createOrUpdateTeam,
+  getTeams,
+  updateTeam,
+} from "@app/services/teamsService";
 import { getUserData, updateProfile } from "@app/services/userService";
 import {
   Autocomplete,
@@ -66,13 +71,13 @@ export default function ProfileEdit() {
     image: string | null;
     introduction: string;
     user_id: string | number;
-    id: string;
+    id: number;
   }>({
     name: "",
     image: null,
     introduction: "",
     user_id: "",
-    id: "",
+    id: 0,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<string[]>([]);
@@ -96,7 +101,9 @@ export default function ProfileEdit() {
   const [selectedTeamId, setSelectedTeamId] = useState<number | undefined>(
     undefined
   );
+  const [deletedAwards, setDeletedAwards] = useState<number[]>([]);
   const [awards, setAwards] = useState<UserAwards[]>([]);
+  const [updatedAwards, setUpdatedAwards] = useState<UserAwards[]>([]);
   const router = useRouter();
 
   const handleImageClick = () => {
@@ -206,6 +213,7 @@ export default function ProfileEdit() {
     }, 5000);
   };
 
+  // データ送信
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (isInvalid) {
@@ -237,18 +245,23 @@ export default function ProfileEdit() {
       formData.append("user[image]", file);
     }
 
-    let teamId;
+    let teamId = selectedTeamId;
     // チーム保存
     if (teamName.trim() !== "") {
-      const team = await createOrUpdateTeam({
+      const teamData = {
         team: {
           name: teamName,
           category_id: selectedCategoryId,
           prefecture_id: selectedPrefectureId,
         },
-      });
-      if (team && team.data) {
-        teamId = team.data.id;
+      };
+      if (selectedTeamId) {
+        await updateTeam(selectedTeamId, teamData);
+      } else {
+        const team = await createOrUpdateTeam(teamData);
+        if (team && team.data) {
+          teamId = team.data.id;
+        }
       }
     }
 
@@ -269,14 +282,34 @@ export default function ProfileEdit() {
       });
 
       // 受賞歴保存
-      for (const award of awards) {
-        if (award.title && award.title.trim() !== "") {
-          await createAward({
-            award: {
-              userId: profile.id,
-              title: award.title,
-            },
-          });
+      if (awards.length > 0) {
+        for (const award of awards) {
+          try {
+            if (award.id && award.id.toString().length < 13) {
+              await updatePutAward(profile.id, award.id, {
+                title: award.title,
+              });
+            } else {
+              const awardData: AwardData = {
+                award: {
+                  title: award.title,
+                  userId: profile.id.toString(),
+                },
+              };
+              await createAward(awardData);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      }
+
+      // 受賞削除
+      for (const awardId of deletedAwards) {
+        try {
+          await deleteAward(profile.id, awardId);
+        } catch (error) {
+          console.log(error);
         }
       }
 
@@ -309,7 +342,11 @@ export default function ProfileEdit() {
 
   // category_id set
   const handleBaseballCategoryIdChange = (value: number) => {
-    setSelectedCategoryId(value);
+    const category = baseballCategories.find((c) => c.id === value);
+    if (category) {
+      setSelectedCategoryId(category.id);
+      setBaseballCategoryValue(category.name);
+    }
   };
 
   // prefecture_id set
@@ -344,10 +381,19 @@ export default function ProfileEdit() {
 
   // 受賞歴追加
   const handleAwardChange = (index: number, value: string) => {
-    const newAwards = awards.map((award, idx) =>
-      idx === index ? { ...award, title: value } : award
-    );
+    const newAwards = awards.map((award, idx) => {
+      if (idx === index) {
+        return award.id
+          ? { id: award.id, title: value }
+          : { id: Date.now(), title: value };
+      }
+      return award;
+    });
     setAwards(newAwards);
+    if (awards[index].id) {
+      const updatedAward = { id: awards[index].id, title: value };
+      setUpdatedAwards((prevAwards) => [...prevAwards, updatedAward]);
+    }
   };
 
   const addAward = () => {
@@ -356,7 +402,7 @@ export default function ProfileEdit() {
   // 受賞削除
   const handleDeleteAward = async (awardId: number, index: number) => {
     try {
-      await deleteAward(profile.id, awardId);
+      setDeletedAwards([...deletedAwards, awardId]);
       const newAwards = awards.filter((_, idx) => idx !== index);
       setAwards(newAwards);
     } catch (error) {
@@ -546,7 +592,7 @@ export default function ProfileEdit() {
                     label="受賞（チーム成績・個人タイトル）"
                     placeholder="投手 ベストナイン賞（東京六大学 2023 秋）"
                     value={award.title}
-                    onChange={(e) => handleAwardChange(0, e.target.value)}
+                    onChange={(e) => handleAwardChange(index, e.target.value)}
                     color={isInvalid ? "danger" : "primary"}
                     className="mt-1"
                     endContent={
