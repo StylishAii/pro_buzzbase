@@ -150,10 +150,36 @@ interface HeaderSaveProps {
 }
 
 interface updateUserPositions {
-  userId: string;
+  userId: number;
   positionIds: number[];
 }
 
 interface getUserPositions {
   userId: string;
+}
+
+interface teamData {
+  team: {
+    name: string;
+    category_id: number | undefined;
+    prefecture_id: number | undefined;
+  };
+}
+
+interface PlusButtonProps {
+  className: string;
+  type?: "submit" | "button" | "reset" | undefined;
+  onClick: any;
+}
+
+interface AwardData {
+  award: {
+    title: string;
+    userId: string;
+  };
+}
+
+interface UserAwards {
+  id: number;
+  title: string;
 }
