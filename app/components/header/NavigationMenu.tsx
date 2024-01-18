@@ -33,7 +33,7 @@ export default function NavigationMenu() {
 
   return (
     <>
-      <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500">
+      <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500 z-100">
         <ul className="flex items-center justify-around">
           {NavigationItems.map((item, index) => (
             <li key={index}>
