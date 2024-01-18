@@ -1,5 +1,3 @@
-import HeaderNext from "@app/components/header/HeaderNext";
-
 export default function RecordLayout({
   children,
 }: {
@@ -7,12 +5,7 @@ export default function RecordLayout({
 }) {
   return (
     <>
-      <div className="buzz-dark bg-main">
-        <HeaderNext />
-        <div className="h-full buzz-dark">
-          <main className="h-full">{children}</main>
-        </div>
-      </div>
+      <div className="buzz-dark bg-main">{children}</div>
     </>
   );
 }

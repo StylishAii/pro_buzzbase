@@ -3,7 +3,7 @@ import React from "react";
 import { Link, Button } from "@nextui-org/react";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
 
-export default function HeaderNext() {
+export default function HeaderNext({ onMatchResultSave }: HeaderNextProps) {
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
@@ -18,6 +18,7 @@ export default function HeaderNext() {
               endContent={
                 <NextArrowIcon width="16" height="16" stroke="#F4F4F4" />
               }
+              onClick={onMatchResultSave}
             >
               次へ
             </Button>
