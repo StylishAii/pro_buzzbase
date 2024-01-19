@@ -149,6 +149,10 @@ interface HeaderSaveProps {
   onProfileUpdate: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+interface HeaderNextProps {
+  onMatchResultSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
 interface updateUserPositions {
   userId: number;
   positionIds: number[];
@@ -182,4 +186,26 @@ interface AwardData {
 interface UserAwards {
   id: number;
   title: string;
+}
+
+interface TournamentData {
+  id: number;
+  name: string;
+}
+
+interface MatchResultsData {
+  match_result: {
+    game_id: number | null;
+    user_id: number;
+    date_and_time: string;
+    match_type: string;
+    my_team_id: number;
+    opponent_team_id: number;
+    my_team_score: number;
+    opponent_team_score: number;
+    batting_order: string;
+    defensive_position: string;
+    tournament_id: number | null;
+    memo: string | null;
+  };
 }
