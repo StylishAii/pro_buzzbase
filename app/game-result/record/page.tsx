@@ -484,7 +484,7 @@ export default function GameRecord() {
                 <Divider className="my-4" />
                 <Select
                   isRequired
-                  variant="bordered"
+                  variant="faded"
                   label="打順"
                   labelPlacement="outside-left"
                   size="md"
@@ -502,12 +502,13 @@ export default function GameRecord() {
                 <Divider className="my-4" />
                 <Select
                   isRequired
-                  variant="bordered"
+                  variant="faded"
                   label="守備位置"
                   labelPlacement="outside-left"
                   size="md"
                   fullWidth={false}
                   color={isDefensivePositionValid ? "default" : "danger"}
+                  placeholder="守備"
                   selectedKeys={
                     defensivePosition ? defensivePosition : myPosition
                   }

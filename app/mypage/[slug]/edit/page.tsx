@@ -483,7 +483,7 @@ export default function ProfileEdit() {
                 <Select
                   variant="underlined"
                   label="ポジション（複数選択可）"
-                  color="primary"
+                  color="default"
                   selectionMode="multiple"
                   selectedKeys={selectedPositionIds}
                   onSelectionChange={handleSelectChange}
@@ -562,7 +562,7 @@ export default function ProfileEdit() {
                 <Select
                   variant="underlined"
                   label="所属地域（都道府県）"
-                  color="primary"
+                  color="default"
                   className="pt-2"
                   isDisabled={isDisabled}
                   onChange={handlePrefectureChange}

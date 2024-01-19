@@ -12,7 +12,7 @@ export default function MatchResultList() {
             defaultSelectedKeys={[years[0].label]}
             className="bg-transparent rounded-full text-xs border-zinc-400 max-w-xs"
             data={years}
-            variant="bordered"
+            variant="faded"
             color="primary"
             ariaLabel="シーズンを選択"
             labelPlacement="outside"
@@ -23,7 +23,7 @@ export default function MatchResultList() {
             defaultSelectedKeys={[gameType[0].label]}
             className="bg-transparent rounded-full text-xs border-zinc-400 max-w-xs"
             data={gameType}
-            variant="bordered"
+            variant="faded"
             color="primary"
             ariaLabel="試合の種類を選択"
             labelPlacement="outside"
