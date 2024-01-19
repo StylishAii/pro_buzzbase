@@ -388,7 +388,7 @@ export default function GameRecord() {
                   defaultValue={matchType}
                   color="primary"
                   size="sm"
-                  className="text-sm flex justify-between items-center flex-row"
+                  className="text-sm flex justify-between items-center flex-row [&>span]:text-white"
                   onChange={handleMatchTypeChange}
                 >
                   <Radio value="regular">公式戦</Radio>
@@ -508,7 +508,9 @@ export default function GameRecord() {
                   size="md"
                   fullWidth={false}
                   color={isDefensivePositionValid ? "default" : "danger"}
-                  selectedKeys={myPosition}
+                  selectedKeys={
+                    defensivePosition ? defensivePosition : myPosition
+                  }
                   defaultSelectedKeys={myPosition}
                   onSelectionChange={handleDefensivePositionChange}
                   className="grid justify-between items-center grid-cols-[auto_110px]"
@@ -518,6 +520,7 @@ export default function GameRecord() {
                       key={position.id}
                       value={position.id.toString()}
                       textValue={position.name}
+                      className="text-white"
                     >
                       {position.name}
                     </SelectItem>
