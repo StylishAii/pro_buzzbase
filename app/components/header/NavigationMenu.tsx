@@ -6,6 +6,7 @@ import { Link, Button } from "@nextui-org/react";
 import { getUserData } from "@app/services/userService";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 
 type userData = {
   user_id: string;
@@ -15,7 +16,9 @@ type userData = {
 
 export default function NavigationMenu() {
   const [userData, setUserData] = useState<userData | null>(null);
+  const { isLoggedIn } = useAuthContext();
   const pathName = usePathname();
+  const navigationItems = NavigationItems();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,13 +32,17 @@ export default function NavigationMenu() {
     fetchUserData();
   }, []);
 
-  const myPageLink = userData ? `/mypage/${userData.user_id}` : "/signin";
+  const myPageLink = isLoggedIn ? `/mypage/${userData?.user_id}` : "/signin";
+  const isActive = (path: string, itemHref: string) => {
+    const activePaths = ["/", "/game-result/record", "/ranking", "/group"];
+    return path === itemHref && activePaths.includes(path);
+  };
 
   return (
     <>
       <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500 z-100">
         <ul className="flex items-center justify-around">
-          {NavigationItems.map((item, index) => (
+          {navigationItems.map((item, index) => (
             <li key={index}>
               <Button
                 isIconOnly
@@ -43,15 +50,19 @@ export default function NavigationMenu() {
                 as={Link}
                 startContent={
                   <item.icon
-                    fill={`${pathName === item.href ? `#e08e0a` : `#F4F4F4`}`}
-                    filled={`${pathName === item.href ? `#e08e0a` : `#F4F4F4`}`}
+                    fill={isActive(pathName, item.href) ? `#e08e0a` : `#F4F4F4`}
+                    filled={
+                      isActive(pathName, item.href) ? `#e08e0a` : `#F4F4F4`
+                    }
                     height="22"
                     width="22"
                     label=""
                   />
                 }
                 className={`flex items-center flex-col gap-y-1 px-0 bg-transparent overflow-visible fontSize10 ${
-                  pathName === item.href ? `text-yellow-500` : `text-white`
+                  isActive(pathName, item.href)
+                    ? `text-yellow-500`
+                    : `text-white`
                 }`}
               >
                 {item.label}
@@ -75,7 +86,7 @@ export default function NavigationMenu() {
                 }
                 width={22}
                 height={22}
-                alt="" 
+                alt=""
                 active={pathName.includes("/mypage") ? true : false}
               />
               マイページ

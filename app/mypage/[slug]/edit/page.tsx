@@ -111,69 +111,70 @@ export default function ProfileEdit() {
   };
 
   // ユーザーデータ取得
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getUserData();
-        setProfile({
-          name: data.name,
-          image: data.image.url,
-          introduction: data.introduction || "",
-          user_id: data.user_id,
-          id: data.id,
-        });
+  const fetchData = async () => {
+    try {
+      const data = await getUserData();
+      setProfile({
+        name: data.name,
+        image: data.image.url,
+        introduction: data.introduction || "",
+        user_id: data.user_id,
+        id: data.id,
+      });
 
-        // ポジション一覧取得
-        const positionsData = await getPositions();
-        setPositions(positionsData);
+      // ポジション一覧取得
+      const positionsData = await getPositions();
+      setPositions(positionsData);
 
-        // チーム都道府県一覧取得
-        const prefectureData = await getPrefectures();
-        setPrefectures(prefectureData);
+      // チーム都道府県一覧取得
+      const prefectureData = await getPrefectures();
+      setPrefectures(prefectureData);
 
-        // 野球カテゴリ一覧取得
-        const baseballCategoryData = await getBaseballCategory();
-        setBaseballCategories(baseballCategoryData);
+      // 野球カテゴリ一覧取得
+      const baseballCategoryData = await getBaseballCategory();
+      setBaseballCategories(baseballCategoryData);
 
-        // チーム一覧取得
-        const teamsData = await getTeams();
-        setTeams(teamsData);
+      // チーム一覧取得
+      const teamsData = await getTeams();
+      setTeams(teamsData);
 
-        const positionIds = data.positions.map((position: any) =>
-          position.id.toString()
+      const positionIds = data.positions.map((position: any) =>
+        position.id.toString()
+      );
+      setSelectedPositionIds(positionIds);
+
+      // チーム初期値設定
+      if (data.team_id) {
+        const userTeam = teamsData.find(
+          (team: { id: any }) => team.id === data.team_id
         );
-        setSelectedPositionIds(positionIds);
-
-        // チーム初期値設定
-        if (data.team_id) {
-          const userTeam = teamsData.find(
-            (team: { id: any }) => team.id === data.team_id
+        if (userTeam) {
+          setTeamName(userTeam.name);
+          setSelectedTeamId(userTeam.id);
+          setSelectedCategoryId(userTeam.category_id);
+          setSelectedPrefectureId(userTeam.prefecture_id);
+          const category = baseballCategoryData.find(
+            (category: { id: number }) => category.id === userTeam.category_id
           );
-          if (userTeam) {
-            setTeamName(userTeam.name);
-            setSelectedTeamId(userTeam.id);
-            setSelectedCategoryId(userTeam.category_id);
-            setSelectedPrefectureId(userTeam.prefecture_id);
-            const category = baseballCategoryData.find(
-              (category: { id: number }) => category.id === userTeam.category_id
-            );
-            if (category) {
-              setBaseballCategoryValue(category.name);
-            }
+          if (category) {
+            setBaseballCategoryValue(category.name);
           }
         }
-
-        // 受賞歴初期値
-        const userAwards = await getUserAwards(data.id);
-        if (userAwards.length > 0) {
-          setAwards(userAwards);
-        } else {
-          setAwards([{ id: Date.now(), title: "" }]);
-        }
-      } catch (error: any) {
-        setErrors(error);
       }
-    };
+
+      // 受賞歴初期値
+      const userAwards = await getUserAwards(data.id);
+      if (userAwards.length > 0) {
+        setAwards(userAwards);
+      } else {
+        setAwards([{ id: Date.now(), title: "" }]);
+      }
+    } catch (error: any) {
+      setErrors(error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -209,7 +210,7 @@ export default function ProfileEdit() {
     setErrors(newErrors);
     setTimeout(() => {
       setErrors([]);
-    }, 5000);
+    }, 2000);
   };
 
   // データ送信
