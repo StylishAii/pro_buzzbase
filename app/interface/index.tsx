@@ -148,6 +148,9 @@ interface ResultsSelectBoxProps {
 interface HeaderSaveProps {
   onProfileUpdate: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
+interface HeaderMatchResultsProps {
+  onMatchResultSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
 
 interface HeaderNextProps {
   onMatchResultSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
