@@ -210,7 +210,7 @@ export default function ProfileEdit() {
     setErrors(newErrors);
     setTimeout(() => {
       setErrors([]);
-    }, 5000);
+    }, 2000);
   };
 
   // データ送信

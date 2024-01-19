@@ -206,6 +206,6 @@ interface MatchResultsData {
     batting_order: string;
     defensive_position: string;
     tournament_id: number | null;
-    memo: Text | null;
+    memo: string | null;
   };
 }

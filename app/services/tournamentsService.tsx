@@ -21,3 +21,17 @@ export const createTournament = async ({ name }: { name: string }) => {
     throw error;
   }
 };
+
+export const updateTournament = async (id: number, name: string) => {
+  try {
+    const response = await axiosInstance.put(`/api/v1/tournaments/${id}`, {
+      tournament: {
+        name,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
