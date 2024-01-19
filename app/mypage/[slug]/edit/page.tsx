@@ -618,7 +618,7 @@ export default function ProfileEdit() {
                   />
                 ))}
                 <PlusButton
-                  className="mt-2 ml-auto mr-1 "
+                  className="mt-2 ml-auto mr-1 rounded-large"
                   type="button"
                   onClick={addAward}
                 />

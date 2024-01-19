@@ -14,7 +14,7 @@ export default function PlusButton({
         type={type}
         onClick={onClick}
       >
-        <PlusIcon width="24" height="24" fill="#C4841D" />
+        <PlusIcon width="30" height="30" fill="#C4841D" />
       </Button>
     </>
   );
