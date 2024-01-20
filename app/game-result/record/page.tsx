@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderNext from "@app/components/header/HeaderNext";
+import { updateGameResult } from "@app/services/gameResultsService";
 import { createMatchResults } from "@app/services/matchResultsService";
 import { getPositions } from "@app/services/positionService";
 import { createOrUpdateTeam, getTeams } from "@app/services/teamsService";
@@ -84,7 +85,9 @@ export default function GameRecord() {
   const [isDefensivePositionValid, setIsDefensivePositionValid] =
     useState(true);
   const [errors, setErrors] = useState<string[]>([]);
-
+  const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
+    number | null
+  >(null);
   const router = useRouter();
 
   const fetchData = async () => {
@@ -112,6 +115,10 @@ export default function GameRecord() {
 
   useEffect(() => {
     fetchData();
+    const savedGameResultId = localStorage.getItem("gameResultId");
+    if (savedGameResultId) {
+      setLocalStorageGameResultId(JSON.parse(savedGameResultId));
+    }
   }, []);
 
   useEffect(() => {
@@ -324,7 +331,7 @@ export default function GameRecord() {
       }
       const matchResultData = {
         match_result: {
-          game_id: null,
+          game_result_id: localStorageGameResultId,
           user_id: Number(userId),
           date_and_time: gameDate,
           match_type: matchType,
@@ -340,9 +347,20 @@ export default function GameRecord() {
       };
       const response = await createMatchResults(matchResultData);
       console.log(response);
+      if (typeof userId !== "undefined" && localStorageGameResultId !== null) {
+        const updateGameResultData = {
+          game_result: {
+            user_id: userId,
+            match_result_id: response.id,
+            batting_average_id: null,
+            pitching_result_id: null,
+          },
+        };
+        await updateGameResult(localStorageGameResultId, updateGameResultData);
+      }
       setTimeout(() => {
-        router.push(`/game-result/batting`);
-      }, 500);
+        router.push(`/game-result/batting/`);
+      }, 10);
     } catch (error) {
       console.log(error);
       throw error;
