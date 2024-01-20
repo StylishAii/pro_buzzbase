@@ -22,7 +22,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 
 const battingOrder = [
@@ -89,6 +89,7 @@ export default function GameRecord() {
     number | null
   >(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   const fetchData = async () => {
     try {
@@ -115,10 +116,20 @@ export default function GameRecord() {
 
   useEffect(() => {
     fetchData();
+    // ローカルストレージからid取得
     const savedGameResultId = localStorage.getItem("gameResultId");
     if (savedGameResultId) {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
     }
+    const handleRemoveLocalStorage = () => {
+      if (pathname !== "/game-result/battings") {
+        localStorage.removeItem("gameResultId");
+      }
+    };
+    window.addEventListener("beforeunload", handleRemoveLocalStorage);
+    return () => {
+      window.removeEventListener("beforeunload", handleRemoveLocalStorage);
+    };
   }, []);
 
   useEffect(() => {
