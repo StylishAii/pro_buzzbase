@@ -196,9 +196,18 @@ interface TournamentData {
   name: string;
 }
 
+interface GameResultData {
+  game_result: {
+    user_id: number;
+    match_result_id: number | null;
+    batting_average_id: number | null;
+    pitching_result_id: number | null;
+  };
+}
+
 interface MatchResultsData {
   match_result: {
-    game_id: number | null;
+    game_result_id: number | null;
     user_id: number;
     date_and_time: string;
     match_type: string;
