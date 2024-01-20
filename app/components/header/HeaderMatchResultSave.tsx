@@ -2,8 +2,8 @@ import React from "react";
 import { BackIcon } from "@app/components/icon/BackIcon";
 import { Button } from "@nextui-org/react";
 
-export default function HeaderMatchResultSave({
-  onMatchResultSave,
+export default function HeaderMatchResultNext({
+  onMatchResultNext,
 }: HeaderMatchResultsProps) {
   const handleBackClick = () => {
     window.history.back();
@@ -16,13 +16,13 @@ export default function HeaderMatchResultSave({
             <BackIcon width="24" height="24" fill="" stroke="white" />
           </button>
           <Button
-            onClick={onMatchResultSave}
+            onClick={onMatchResultNext}
             color="primary"
             variant="solid"
             size="sm"
             radius="full"
           >
-            保存
+            次へ
           </Button>
         </div>
       </header>

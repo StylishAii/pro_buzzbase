@@ -149,7 +149,7 @@ interface HeaderSaveProps {
   onProfileUpdate: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 interface HeaderMatchResultsProps {
-  onMatchResultSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onMatchResultNext: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 interface HeaderNextProps {

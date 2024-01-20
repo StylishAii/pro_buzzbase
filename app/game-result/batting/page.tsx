@@ -1,6 +1,6 @@
 "use client";
 import PlusButton from "@app/components/button/PlusButton";
-import HeaderMatchResultSave from "@app/components/header/HeaderMatchResultSave";
+import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
 import { DeleteIcon } from "@app/components/icon/DeleteIcon";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { useState } from "react";
@@ -59,25 +59,32 @@ const resultShortForms: Record<string, string> = {
 export default function BattingRecord() {
   const [selectedPosition, setSelectedPosition] = useState<number>(0);
   const [selectedResult, setSelectedResult] = useState<number>(0);
+  const [runsBattedIn, setRunsBattedIn] = useState(0);
+  const [run, setRun] = useState(0);
+  const [defensiveError, setDefensiveError] = useState(0);
+  const [stealingBase, setStealingBase] = useState(0);
+  const [caughtStealing, setCaughtStealing] = useState(0);
   const [battingBoxes, setBattingBoxes] = useState<
-    Array<{ position: number; result: number }>
-  >([{ position: 0, result: 0 }]);
-
-  const getDisplayText = () => {
-    const position =
-      battingResultsPositions.find((p) => p.id === selectedPosition)
-        ?.direction || "";
-    const result =
-      battingResultsList.find((r) => r.id === selectedResult)?.result || "";
-
-    const shortFormResult = resultShortForms[result] || result;
-
-    return `${position}${shortFormResult}`;
-  };
+    Array<{ position: number; result: number; text: string }>
+  >([
+    {
+      position: 0,
+      result: 0,
+      text: battingResultsPositions[0].direction + battingResultsList[0].result,
+    },
+  ]);
 
   // 打席追加
   const addBox = () => {
-    setBattingBoxes([...battingBoxes, { position: 0, result: 0 }]);
+    setBattingBoxes([
+      ...battingBoxes,
+      {
+        position: 0,
+        result: 0,
+        text:
+          battingResultsPositions[0].direction + battingResultsList[0].result,
+      },
+    ]);
   };
 
   // 打席削除
@@ -86,12 +93,78 @@ export default function BattingRecord() {
     setBattingBoxes(newBoxes);
   };
 
+  // 打点
+  const handleRunsBattedInChange = (e: any) =>
+    setRunsBattedIn(Number(e.target.value));
+
+  // 得点
+  const handleRunChange = (e: any) => setRun(Number(e.target.value));
+
+  // 失策
+  const handleErrorChange = (e: any) =>
+    setDefensiveError(Number(e.target.value));
+
+  // 盗塁
+  const handleStealingBaseChange = (e: any) =>
+    setStealingBase(Number(e.target.value));
+
+  // 盗塁死
+  const handleCaughtStealingChange = (e: any) =>
+    setCaughtStealing(Number(e.target.value));
+
+  // 打球方向
+  const createHandlePositionChange = (index: number) => (keys: any) => {
+    const newPosition = Number(keys.values().next().value);
+    updateBattingBox(index, newPosition, battingBoxes[index].result);
+  };
+
+  // 打球結果
+  const createHandleResultChange = (index: number) => (keys: any) => {
+    const newResult = Number(keys.values().next().value);
+    updateBattingBox(index, battingBoxes[index].position, newResult);
+  };
+
+  // 打席結果
+  const updateBattingBox = (
+    index: number,
+    positionIndex: number,
+    resultIndex: number
+  ) => {
+    const updatedBoxes = battingBoxes.map((box, i) => {
+      if (i === index) {
+        const positionText =
+          battingResultsPositions.find((p) => p.id === positionIndex)
+            ?.direction || "";
+        const resultText =
+          battingResultsList.find((r) => r.id === resultIndex)?.result || "";
+        const shortFormResult = resultShortForms[resultText] || resultText;
+        return {
+          position: positionIndex,
+          result: resultIndex,
+          text: `${positionText}${shortFormResult}`,
+        };
+      }
+      return box;
+    });
+    setBattingBoxes(updatedBoxes);
+  };
+
+  // データ送信
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    const data = {
+      runsBattedIn,
+      run,
+      defensiveError,
+      stealingBase,
+      caughtStealing,
+    };
+    console.log(battingBoxes);
+    console.log(data);
   };
   return (
     <>
-      <HeaderMatchResultSave onMatchResultSave={handleSubmit} />
+      <HeaderMatchResultNext onMatchResultNext={handleSubmit} />
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-20 px-4">
@@ -125,10 +198,9 @@ export default function BattingRecord() {
                             labelPlacement="outside-left"
                             placeholder="方向"
                             aria-label="打球方向"
-                            value={selectedPosition}
-                            onChange={(e) =>
-                              setSelectedPosition(Number(e.target.value))
-                            }
+                            onSelectionChange={createHandlePositionChange(
+                              index
+                            )}
                           >
                             {battingResultsPositions.map((position) => (
                               <SelectItem key={position.id} value={position.id}>
@@ -143,10 +215,8 @@ export default function BattingRecord() {
                             label=""
                             placeholder="打球結果"
                             aria-label="打球結果"
-                            value={selectedResult}
-                            onChange={(e) =>
-                              setSelectedResult(Number(e.target.value))
-                            }
+                            value={box.result}
+                            onSelectionChange={createHandleResultChange(index)}
                           >
                             {battingResultsList.map((result) => (
                               <SelectItem key={result.id} value={result.id}>
@@ -157,7 +227,7 @@ export default function BattingRecord() {
                         </div>
                         <div className="flex items-end">
                           <div className="font-bold w-fit ml-auto mr-0 mt-2 pb-1 border-b-2 border-yellow-600">
-                            {getDisplayText()}
+                            {box.text}
                           </div>
                           <Button
                             className="p-0 w-auto min-w-max h-auto border-none block bg-transparent ml-6"
@@ -198,7 +268,7 @@ export default function BattingRecord() {
                       defaultValue="0"
                       // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
-                      // onChange={handleMyScoreChange}
+                      onChange={handleRunsBattedInChange}
                     />
                     <Input
                       type="number"
@@ -211,7 +281,7 @@ export default function BattingRecord() {
                       defaultValue="0"
                       // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
-                      // onChange={handleMyScoreChange}
+                      onChange={handleRunChange}
                     />
                     <Input
                       type="number"
@@ -224,7 +294,7 @@ export default function BattingRecord() {
                       defaultValue="0"
                       // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
-                      // onChange={handleMyScoreChange}
+                      onChange={handleErrorChange}
                     />
                     <Input
                       type="number"
@@ -237,7 +307,7 @@ export default function BattingRecord() {
                       defaultValue="0"
                       // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
-                      // onChange={handleMyScoreChange}
+                      onChange={handleStealingBaseChange}
                     />
                     <Input
                       type="number"
@@ -250,7 +320,7 @@ export default function BattingRecord() {
                       defaultValue="0"
                       // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
-                      // onChange={handleMyScoreChange}
+                      onChange={handleCaughtStealingChange}
                     />
                   </div>
                 </>
