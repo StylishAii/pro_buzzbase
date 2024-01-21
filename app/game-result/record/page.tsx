@@ -126,16 +126,12 @@ export default function GameRecord() {
     if (savedGameResultId) {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
     }
-    console.log(savedGameResultId);
     if (
       !(pathname === "/game-result/battings") &&
       !(pathname === "/game-result/record") &&
       savedGameResultId
     ) {
       localStorage.removeItem("gameResultId");
-      console.log("削除しましたRecord");
-    } else {
-      console.log("維持しています");
     }
   }, []);
 

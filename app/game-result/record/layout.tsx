@@ -16,9 +16,6 @@ export default function RecordLayout({
       savedGameResultId
     ) {
       localStorage.removeItem("gameResultId");
-      console.log("削除しました");
-    } else {
-      console.log("維持しています");
     }
   }, [pathname]);
   return (

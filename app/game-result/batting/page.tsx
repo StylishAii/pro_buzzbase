@@ -214,8 +214,6 @@ export default function BattingRecord() {
       return;
     }
     setErrors([]);
-    console.log(currentUserId);
-    console.log(localStorageGameResultId);
     const battingAverageData = {
       batting_average: {
         game_result_id: localStorageGameResultId,
