@@ -11,7 +11,7 @@ import {
 import { getCurrentUserId } from "@app/services/userService";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const battingResultsPositions = [
   { id: 0, direction: "-" },
@@ -64,6 +64,58 @@ const resultShortForms: Record<string, string> = {
   併殺打: "併",
 };
 
+type BattingBox = {
+  position: number;
+  result: number;
+  text: string;
+};
+
+// 打撃成績計算
+const useBattingStatistics = (battingBoxes: BattingBox[]) => {
+  const calculateStatistics = () => {
+    let totalBases = 0;
+    let strikeOuts = 0;
+    let baseOnBalls = 0;
+    let hitByPitch = 0;
+    let sacrificeHit = 0;
+
+    const validBoxes = battingBoxes.filter(
+      (box) => box.position !== 0 || box.result !== 0
+    );
+    const timesAtBat = validBoxes.length;
+    const hit = battingBoxes.filter((box) => box.result === 7).length;
+    const twoBaseHit = battingBoxes.filter((box) => box.result === 8).length;
+    const threeBaseHit = battingBoxes.filter((box) => box.result === 9).length;
+    const homeRun = battingBoxes.filter((box) => box.result === 10).length;
+
+    battingBoxes.forEach((box) => {
+      if (box.result === 7) totalBases += 1;
+      if (box.result === 8) totalBases += 2;
+      if (box.result === 9) totalBases += 3;
+      if (box.result === 10) totalBases += 4;
+
+      if (box.result === 12 || box.result === 13) strikeOuts += 1;
+      if (box.result === 14) baseOnBalls += 1;
+      if (box.result === 15) hitByPitch += 1;
+      if (box.result === 11) sacrificeHit += 1;
+    });
+
+    return {
+      timesAtBat,
+      hit,
+      twoBaseHit,
+      threeBaseHit,
+      homeRun,
+      totalBases,
+      strikeOuts,
+      baseOnBalls,
+      hitByPitch,
+      sacrificeHit,
+    };
+  };
+  return useMemo(calculateStatistics, [battingBoxes]);
+};
+
 export default function BattingRecord() {
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [runsBattedIn, setRunsBattedIn] = useState(0);
@@ -96,6 +148,19 @@ export default function BattingRecord() {
       console.log(error);
     }
   };
+
+  const {
+    timesAtBat,
+    hit,
+    twoBaseHit,
+    threeBaseHit,
+    homeRun,
+    totalBases,
+    strikeOuts,
+    baseOnBalls,
+    hitByPitch,
+    sacrificeHit,
+  } = useBattingStatistics(battingBoxes);
 
   useEffect(() => {
     fetchData();
@@ -218,8 +283,19 @@ export default function BattingRecord() {
       batting_average: {
         game_result_id: localStorageGameResultId,
         user_id: currentUserId,
+        // plate_appearances: ,
+        times_at_bat: timesAtBat, // 打席数
+        hit: hit, // 安打数
+        two_base_hit: twoBaseHit, // 2塁打数
+        three_base_hit: threeBaseHit, // 3塁打数
+        home_run: homeRun, // 本塁打数
+        total_bases: totalBases, // 塁打数
         runs_batted_in: runsBattedIn,
         run: run,
+        strike_out: strikeOuts, // 三振数
+        base_on_balls: baseOnBalls, //四球
+        hit_by_pitch: hitByPitch, // 死球
+        sacrifice_hit: sacrificeHit, //犠打
         error: defensiveError,
         stealing_base: stealingBase,
         caught_stealing: caughtStealing,
