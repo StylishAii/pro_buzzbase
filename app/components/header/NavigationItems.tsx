@@ -11,7 +11,7 @@ const NavigationItems = () => {
     { href: "", label: "新着", icon: HomeIcon },
     { href: "/ranking", label: "ランキング", icon: RankingIcon },
     {
-      href: isLoggedIn ? "/game-result/record" : "/signin",
+      href: isLoggedIn ? "/game-result/lists" : "/signin",
       label: "記録",
       icon: RecordIcon,
     },

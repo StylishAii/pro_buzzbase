@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { Link, Button } from "@nextui-org/react";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
 
