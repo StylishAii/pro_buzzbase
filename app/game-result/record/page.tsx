@@ -84,6 +84,7 @@ export default function GameRecord() {
   const [isBattingOrderValid, setIsBattingOrderValid] = useState(true);
   const [isDefensivePositionValid, setIsDefensivePositionValid] =
     useState(true);
+  const [isLocalStorageId, setIsLocalStorageId] = useState(true);
   const [errors, setErrors] = useState<string[]>([]);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
@@ -216,6 +217,16 @@ export default function GameRecord() {
   const validateForm = () => {
     let isValid = true;
     let newErrors = [];
+
+    if (!localStorageGameResultId) {
+      setIsLocalStorageId(false);
+      isValid = false;
+      newErrors.push(
+        "一定時間、操作が行われなかったため、最初からやり直してください"
+      );
+    } else {
+      setIsLocalStorageId(true);
+    }
 
     if (!gameDate) {
       setIsMatchDate(false);
