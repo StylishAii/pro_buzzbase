@@ -232,10 +232,10 @@ interface BattingAverageData {
   };
 }
 
-interface CreatePlateAppearance {
+interface PlateAppearance {
   plate_appearance: {
-    game_result_id: number | null;
-    user_id: number | null;
+    game_result_id: number;
+    user_id: number;
     batter_box_number: number | null;
     batting_result: string | null;
   };

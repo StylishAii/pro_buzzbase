@@ -10,7 +10,7 @@ export const getPlateAppearances = async () => {
   }
 };
 
-export const createPlateAppearance = async (data: CreatePlateAppearance) => {
+export const createPlateAppearance = async (data: PlateAppearance) => {
   try {
     const response = await axiosInstance.post(
       "/api/v1/plate_appearances",
@@ -23,12 +23,33 @@ export const createPlateAppearance = async (data: CreatePlateAppearance) => {
   }
 };
 
-export const updatePlateAppearance = async () => {
+export const updatePlateAppearance = async (
+  id: number,
+  plateAppearance: PlateAppearance
+) => {
   try {
-    const response = await axiosInstance.put(`/api/v1/plate_appearances/:id`);
+    const response = await axiosInstance.put(
+      `/api/v1/plate_appearances/${id}`,
+      plateAppearance
+    );
     return response.data;
   } catch (error) {
     console.log(error);
     throw error;
+  }
+};
+
+export const checkExistingPlateAppearance = async (
+  gameResultId: number | null,
+  userId: number | null
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/plate_search?game_result_id=${gameResultId}&user_id=${userId}`
+    );
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    return null;
   }
 };

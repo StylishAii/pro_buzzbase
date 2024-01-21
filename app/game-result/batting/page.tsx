@@ -8,7 +8,11 @@ import {
   createBattingAverage,
   updateBattingAverage,
 } from "@app/services/battingAveragesService";
-import { createPlateAppearance } from "@app/services/plateAppearanceService";
+import {
+  checkExistingPlateAppearance,
+  createPlateAppearance,
+  updatePlateAppearance,
+} from "@app/services/plateAppearanceService";
 import { getCurrentUserId } from "@app/services/userService";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -280,6 +284,9 @@ export default function BattingRecord() {
       return;
     }
     setErrors([]);
+    if (localStorageGameResultId == null || currentUserId == null) {
+      return;
+    }
     const battingAverageData = {
       batting_average: {
         game_result_id: localStorageGameResultId,
@@ -311,14 +318,27 @@ export default function BattingRecord() {
           batting_result: battingBoxes[i].text,
         },
       };
+      // 打席ごと
       try {
-        await createPlateAppearance(plateAppearanceData);
+        const existingPlateAppearance = await checkExistingPlateAppearance(
+          plateAppearanceData.plate_appearance.game_result_id,
+          currentUserId
+        );
+        if (existingPlateAppearance) {
+          await updatePlateAppearance(
+            existingPlateAppearance.id,
+            plateAppearanceData
+          );
+        } else {
+          await createPlateAppearance(plateAppearanceData);
+        }
       } catch (error) {
         console.log(`plate error :${error}`);
       }
     }
     console.log(battingBoxes);
     console.log(battingAverageData);
+    // 打撃トータル
     try {
       const existingBattingAverage = await checkExistingBattingAverage(
         battingAverageData.batting_average.game_result_id,
