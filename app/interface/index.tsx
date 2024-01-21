@@ -148,6 +148,9 @@ interface ResultsSelectBoxProps {
 interface HeaderSaveProps {
   onProfileUpdate: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
+interface HeaderMatchResultsProps {
+  onMatchResultNext: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
 
 interface HeaderNextProps {
   onMatchResultSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -193,9 +196,18 @@ interface TournamentData {
   name: string;
 }
 
+interface GameResultData {
+  game_result: {
+    user_id: number;
+    match_result_id: number | null;
+    batting_average_id: number | null;
+    pitching_result_id: number | null;
+  };
+}
+
 interface MatchResultsData {
   match_result: {
-    game_id: number | null;
+    game_result_id: number | null;
     user_id: number;
     date_and_time: string;
     match_type: string;
@@ -207,5 +219,24 @@ interface MatchResultsData {
     defensive_position: string;
     tournament_id: number | null;
     memo: string | null;
+  };
+}
+
+interface BattingAverageData {
+  batting_average: {
+    runs_batted_in: number;
+    run: number;
+    error: number;
+    stealing_base: number;
+    caught_stealing: number;
+  };
+}
+
+interface PlateAppearance {
+  plate_appearance: {
+    game_result_id: number;
+    user_id: number;
+    batter_box_number: number | null;
+    batting_result: string | null;
   };
 }

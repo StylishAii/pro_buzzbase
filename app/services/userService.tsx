@@ -34,3 +34,12 @@ export const updateProfile = async (data: FormData) => {
   const response = await axiosInstance.put("/api/v1/user", data, {});
   return response;
 };
+
+export const getCurrentUserId = async () => {
+  try {
+    const response = await axiosInstance.get("/api/v1/users/current");
+    return response.data.id;
+  } catch (error) {
+    console.log(error);
+  }
+};

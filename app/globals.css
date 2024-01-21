@@ -18,10 +18,6 @@ body {
   width: 100%;
 }
 
-.text-foreground-500 {
-  color: #f4f4f4 !important;
-}
-
 .bg-content1 {
   background-color: #424242;
 }

@@ -34,7 +34,15 @@ export default function NavigationMenu() {
 
   const myPageLink = isLoggedIn ? `/mypage/${userData?.user_id}` : "/signin";
   const isActive = (path: string, itemHref: string) => {
-    const activePaths = ["/", "/game-result/record", "/ranking", "/group"];
+    const activePaths = [
+      "/",
+      "/game-result/lists",
+      "/game-result/record",
+      "/game-result/battings",
+      "/game-result/pitching",
+      "/ranking",
+      "/group",
+    ];
     return path === itemHref && activePaths.includes(path);
   };
 

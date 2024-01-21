@@ -1,7 +1,12 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderNext from "@app/components/header/HeaderNext";
-import { createMatchResults } from "@app/services/matchResultsService";
+import { updateGameResult } from "@app/services/gameResultsService";
+import {
+  checkExistingMatchResults,
+  createMatchResults,
+  updateMatchResult,
+} from "@app/services/matchResultsService";
 import { getPositions } from "@app/services/positionService";
 import { createOrUpdateTeam, getTeams } from "@app/services/teamsService";
 import {
@@ -21,7 +26,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 
 const battingOrder = [
@@ -83,9 +88,13 @@ export default function GameRecord() {
   const [isBattingOrderValid, setIsBattingOrderValid] = useState(true);
   const [isDefensivePositionValid, setIsDefensivePositionValid] =
     useState(true);
+  const [isLocalStorageId, setIsLocalStorageId] = useState(true);
   const [errors, setErrors] = useState<string[]>([]);
-
+  const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
+    number | null
+  >(null);
   const router = useRouter();
+  const pathname = usePathname();
 
   const fetchData = async () => {
     try {
@@ -112,6 +121,18 @@ export default function GameRecord() {
 
   useEffect(() => {
     fetchData();
+    // ローカルストレージからid取得
+    const savedGameResultId = localStorage.getItem("gameResultId");
+    if (savedGameResultId) {
+      setLocalStorageGameResultId(JSON.parse(savedGameResultId));
+    }
+    if (
+      !(pathname === "/game-result/battings") &&
+      !(pathname === "/game-result/record") &&
+      savedGameResultId
+    ) {
+      localStorage.removeItem("gameResultId");
+    }
   }, []);
 
   useEffect(() => {
@@ -198,6 +219,14 @@ export default function GameRecord() {
   const validateForm = () => {
     let isValid = true;
     let newErrors = [];
+
+    if (!localStorageGameResultId) {
+      setIsLocalStorageId(false);
+      isValid = false;
+      newErrors.push("エラーが発生しました。");
+    } else {
+      setIsLocalStorageId(true);
+    }
 
     if (!gameDate) {
       setIsMatchDate(false);
@@ -324,7 +353,7 @@ export default function GameRecord() {
       }
       const matchResultData = {
         match_result: {
-          game_id: null,
+          game_result_id: localStorageGameResultId,
           user_id: Number(userId),
           date_and_time: gameDate,
           match_type: matchType,
@@ -338,11 +367,36 @@ export default function GameRecord() {
           memo: matchMemo,
         },
       };
-      const response = await createMatchResults(matchResultData);
-      console.log(response);
+      const existingMatchResults = await checkExistingMatchResults(
+        matchResultData.match_result.game_result_id,
+        matchResultData.match_result.user_id
+      );
+      if (existingMatchResults) {
+        await updateMatchResult(existingMatchResults.id, matchResultData);
+      } else {
+        const response = await createMatchResults(matchResultData);
+        console.log(response);
+        if (
+          typeof userId !== "undefined" &&
+          localStorageGameResultId !== null
+        ) {
+          const updateGameResultData = {
+            game_result: {
+              user_id: userId,
+              match_result_id: response.id,
+              batting_average_id: null,
+              pitching_result_id: null,
+            },
+          };
+          await updateGameResult(
+            localStorageGameResultId,
+            updateGameResultData
+          );
+        }
+      }
       setTimeout(() => {
-        router.push(`/game-result/batting`);
-      }, 500);
+        router.push(`/game-result/batting/`);
+      }, 10);
     } catch (error) {
       console.log(error);
       throw error;
@@ -388,7 +442,7 @@ export default function GameRecord() {
                   defaultValue={matchType}
                   color="primary"
                   size="sm"
-                  className="text-sm flex justify-between items-center flex-row"
+                  className="text-sm flex justify-between items-center flex-row [&>span]:text-white"
                   onChange={handleMatchTypeChange}
                 >
                   <Radio value="regular">公式戦</Radio>
@@ -484,7 +538,7 @@ export default function GameRecord() {
                 <Divider className="my-4" />
                 <Select
                   isRequired
-                  variant="bordered"
+                  variant="faded"
                   label="打順"
                   labelPlacement="outside-left"
                   size="md"
@@ -502,13 +556,16 @@ export default function GameRecord() {
                 <Divider className="my-4" />
                 <Select
                   isRequired
-                  variant="bordered"
+                  variant="faded"
                   label="守備位置"
                   labelPlacement="outside-left"
                   size="md"
                   fullWidth={false}
                   color={isDefensivePositionValid ? "default" : "danger"}
-                  selectedKeys={myPosition}
+                  placeholder="守備"
+                  selectedKeys={
+                    defensivePosition ? defensivePosition : myPosition
+                  }
                   defaultSelectedKeys={myPosition}
                   onSelectionChange={handleDefensivePositionChange}
                   className="grid justify-between items-center grid-cols-[auto_110px]"
@@ -518,6 +575,7 @@ export default function GameRecord() {
                       key={position.id}
                       value={position.id.toString()}
                       textValue={position.name}
+                      className="text-white"
                     >
                       {position.name}
                     </SelectItem>

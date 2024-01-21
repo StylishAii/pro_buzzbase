@@ -1,15 +1,12 @@
-"use client";
-import React, { useEffect } from "react";
 import { BackIcon } from "@app/components/icon/BackIcon";
 import { Button } from "@nextui-org/react";
 
-export default function HeaderSave({ onProfileUpdate }: HeaderSaveProps) {
+export default function HeaderMatchResultNext({
+  onMatchResultNext,
+}: HeaderMatchResultsProps) {
   const handleBackClick = () => {
     window.history.back();
   };
-  useEffect(() => {
-    localStorage.removeItem("gameResultId");
-  }, []);
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
@@ -18,13 +15,13 @@ export default function HeaderSave({ onProfileUpdate }: HeaderSaveProps) {
             <BackIcon width="24" height="24" fill="" stroke="white" />
           </button>
           <Button
-            onClick={onProfileUpdate}
+            onClick={onMatchResultNext}
             color="primary"
             variant="solid"
             size="sm"
             radius="full"
           >
-            保存
+            次へ
           </Button>
         </div>
       </header>
