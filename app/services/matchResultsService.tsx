@@ -60,3 +60,18 @@ export const deleteMatchResult = async (id: number) => {
     throw error;
   }
 };
+
+export const checkExistingMatchResults = async (
+  gameResultId: number | null,
+  userId: number | null
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/existing_search?game_result_id=${gameResultId}&user_id=${userId}`
+    );
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+    return null;
+  }
+};

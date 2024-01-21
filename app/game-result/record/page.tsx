@@ -2,7 +2,11 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderNext from "@app/components/header/HeaderNext";
 import { updateGameResult } from "@app/services/gameResultsService";
-import { createMatchResults } from "@app/services/matchResultsService";
+import {
+  checkExistingMatchResults,
+  createMatchResults,
+  updateMatchResult,
+} from "@app/services/matchResultsService";
 import { getPositions } from "@app/services/positionService";
 import { createOrUpdateTeam, getTeams } from "@app/services/teamsService";
 import {
@@ -367,23 +371,33 @@ export default function GameRecord() {
           memo: matchMemo,
         },
       };
-      const response = await createMatchResults(matchResultData);
-      console.log(response);
-      if (typeof userId !== "undefined" && localStorageGameResultId !== null) {
-        const updateGameResultData = {
-          game_result: {
-            user_id: userId,
-            match_result_id: response.id,
-            batting_average_id: null,
-            pitching_result_id: null,
-          },
-        };
-        await updateGameResult(localStorageGameResultId, updateGameResultData);
-      }
-      localStorage.setItem(
-        "gameResultId",
-        JSON.stringify(localStorageGameResultId)
+      const existingMatchResults = await checkExistingMatchResults(
+        matchResultData.match_result.game_result_id,
+        matchResultData.match_result.user_id
       );
+      if (existingMatchResults) {
+        await updateMatchResult(existingMatchResults.id, matchResultData);
+      } else {
+        const response = await createMatchResults(matchResultData);
+        console.log(response);
+        if (
+          typeof userId !== "undefined" &&
+          localStorageGameResultId !== null
+        ) {
+          const updateGameResultData = {
+            game_result: {
+              user_id: userId,
+              match_result_id: response.id,
+              batting_average_id: null,
+              pitching_result_id: null,
+            },
+          };
+          await updateGameResult(
+            localStorageGameResultId,
+            updateGameResultData
+          );
+        }
+      }
       setTimeout(() => {
         router.push(`/game-result/batting/`);
       }, 10);
