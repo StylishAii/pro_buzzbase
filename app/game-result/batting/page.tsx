@@ -310,12 +310,13 @@ export default function BattingRecord() {
       },
     };
     for (let i = 0; i < battingBoxes.length; i++) {
+      const battingResult = battingBoxes[i].text.replace("-", "");
       const plateAppearanceData = {
         plate_appearance: {
           game_result_id: localStorageGameResultId,
           user_id: currentUserId,
           batter_box_number: i + 1,
-          batting_result: battingBoxes[i].text,
+          batting_result: battingResult,
         },
       };
       // 打席ごと
