@@ -322,7 +322,8 @@ export default function BattingRecord() {
       try {
         const existingPlateAppearance = await checkExistingPlateAppearance(
           plateAppearanceData.plate_appearance.game_result_id,
-          currentUserId
+          plateAppearanceData.plate_appearance.user_id,
+          plateAppearanceData.plate_appearance.batter_box_number
         );
         if (existingPlateAppearance) {
           await updatePlateAppearance(
@@ -353,7 +354,7 @@ export default function BattingRecord() {
         await createBattingAverage(battingAverageData);
       }
     } catch (error) {
-      console.log(error);
+      console.log(`batting average ${error}`);
     }
   };
   return (

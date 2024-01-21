@@ -41,11 +41,12 @@ export const updatePlateAppearance = async (
 
 export const checkExistingPlateAppearance = async (
   gameResultId: number | null,
-  userId: number | null
+  userId: number | null,
+  batterBoxNumber: number
 ) => {
   try {
     const response = await axiosInstance.get(
-      `/api/v1/plate_search?game_result_id=${gameResultId}&user_id=${userId}`
+      `/api/v1/plate_search?game_result_id=${gameResultId}&user_id=${userId}&batter_box_number=${batterBoxNumber}`
     );
     return response.data;
   } catch (error: any) {
