@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import { BackIcon } from "@app/components/icon/BackIcon";
 import { Button } from "@nextui-org/react";
 
@@ -6,6 +7,9 @@ export default function HeaderSave({ onProfileUpdate }: HeaderSaveProps) {
   const handleBackClick = () => {
     window.history.back();
   };
+  useEffect(() => {
+    localStorage.removeItem("gameResultId");
+  }, []);
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">

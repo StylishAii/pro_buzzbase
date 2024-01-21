@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Button } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
@@ -7,7 +7,9 @@ import Logout from "@app/components/auth/Logout";
 
 export default function Header() {
   const { isLoggedIn } = useAuthContext();
-
+  useEffect(() => {
+    localStorage.removeItem("gameResultId");
+  }, []);
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">

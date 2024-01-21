@@ -1,8 +1,11 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "@nextui-org/react";
 
 export default function HeaderLogo() {
+  useEffect(() => {
+    localStorage.removeItem("gameResultId");
+  }, []);
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">

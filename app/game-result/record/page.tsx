@@ -122,15 +122,17 @@ export default function GameRecord() {
     if (savedGameResultId) {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
     }
-    const handleRemoveLocalStorage = () => {
-      if (pathname !== "/game-result/battings") {
-        localStorage.removeItem("gameResultId");
-      }
-    };
-    window.addEventListener("beforeunload", handleRemoveLocalStorage);
-    return () => {
-      window.removeEventListener("beforeunload", handleRemoveLocalStorage);
-    };
+    console.log(savedGameResultId);
+    if (
+      !(pathname === "/game-result/battings") &&
+      !(pathname === "/game-result/record") &&
+      savedGameResultId
+    ) {
+      localStorage.removeItem("gameResultId");
+      console.log("削除しましたRecord");
+    } else {
+      console.log("維持しています");
+    }
   }, []);
 
   useEffect(() => {
@@ -221,9 +223,7 @@ export default function GameRecord() {
     if (!localStorageGameResultId) {
       setIsLocalStorageId(false);
       isValid = false;
-      newErrors.push(
-        "一定時間、操作が行われなかったため、最初からやり直してください"
-      );
+      newErrors.push("エラーが発生しました。");
     } else {
       setIsLocalStorageId(true);
     }
@@ -380,6 +380,10 @@ export default function GameRecord() {
         };
         await updateGameResult(localStorageGameResultId, updateGameResultData);
       }
+      localStorage.setItem(
+        "gameResultId",
+        JSON.stringify(localStorageGameResultId)
+      );
       setTimeout(() => {
         router.push(`/game-result/batting/`);
       }, 10);
