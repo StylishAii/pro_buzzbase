@@ -221,3 +221,13 @@ interface MatchResultsData {
     memo: string | null;
   };
 }
+
+interface BattingAverageData {
+  batting_average: {
+    runs_batted_in: number;
+    run: number;
+    error: number;
+    stealing_base: number;
+    caught_stealing: number;
+  };
+}

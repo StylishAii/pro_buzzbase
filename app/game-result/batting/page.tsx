@@ -1,9 +1,17 @@
 "use client";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 import PlusButton from "@app/components/button/PlusButton";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
 import { DeleteIcon } from "@app/components/icon/DeleteIcon";
+import {
+  checkExistingBattingAverage,
+  createBattingAverage,
+  updateBattingAverage,
+} from "@app/services/battingAveragesService";
+import { getCurrentUserId } from "@app/services/userService";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const battingResultsPositions = [
   { id: 0, direction: "-" },
@@ -57,13 +65,14 @@ const resultShortForms: Record<string, string> = {
 };
 
 export default function BattingRecord() {
-  const [selectedPosition, setSelectedPosition] = useState<number>(0);
-  const [selectedResult, setSelectedResult] = useState<number>(0);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [runsBattedIn, setRunsBattedIn] = useState(0);
   const [run, setRun] = useState(0);
   const [defensiveError, setDefensiveError] = useState(0);
   const [stealingBase, setStealingBase] = useState(0);
   const [caughtStealing, setCaughtStealing] = useState(0);
+  const [errors, setErrors] = useState<string[]>([]);
+  const [isLocalStorageId, setIsLocalStorageId] = useState(true);
   const [battingBoxes, setBattingBoxes] = useState<
     Array<{ position: number; result: number; text: string }>
   >([
@@ -73,6 +82,29 @@ export default function BattingRecord() {
       text: battingResultsPositions[0].direction + battingResultsList[0].result,
     },
   ]);
+  const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
+    number | null
+  >(null);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const fetchData = async () => {
+    try {
+      const currentUserIdData = await getCurrentUserId();
+      setCurrentUserId(currentUserIdData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // ローカルストレージからid取得
+    const savedGameResultId = localStorage.getItem("gameResultId");
+    if (savedGameResultId) {
+      setLocalStorageGameResultId(JSON.parse(savedGameResultId));
+    }
+  }, [pathname]);
 
   // 打席追加
   const addBox = () => {
@@ -149,24 +181,77 @@ export default function BattingRecord() {
     setBattingBoxes(updatedBoxes);
   };
 
+  // バリデーション
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 3000);
+  };
+  const validateForm = () => {
+    let isValid = true;
+    let newErrors = [];
+
+    if (!localStorageGameResultId) {
+      setIsLocalStorageId(false);
+      isValid = false;
+      newErrors.push("エラーが発生しました。");
+    } else {
+      setIsLocalStorageId(true);
+    }
+
+    if (!isValid) {
+      setErrorsWithTimeout(newErrors);
+    }
+
+    return isValid;
+  };
+
   // データ送信
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    const data = {
-      runsBattedIn,
-      run,
-      defensiveError,
-      stealingBase,
-      caughtStealing,
+    if (!validateForm()) {
+      return;
+    }
+    setErrors([]);
+    console.log(currentUserId);
+    console.log(localStorageGameResultId);
+    const battingAverageData = {
+      batting_average: {
+        game_result_id: localStorageGameResultId,
+        user_id: currentUserId,
+        runs_batted_in: runsBattedIn,
+        run: run,
+        error: defensiveError,
+        stealing_base: stealingBase,
+        caught_stealing: caughtStealing,
+      },
     };
     console.log(battingBoxes);
-    console.log(data);
+    console.log(battingAverageData);
+    try {
+      const existingBattingAverage = await checkExistingBattingAverage(
+        battingAverageData.batting_average.game_result_id,
+        currentUserId
+      );
+      if (existingBattingAverage) {
+        await updateBattingAverage(
+          existingBattingAverage.id,
+          battingAverageData
+        );
+      } else {
+        await createBattingAverage(battingAverageData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
       <HeaderMatchResultNext onMatchResultNext={handleSubmit} />
       <main className="h-full">
         <div className="pb-32 relative">
+          <ErrorMessages errors={errors} />
           <div className="pt-20 px-4">
             <h2 className="text-xl font-bold text-center">
               打撃成績を入力しよう！
