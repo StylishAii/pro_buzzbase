@@ -8,6 +8,7 @@ import {
   createBattingAverage,
   updateBattingAverage,
 } from "@app/services/battingAveragesService";
+import { createPlateAppearance } from "@app/services/plateAppearanceService";
 import { getCurrentUserId } from "@app/services/userService";
 import { Button, Divider, Input, Select, SelectItem } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -301,6 +302,21 @@ export default function BattingRecord() {
         caught_stealing: caughtStealing,
       },
     };
+    for (let i = 0; i < battingBoxes.length; i++) {
+      const plateAppearanceData = {
+        plate_appearance: {
+          game_result_id: localStorageGameResultId,
+          user_id: currentUserId,
+          batter_box_number: i + 1,
+          batting_result: battingBoxes[i].text,
+        },
+      };
+      try {
+        await createPlateAppearance(plateAppearanceData);
+      } catch (error) {
+        console.log(`plate error :${error}`);
+      }
+    }
     console.log(battingBoxes);
     console.log(battingAverageData);
     try {

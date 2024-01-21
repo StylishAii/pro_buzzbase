@@ -231,3 +231,12 @@ interface BattingAverageData {
     caught_stealing: number;
   };
 }
+
+interface CreatePlateAppearance {
+  plate_appearance: {
+    game_result_id: number | null;
+    user_id: number | null;
+    batter_box_number: number | null;
+    batting_result: string | null;
+  };
+}

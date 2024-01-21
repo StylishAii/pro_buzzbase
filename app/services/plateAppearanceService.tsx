@@ -10,9 +10,12 @@ export const getPlateAppearances = async () => {
   }
 };
 
-export const createPlateAppearance = async () => {
+export const createPlateAppearance = async (data: CreatePlateAppearance) => {
   try {
-    const response = await axiosInstance.post("/api/v1/plate_appearances");
+    const response = await axiosInstance.post(
+      "/api/v1/plate_appearances",
+      data
+    );
     return response.data;
   } catch (error) {
     console.log(error);
