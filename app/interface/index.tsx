@@ -250,9 +250,9 @@ interface PitchingResultData {
     loss: number;
     hold: number;
     saves: number;
-    // innings_pitched: number;
-    // number_of_pitches: number;
-    // got_to_the_distance: boolean;
+    innings_pitched: number;
+    number_of_pitches: number;
+    got_to_the_distance: boolean;
     run_allowed: number;
     earned_run: number;
     hits_allowed: number;

@@ -1,7 +1,11 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
-import { createPitchingResult } from "@app/services/pitchingResultsService";
+import {
+  checkExistingPitchingResult,
+  createPitchingResult,
+  updatePitchingResult,
+} from "@app/services/pitchingResultsService";
 import { getCurrentUserId } from "@app/services/userService";
 import {
   Checkbox,
@@ -158,6 +162,9 @@ export default function PitchingRecord() {
   // データ送信
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    if (localStorageGameResultId == null || currentUserId == null) {
+      return;
+    }
     const totalInnings = Number(selectedInnings) + Number(selectedFractions);
     try {
       const pitchingResultData = {
@@ -180,8 +187,19 @@ export default function PitchingRecord() {
           hit_by_pitch: hitByPitches,
         },
       };
-      await createPitchingResult(pitchingResultData);
-      console.log(pitchingResultData);
+      const existingPitchingResult = await checkExistingPitchingResult(
+        pitchingResultData.pitching_result.game_result_id,
+        pitchingResultData.pitching_result.user_id
+      );
+      if (existingPitchingResult) {
+        await updatePitchingResult(
+          existingPitchingResult.id,
+          pitchingResultData
+        );
+      } else {
+        await createPitchingResult(pitchingResultData);
+        console.log(pitchingResultData);
+      }
     } catch (error) {
       console.log(error);
     }
