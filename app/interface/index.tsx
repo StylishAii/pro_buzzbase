@@ -150,6 +150,7 @@ interface HeaderSaveProps {
 }
 interface HeaderMatchResultsProps {
   onMatchResultNext: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  text: string;
 }
 
 interface HeaderNextProps {

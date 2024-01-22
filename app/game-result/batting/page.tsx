@@ -363,7 +363,7 @@ export default function BattingRecord() {
   };
   return (
     <>
-      <HeaderMatchResultNext onMatchResultNext={handleSubmit} />
+      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"次へ"}/>
       <main className="h-full">
         <div className="pb-32 relative">
           <ErrorMessages errors={errors} />

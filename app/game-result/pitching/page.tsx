@@ -80,7 +80,7 @@ export default function PitchingRecord() {
   const handleSubmit = async (event: any) => {};
   return (
     <>
-      <HeaderMatchResultNext onMatchResultNext={handleSubmit} />
+      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"保存"}/>
       <main className="h-full">
         <div className="pb-32 relative">
           <ErrorMessages errors={errors} />
