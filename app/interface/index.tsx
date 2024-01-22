@@ -150,6 +150,7 @@ interface HeaderSaveProps {
 }
 interface HeaderMatchResultsProps {
   onMatchResultNext: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  text: string;
 }
 
 interface HeaderNextProps {
@@ -238,5 +239,26 @@ interface PlateAppearance {
     user_id: number;
     batter_box_number: number | null;
     batting_result: string | null;
+  };
+}
+
+interface PitchingResultData {
+  pitching_result: {
+    game_result_id: number | null;
+    user_id: number | null;
+    win: number;
+    loss: number;
+    hold: number;
+    saves: number;
+    innings_pitched: number;
+    number_of_pitches: number;
+    got_to_the_distance: boolean;
+    run_allowed: number;
+    earned_run: number;
+    hits_allowed: number;
+    home_runs_hit: number;
+    strikeouts: number;
+    base_on_balls: number;
+    hit_by_pitch: number;
   };
 }

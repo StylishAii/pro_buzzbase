@@ -3,6 +3,7 @@ import { Button } from "@nextui-org/react";
 
 export default function HeaderMatchResultNext({
   onMatchResultNext,
+  text,
 }: HeaderMatchResultsProps) {
   const handleBackClick = () => {
     window.history.back();
@@ -21,7 +22,7 @@ export default function HeaderMatchResultNext({
             size="sm"
             radius="full"
           >
-            次へ
+            {text}
           </Button>
         </div>
       </header>
