@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
+import { createPitchingResult } from "@app/services/pitchingResultsService";
 import { getCurrentUserId } from "@app/services/userService";
 import {
   Checkbox,
@@ -40,6 +41,21 @@ const fractions = [
 ];
 
 export default function PitchingRecord() {
+  const [win, setWin] = useState(0);
+  const [loss, setLoss] = useState(0);
+  const [selectedInnings, setSelectedInnings] = useState(0);
+  const [selectedFractions, setSelectedFractions] = useState(0);
+  const [gotToTheDistance, setGotToTheDistance] = useState(false);
+  const [numberOfPitches, setNumberOfPitches] = useState(0);
+  const [holds, setHolds] = useState(0);
+  const [saves, setSaves] = useState(0);
+  const [runsAllowed, setRunsAllowed] = useState(0);
+  const [earnedRuns, setEarnedRuns] = useState(0);
+  const [hitsAllowed, setHitsAllowed] = useState(0);
+  const [homeRuns, setHomeRuns] = useState(0);
+  const [strikeouts, setStrikeouts] = useState(0);
+  const [basesOnBalls, setBasesOnBalls] = useState(0);
+  const [hitByPitches, setHitByPitches] = useState(0);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
@@ -67,20 +83,112 @@ export default function PitchingRecord() {
   }, [pathname]);
 
   // 勝敗
-  const handleWinOrLossChange = (value: any) => {};
+  const handleWinOrLossChange = (value: any) => {
+    const selectValue = Array.from(value)[0];
+    if (selectValue === "0") {
+      setWin(1);
+      setLoss(0);
+    } else if (selectValue === "1") {
+      setWin(0);
+      setLoss(1);
+    }
+  };
 
   // 投球回数
-  const createHandleInningsChange = () => {};
-  const createHandleFractionsChange = () => {};
+  const createHandleInningsChange = (value: any) => {
+    const selectValue = Array.from(value)[0] as number;
+    setSelectedInnings(selectValue);
+  };
+  const createHandleFractionsChange = (value: any) => {
+    const selectValue = Array.from(value)[0] as number;
+    const fractionValue = selectValue == 0 ? 0 : selectValue == 1 ? 0.33 : 0.66;
+    setSelectedFractions(fractionValue);
+  };
 
   // 投球数
-  const handleNumberPitchesChange = () => {};
+  const handleNumberPitchesChange = (event: any) => {
+    setNumberOfPitches(event.target.value);
+  };
+
+  // ホールド数
+  const handleHoldChange = (event: any) => {
+    setHolds(event.target.value);
+  };
+
+  // セーブ数
+  const handleSaveChange = (event: any) => {
+    setSaves(event.target.value);
+  };
+
+  // 失点
+  const handleRunAllowedChange = (event: any) => {
+    setRunsAllowed(event.target.value);
+  };
+
+  // 自責点
+  const handleEarnedRunChange = (event: any) => {
+    setEarnedRuns(event.target.value);
+  };
+
+  // 被安打
+  const handleHitsAllowedChange = (event: any) => {
+    setHitsAllowed(event.target.value);
+  };
+
+  // 被本塁打
+  const handleHomeRunsChange = (event: any) => {
+    setHomeRuns(event.target.value);
+  };
+
+  // 奪三振
+  const handleStrikeoutsChange = (event: any) => {
+    setStrikeouts(event.target.value);
+  };
+
+  // 四球
+  const handleBaseOnBallsChange = (event: any) => {
+    setBasesOnBalls(event.target.value);
+  };
+
+  // 死球
+  const handleHitByPitcherChange = (event: any) => {
+    setHitByPitches(event.target.value);
+  };
 
   // データ送信
-  const handleSubmit = async (event: any) => {};
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    const totalInnings = Number(selectedInnings) + Number(selectedFractions);
+    try {
+      const pitchingResultData = {
+        pitching_result: {
+          game_result_id: localStorageGameResultId,
+          user_id: currentUserId,
+          win: win,
+          loss: loss,
+          hold: holds,
+          saves: saves,
+          innings_pitched: totalInnings,
+          number_of_pitches: numberOfPitches,
+          got_to_the_distance: gotToTheDistance,
+          run_allowed: runsAllowed,
+          earned_run: earnedRuns,
+          hits_allowed: hitsAllowed,
+          home_runs_hit: homeRuns,
+          strikeouts: strikeouts,
+          base_on_balls: basesOnBalls,
+          hit_by_pitch: hitByPitches,
+        },
+      };
+      await createPitchingResult(pitchingResultData);
+      console.log(pitchingResultData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
-      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"保存"}/>
+      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"保存"} />
       <main className="h-full">
         <div className="pb-32 relative">
           <ErrorMessages errors={errors} />
@@ -174,13 +282,37 @@ export default function PitchingRecord() {
                   <div className="flex items-center justify-between">
                     <p>完投</p>
                     <Checkbox
-                    // isSelected={isSelected}
-                    // onValueChange={setIsSelected}
+                      isSelected={gotToTheDistance}
+                      onValueChange={setGotToTheDistance}
                     ></Checkbox>
                   </div>
                   <Divider className="my-4" />
                   {/* その他結果 */}
                   <div className="grid grid-cols-2 gap-y-5 gap-x-2 mt-7">
+                    <Input
+                      type="number"
+                      size="md"
+                      variant="bordered"
+                      label="ホールド"
+                      labelPlacement="outside-left"
+                      placeholder="ホールド"
+                      className="[&>div]:w-20"
+                      defaultValue="0"
+                      min={0}
+                      onChange={handleHoldChange}
+                    />
+                    <Input
+                      type="number"
+                      size="md"
+                      variant="bordered"
+                      label="セーブ"
+                      labelPlacement="outside-left"
+                      placeholder="セーブ"
+                      className="[&>div]:w-20"
+                      defaultValue="0"
+                      min={0}
+                      onChange={handleSaveChange}
+                    />
                     <Input
                       type="number"
                       size="md"
@@ -191,19 +323,20 @@ export default function PitchingRecord() {
                       className="[&>div]:w-20"
                       defaultValue="0"
                       min={0}
-                      // onChange={handleRunsBattedInChange}
+                      onChange={handleRunAllowedChange}
                     />
                     <Input
                       type="number"
                       size="md"
                       variant="bordered"
-                      label="自責"
+                      label="自責点"
                       labelPlacement="outside-left"
-                      placeholder="自責"
+                      placeholder="自責点
+                      "
                       className="[&>div]:w-20"
                       defaultValue="0"
                       min={0}
-                      // onChange={handleRunChange}
+                      onChange={handleEarnedRunChange}
                     />
                     <Input
                       type="number"
@@ -215,7 +348,7 @@ export default function PitchingRecord() {
                       className="[&>div]:w-20"
                       defaultValue="0"
                       min={0}
-                      // onChange={handleErrorChange}
+                      onChange={handleHitsAllowedChange}
                     />
                     <Input
                       type="number"
@@ -227,19 +360,19 @@ export default function PitchingRecord() {
                       className="[&>div]:w-20"
                       defaultValue="0"
                       min={0}
-                      // onChange={handleErrorChange}
+                      onChange={handleHomeRunsChange}
                     />
                     <Input
                       type="number"
                       size="md"
                       variant="bordered"
-                      label="三振"
+                      label="奪三振"
                       labelPlacement="outside-left"
-                      placeholder="三振"
+                      placeholder="奪三振"
                       className="[&>div]:w-20"
                       defaultValue="0"
                       min={0}
-                      // onChange={handleErrorChange}
+                      onChange={handleStrikeoutsChange}
                     />
                     <Input
                       type="number"
@@ -251,7 +384,7 @@ export default function PitchingRecord() {
                       className="[&>div]:w-20"
                       defaultValue="0"
                       min={0}
-                      // onChange={handleErrorChange}
+                      onChange={handleBaseOnBallsChange}
                     />
                     <Input
                       type="number"
@@ -263,7 +396,7 @@ export default function PitchingRecord() {
                       className="[&>div]:w-20"
                       defaultValue="0"
                       min={0}
-                      // onChange={handleErrorChange}
+                      onChange={handleHitByPitcherChange}
                     />
                   </div>
                 </>
