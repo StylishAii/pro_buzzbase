@@ -354,13 +354,16 @@ export default function BattingRecord() {
       } else {
         await createBattingAverage(battingAverageData);
       }
+      setTimeout(() => {
+        router.push(`/game-result/pitching/`);
+      }, 10);
     } catch (error) {
       console.log(`batting average ${error}`);
     }
   };
   return (
     <>
-      <HeaderMatchResultNext onMatchResultNext={handleSubmit} />
+      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"次へ"}/>
       <main className="h-full">
         <div className="pb-32 relative">
           <ErrorMessages errors={errors} />
@@ -463,7 +466,6 @@ export default function BattingRecord() {
                       placeholder="打点"
                       className="[&>div]:w-20"
                       defaultValue="0"
-                      // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleRunsBattedInChange}
                     />
@@ -476,7 +478,6 @@ export default function BattingRecord() {
                       placeholder="得点"
                       className="[&>div]:w-20"
                       defaultValue="0"
-                      // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleRunChange}
                     />
@@ -489,7 +490,6 @@ export default function BattingRecord() {
                       placeholder="失策"
                       className="[&>div]:w-20"
                       defaultValue="0"
-                      // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleErrorChange}
                     />
@@ -502,7 +502,6 @@ export default function BattingRecord() {
                       placeholder="盗塁"
                       className="[&>div]:w-20"
                       defaultValue="0"
-                      // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleStealingBaseChange}
                     />
@@ -515,7 +514,6 @@ export default function BattingRecord() {
                       placeholder="盗塁死"
                       className="[&>div]:w-20"
                       defaultValue="0"
-                      // color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleCaughtStealingChange}
                     />
