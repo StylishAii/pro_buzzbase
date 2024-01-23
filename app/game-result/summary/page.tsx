@@ -1,7 +1,6 @@
 "use client";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { ShareIcon } from "@app/components/icon/ShareIcon";
-import { battingOrder } from "@app/game-result/record/page";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
@@ -11,6 +10,18 @@ import { getTournamentName } from "@app/services/tournamentsService";
 import { Button, Chip, Divider } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+const battingOrder = [
+  { id: 1, turn: "1番" },
+  { id: 2, turn: "2番" },
+  { id: 3, turn: "3番" },
+  { id: 4, turn: "4番" },
+  { id: 5, turn: "5番" },
+  { id: 6, turn: "6番" },
+  { id: 7, turn: "7番" },
+  { id: 8, turn: "8番" },
+  { id: 9, turn: "9番" },
+];
 
 export default function ResultsSummary() {
   const [matchResult, setMatchResult] = useState<MatchResult[]>([]);
@@ -194,6 +205,7 @@ export default function ResultsSummary() {
                   battingAverage.map((batting: any) => (
                     <div key={batting.id}>
                       <p className="text-xs text-zinc-400">打撃</p>
+                      <div></div>
                       <div className="mt-1.5 grid grid-cols-3 gap-x-3 gap-y-1">
                         <div className="flex items-center">
                           <p className="text-sm text-zinc-400 mr-2">打点:</p>
