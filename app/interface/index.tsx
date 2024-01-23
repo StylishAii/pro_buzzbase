@@ -272,4 +272,5 @@ interface MatchResult {
   tournament_id: number | null;
   my_team_id: number;
   opponent_team_id: number;
+  defensive_position: string;
 }

@@ -5,9 +5,10 @@ import { battingOrder } from "@app/game-result/record/page";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
+import { getPositionName } from "@app/services/positionService";
 import { getTeamName } from "@app/services/teamsService";
 import { getTournamentName } from "@app/services/tournamentsService";
-import { Button, Chip } from "@nextui-org/react";
+import { Button, Chip, Divider } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -25,16 +26,19 @@ export default function ResultsSummary() {
   const fetchMatchResultDetailData = async () => {
     const updateMatchResults = await Promise.all(
       matchResult.map(async (match) => {
-        const [tournamentName, myTeamName, opponentTeam] = await Promise.all([
-          getTournamentName(match.tournament_id),
-          getTeamName(match.my_team_id),
-          getTeamName(match.opponent_team_id),
-        ]);
+        const [tournamentName, myTeamName, opponentTeam, positionName] =
+          await Promise.all([
+            getTournamentName(match.tournament_id),
+            getTeamName(match.my_team_id),
+            getTeamName(match.opponent_team_id),
+            getPositionName(Number(match.defensive_position)),
+          ]);
         return {
           ...match,
           tournament_name: tournamentName,
           my_team_name: myTeamName,
           opponent_team_name: opponentTeam,
+          defensive_position: positionName,
         };
       })
     );
@@ -170,18 +174,18 @@ export default function ResultsSummary() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex mt-1.5">
-                      <p className="text-base ">
+                    <div className="flex mt-1.5 gap-x-3">
+                      <p className="text-sm text-zinc-400">
                         {getBattingOrderTurn(match.batting_order)}
                       </p>
-                      <p></p>
+                      <p className="text-sm text-zinc-400">{match.defensive_position}</p>
                     </div>
                   </div>
                 ))
               ) : (
                 <div>試合情報はありません。</div>
               )}
-
+              <Divider className="my-4" />
               {/* 打撃成績 */}
               {/* 投手成績 */}
             </div>
