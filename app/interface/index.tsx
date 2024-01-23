@@ -267,3 +267,7 @@ interface PitchingResultData {
     hit_by_pitch: number;
   };
 }
+
+interface MatchResult {
+  tournament_id: number | null;
+}
