@@ -274,3 +274,24 @@ interface MatchResult {
   opponent_team_id: number;
   defensive_position: string;
 }
+
+interface BattingAverage {
+  base_on_balls: number | null;
+  caught_stealing: number | null;
+  error: number | null;
+  game_result_id: number;
+  hit: number | null;
+  hit_by_pitch: number | null;
+  home_run: number | null;
+  id: number | null;
+  plate_appearances: number | null;
+  run: number | null;
+  runs_batted_in: number | null;
+  sacrifice_hit: number | null;
+  stealing_base: number | null;
+  strike_out: number | null;
+  three_base_hit: number | null;
+  times_at_bat: number | null;
+  total_bases: number | null;
+  two_base_hit: number | null;
+}

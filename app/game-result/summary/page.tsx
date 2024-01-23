@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
 export default function ResultsSummary() {
   const [matchResult, setMatchResult] = useState<MatchResult[]>([]);
-  const [battingAverage, setBattingAverage] = useState([]);
+  const [battingAverage, setBattingAverage] = useState<BattingAverage[]>([]);
   const [pitchingResult, setPitchingResult] = useState([]);
   const [isDetailDataFetched, setIsDetailDataFetched] = useState(false);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
@@ -178,7 +178,9 @@ export default function ResultsSummary() {
                       <p className="text-sm text-zinc-400">
                         {getBattingOrderTurn(match.batting_order)}
                       </p>
-                      <p className="text-sm text-zinc-400">{match.defensive_position}</p>
+                      <p className="text-sm text-zinc-400">
+                        {match.defensive_position}
+                      </p>
                     </div>
                   </div>
                 ))
@@ -187,6 +189,54 @@ export default function ResultsSummary() {
               )}
               <Divider className="my-4" />
               {/* 打撃成績 */}
+              <div>
+                {battingAverage ? (
+                  battingAverage.map((batting: any) => (
+                    <div key={batting.id}>
+                      <p className="text-xs text-zinc-400">打撃</p>
+                      <div className="mt-1.5 grid grid-cols-3 gap-x-3 gap-y-1">
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">打点:</p>
+                          <span className="block text-base font-bold">
+                            {batting.runs_batted_in}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">得点:</p>
+                          <span className="block text-base font-bold">
+                            {batting.run}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">失策:</p>
+                          <span className="block text-base font-bold">
+                            {batting.error}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">盗塁:</p>
+                          <span className="block text-base font-bold">
+                            {batting.stealing_base}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">盗塁死:</p>
+                          <span className="block text-base font-bold">
+                            {batting.caught_stealing}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <p className="text-sm text-zinc-500">
+                      打撃成績はありません。
+                    </p>
+                  </>
+                )}
+              </div>
+              <Divider className="my-4" />
               {/* 投手成績 */}
             </div>
           </div>
