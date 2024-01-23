@@ -4,6 +4,7 @@ import { ShareIcon } from "@app/components/icon/ShareIcon";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
+import { getTeamName } from "@app/services/teamsService";
 import { getTournamentName } from "@app/services/tournamentsService";
 import { Button, Chip } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -23,12 +24,16 @@ export default function ResultsSummary() {
   const fetchMatchResultDetailData = async () => {
     const updateMatchResults = await Promise.all(
       matchResult.map(async (match) => {
-        const [tournamentName] = await Promise.all([
+        const [tournamentName, myTeamName, opponentTeam] = await Promise.all([
           getTournamentName(match.tournament_id),
+          getTeamName(match.my_team_id),
+          getTeamName(match.opponent_team_id),
         ]);
         return {
           ...match,
           tournament_name: tournamentName,
+          my_team_name: myTeamName,
+          opponent_team_name: opponentTeam,
         };
       })
     );
@@ -121,7 +126,16 @@ export default function ResultsSummary() {
                         {new Date(match.date_and_time).toLocaleDateString()}
                       </p>
                     </div>
+                    <p className="text-base mt-3 text-zinc-400">{match.my_team_name}</p>
                     <p className="text-sm mt-1">{match.tournament_name}</p>
+                    <div className="flex gap-x-1 items-baseline mt-3">
+                      <span className="text-base font-normal text-zinc-400">
+                        vs.
+                      </span>
+                      <p className="text-base font-bold">
+                        {match.opponent_team_name}
+                      </p>
+                    </div>
                   </div>
                 ))
               ) : (
