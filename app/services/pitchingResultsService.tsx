@@ -50,3 +50,15 @@ export const checkExistingPitchingResult = async (
     return null;
   }
 };
+
+export const getCurrentPitchingResult = async (gameResultId: number | null) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/current_pitching_result_search?game_result_id=${gameResultId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

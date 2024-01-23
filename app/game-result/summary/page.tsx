@@ -4,6 +4,7 @@ import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { ShareIcon } from "@app/components/icon/ShareIcon";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
+import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
 import { Button } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import { useEffect, useState } from "react";
 export default function ResultsSummary() {
   const [matchResult, setMatchResult] = useState(null);
   const [battingAverage, setBattingAverage] = useState(null);
+  const [pitchingResult, setPitchingResult] = useState(null);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
@@ -34,8 +36,12 @@ export default function ResultsSummary() {
       const battingAverageData = await getCurrentBattingAverage(
         localStorageGameResultId
       );
+      const pitchingResultData = await getCurrentPitchingResult(
+        localStorageGameResultId
+      );
       setMatchResult(matchResultData);
       setBattingAverage(battingAverageData);
+      setPitchingResult(pitchingResultData);
     } catch (error) {
       console.log(`fetch error: ${error}`);
     }
@@ -46,6 +52,7 @@ export default function ResultsSummary() {
 
   console.log(matchResult);
   console.log(battingAverage);
+  console.log(pitchingResult);
   return (
     <>
       <SummaryResultHeader onSummaryResult={handleResultEdit} text="編集" />
