@@ -2,6 +2,7 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { ShareIcon } from "@app/components/icon/ShareIcon";
+import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { Button } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function ResultsSummary() {
   const [matchResult, setMatchResult] = useState(null);
+  const [battingAverage, setBattingAverage] = useState(null);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
@@ -29,7 +31,11 @@ export default function ResultsSummary() {
       const matchResultData = await getCurrentMatchResult(
         localStorageGameResultId
       );
+      const battingAverageData = await getCurrentBattingAverage(
+        localStorageGameResultId
+      );
       setMatchResult(matchResultData);
+      setBattingAverage(battingAverageData);
     } catch (error) {
       console.log(`fetch error: ${error}`);
     }
@@ -39,6 +45,7 @@ export default function ResultsSummary() {
   const handleResultEdit = () => {};
 
   console.log(matchResult);
+  console.log(battingAverage);
   return (
     <>
       <SummaryResultHeader onSummaryResult={handleResultEdit} text="編集" />
