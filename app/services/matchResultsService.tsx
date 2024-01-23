@@ -75,3 +75,15 @@ export const checkExistingMatchResults = async (
     return null;
   }
 };
+
+export const getCurrentMatchResult = async (gameResultId: number | null) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/current_game_result_search?game_result_id=${gameResultId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
