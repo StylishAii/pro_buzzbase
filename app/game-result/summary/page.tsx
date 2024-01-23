@@ -1,6 +1,7 @@
 "use client";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { ShareIcon } from "@app/components/icon/ShareIcon";
+import { battingOrder } from "@app/game-result/record/page";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
@@ -90,6 +91,14 @@ export default function ResultsSummary() {
     }
   };
 
+  // 打順
+  const getBattingOrderTurn = (battingOrderId: string) => {
+    const battingOrderTurn = battingOrder.find(
+      (order) => order.id.toString() === battingOrderId
+    )?.turn;
+    return battingOrderTurn || "";
+  };
+
   const handleShare = () => {};
   const handleResultEdit = () => {};
 
@@ -144,9 +153,7 @@ export default function ResultsSummary() {
                     <span className="mt-3 text-xs text-zinc-400">
                       マイチーム
                     </span>
-                    <p className="text-base">
-                      {match.my_team_name}
-                    </p>
+                    <p className="text-base">{match.my_team_name}</p>
                     <div className="flex gap-x-3 items-center mt-2">
                       <div className="flex gap-x-2 items-baseline">
                         {renderScoreResult(match)}
@@ -163,10 +170,16 @@ export default function ResultsSummary() {
                         </p>
                       </div>
                     </div>
+                    <div className="flex mt-1.5">
+                      <p className="text-base ">
+                        {getBattingOrderTurn(match.batting_order)}
+                      </p>
+                      <p></p>
+                    </div>
                   </div>
                 ))
               ) : (
-                <div></div>
+                <div>試合情報はありません。</div>
               )}
 
               {/* 打撃成績 */}

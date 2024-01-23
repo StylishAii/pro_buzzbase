@@ -29,7 +29,7 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { SetStateAction, useEffect, useState } from "react";
 
-const battingOrder = [
+export const battingOrder = [
   { id: 1, turn: "1番" },
   { id: 2, turn: "2番" },
   { id: 3, turn: "3番" },
