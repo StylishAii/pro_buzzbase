@@ -295,3 +295,10 @@ interface BattingAverage {
   total_bases: number | null;
   two_base_hit: number | null;
 }
+
+interface PlateAppearanceSummary {
+  game_result_id: number;
+  user_id: number;
+  batter_box_number: number | null;
+  batting_result: string;
+}

@@ -4,6 +4,7 @@ import { ShareIcon } from "@app/components/icon/ShareIcon";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
+import { getCurrentPlateAppearance } from "@app/services/plateAppearanceService";
 import { getPositionName } from "@app/services/positionService";
 import { getTeamName } from "@app/services/teamsService";
 import { getTournamentName } from "@app/services/tournamentsService";
@@ -25,6 +26,9 @@ const battingOrder = [
 
 export default function ResultsSummary() {
   const [matchResult, setMatchResult] = useState<MatchResult[]>([]);
+  const [plateAppearance, setPlateAppearance] = useState<
+    PlateAppearanceSummary[]
+  >([]);
   const [battingAverage, setBattingAverage] = useState<BattingAverage[]>([]);
   const [pitchingResult, setPitchingResult] = useState([]);
   const [isDetailDataFetched, setIsDetailDataFetched] = useState(false);
@@ -84,9 +88,13 @@ export default function ResultsSummary() {
       const pitchingResultData = await getCurrentPitchingResult(
         localStorageGameResultId
       );
+      const plateAppearanceData = await getCurrentPlateAppearance(
+        localStorageGameResultId
+      );
       setMatchResult(matchResultData);
       setBattingAverage(battingAverageData);
       setPitchingResult(pitchingResultData);
+      setPlateAppearance(plateAppearanceData);
     } catch (error) {
       console.log(`fetch error: ${error}`);
     }
@@ -114,12 +122,72 @@ export default function ResultsSummary() {
     return battingOrderTurn || "";
   };
 
+  // 打席
+  const getBattingResultClassName = (battingResult: string) => {
+    const hits = [
+      "投安",
+      "捕安",
+      "一安",
+      "二安",
+      "三安",
+      "遊安",
+      "左安",
+      "中安",
+      "右安",
+      "投二",
+      "捕二",
+      "一二",
+      "二二",
+      "三二",
+      "遊二",
+      "左二",
+      "中二",
+      "右二",
+      "投三",
+      "捕三",
+      "一三",
+      "二三",
+      "三三",
+      "遊三",
+      "左三",
+      "中三",
+      "右三",
+      "投本",
+      "捕本",
+      "一本",
+      "二本",
+      "三本",
+      "遊本",
+      "左本",
+      "中本",
+      "右本",
+    ];
+    const walks = [
+      "四球",
+      "死球",
+      "投犠",
+      "捕犠",
+      "一犠",
+      "二犠",
+      "三犠",
+      "遊犠",
+      "打妨",
+    ];
+
+    if (hits.includes(battingResult)) {
+      return "text-red-500";
+    } else if (walks.includes(battingResult)) {
+      return "text-blue-400";
+    } else {
+      return "";
+    }
+  };
+
   const handleShare = () => {};
   const handleResultEdit = () => {};
 
-  console.log(matchResult);
-  console.log(battingAverage);
   console.log(pitchingResult);
+  console.log(plateAppearance);
   return (
     <>
       <SummaryResultHeader onSummaryResult={handleResultEdit} text="編集" />
@@ -141,8 +209,8 @@ export default function ResultsSummary() {
                 成績をシェア
               </Button>
             </div>
+            {/* 試合情報 */}
             <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
-              {/* 試合情報 */}
               {matchResult ? (
                 matchResult.map((match: any) => (
                   <div key={match.id}>
@@ -172,7 +240,7 @@ export default function ResultsSummary() {
                     <div className="flex gap-x-3 items-center mt-2">
                       <div className="flex gap-x-2 items-baseline">
                         {renderScoreResult(match)}
-                        <p className="text-lg">
+                        <p className="text-lg font-bold">
                           {match.my_team_score} - {match.opponent_team_score}
                         </p>
                       </div>
@@ -205,7 +273,23 @@ export default function ResultsSummary() {
                   battingAverage.map((batting: any) => (
                     <div key={batting.id}>
                       <p className="text-xs text-zinc-400">打撃</p>
-                      <div></div>
+                      <ul className="flex flex-wrap gap-2 mt-2">
+                        {plateAppearance ? (
+                          plateAppearance.map((plate) => (
+                            <li key={plate.batter_box_number}>
+                              <p
+                                className={`font-bold ${getBattingResultClassName(
+                                  plate.batting_result
+                                )}`}
+                              >
+                                {plate.batting_result}
+                              </p>
+                            </li>
+                          ))
+                        ) : (
+                          <></>
+                        )}
+                      </ul>
                       <div className="mt-1.5 grid grid-cols-3 gap-x-3 gap-y-1">
                         <div className="flex items-center">
                           <p className="text-sm text-zinc-400 mr-2">打点:</p>
