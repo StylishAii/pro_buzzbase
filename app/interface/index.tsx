@@ -157,6 +157,11 @@ interface HeaderNextProps {
   onMatchResultSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+interface HeaderSummaryResultProps {
+  onSummaryResult: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  text: string;
+}
+
 interface updateUserPositions {
   userId: number;
   positionIds: number[];
