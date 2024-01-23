@@ -76,6 +76,20 @@ export default function ResultsSummary() {
     }
   };
 
+  // 勝敗
+  const renderScoreResult = (match: {
+    my_team_score: number;
+    opponent_team_score: number;
+  }) => {
+    if (match.my_team_score > match.opponent_team_score) {
+      return <p className="text-red-500">◯</p>;
+    } else if (match.my_team_score < match.opponent_team_score) {
+      return <p className="text-blue-500 text-lg">×</p>;
+    } else {
+      return <p className="text-lg">-</p>;
+    }
+  };
+
   const handleShare = () => {};
   const handleResultEdit = () => {};
 
@@ -126,15 +140,28 @@ export default function ResultsSummary() {
                         {new Date(match.date_and_time).toLocaleDateString()}
                       </p>
                     </div>
-                    <p className="text-base mt-3 text-zinc-400">{match.my_team_name}</p>
-                    <p className="text-sm mt-1">{match.tournament_name}</p>
-                    <div className="flex gap-x-1 items-baseline mt-3">
-                      <span className="text-base font-normal text-zinc-400">
-                        vs.
-                      </span>
-                      <p className="text-base font-bold">
-                        {match.opponent_team_name}
-                      </p>
+                    <p className="text-sm mt-3">{match.tournament_name}</p>
+                    <span className="mt-3 text-xs text-zinc-400">
+                      マイチーム
+                    </span>
+                    <p className="text-base">
+                      {match.my_team_name}
+                    </p>
+                    <div className="flex gap-x-3 items-center mt-2">
+                      <div className="flex gap-x-2 items-baseline">
+                        {renderScoreResult(match)}
+                        <p className="text-lg">
+                          {match.my_team_score} - {match.opponent_team_score}
+                        </p>
+                      </div>
+                      <div className="flex gap-x-1 items-baseline">
+                        <span className="text-base font-normal text-zinc-400">
+                          vs.
+                        </span>
+                        <p className="text-base font-bold">
+                          {match.opponent_team_name}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))
