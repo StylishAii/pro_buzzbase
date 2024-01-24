@@ -114,11 +114,6 @@ export default function ResultsSummary() {
     }
   };
 
-  // memo
-  const getMatchMemo = (memo: Text) => {
-    setMemo(memo);
-  };
-
   // user_id
   const currentUsersUserIdData = async (id: number | null) => {
     try {
