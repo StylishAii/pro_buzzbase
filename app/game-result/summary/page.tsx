@@ -223,11 +223,16 @@ export default function ResultsSummary() {
   };
 
   const handleShare = () => {};
-  const handleResultEdit = () => {};
+  const handleResultComplete = () => {
+    router.push(`/mypage/${currentUserId}`);
+  };
 
   return (
     <>
-      <SummaryResultHeader onSummaryResult={handleResultEdit} text="編集" />
+      <SummaryResultHeader
+        onSummaryResult={handleResultComplete}
+        text="マイページへ"
+      />
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-20 px-4">
