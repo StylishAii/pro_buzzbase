@@ -124,10 +124,15 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
 export default function BattingRecord() {
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [runsBattedIn, setRunsBattedIn] = useState(0);
+  const [existingRunsBattedIn, setExistingRunsBattedIn] = useState(0);
   const [run, setRun] = useState(0);
+  const [existingRun, setExistingRun] = useState(0);
   const [defensiveError, setDefensiveError] = useState(0);
+  const [existingDefensiveError, setExistingDefensiveError] = useState(0);
   const [stealingBase, setStealingBase] = useState(0);
+  const [existingStealingBase, setExistingStealingBase] = useState(0);
   const [caughtStealing, setCaughtStealing] = useState(0);
+  const [existingCaughtStealing, setExistingCaughtStealing] = useState(0);
   const [errors, setErrors] = useState<string[]>([]);
   const [isLocalStorageId, setIsLocalStorageId] = useState(true);
   const [battingBoxes, setBattingBoxes] = useState<
@@ -173,8 +178,28 @@ export default function BattingRecord() {
     const savedGameResultId = localStorage.getItem("gameResultId");
     if (savedGameResultId) {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
+      fetchExistingBattingAverage(JSON.parse(savedGameResultId));
     }
   }, [pathname]);
+
+  // 既に同じgame_result_idが存在する場合
+  const fetchExistingBattingAverage = async (gameResultId: number) => {
+    try {
+      const currentUserId = await getCurrentUserId();
+      const existingBattingAverage = await checkExistingBattingAverage(
+        gameResultId,
+        currentUserId
+      );
+      console.log(existingBattingAverage);
+      setExistingRunsBattedIn(existingBattingAverage.runs_batted_in);
+      setExistingRun(existingBattingAverage.run);
+      setExistingDefensiveError(existingBattingAverage.error);
+      setExistingStealingBase(existingBattingAverage.stealing_base);
+      setExistingCaughtStealing(existingBattingAverage.caught_stealing);
+    } catch (error) {
+      console.log(`Error fetch existing batting average:`, error);
+    }
+  };
 
   // 打席追加
   const addBox = () => {
@@ -196,23 +221,34 @@ export default function BattingRecord() {
   };
 
   // 打点
-  const handleRunsBattedInChange = (e: any) =>
+  const handleRunsBattedInChange = (e: any) => {
+    setExistingRunsBattedIn(Number(e.target.value));
     setRunsBattedIn(Number(e.target.value));
+  };
 
   // 得点
-  const handleRunChange = (e: any) => setRun(Number(e.target.value));
+  const handleRunChange = (e: any) => {
+    setExistingRun(Number(e.target.value));
+    setRun(Number(e.target.value));
+  };
 
   // 失策
-  const handleErrorChange = (e: any) =>
+  const handleErrorChange = (e: any) => {
+    setExistingDefensiveError(Number(e.target.value));
     setDefensiveError(Number(e.target.value));
+  };
 
   // 盗塁
-  const handleStealingBaseChange = (e: any) =>
+  const handleStealingBaseChange = (e: any) => {
+    setExistingCaughtStealing(Number(e.target.value));
     setStealingBase(Number(e.target.value));
+  };
 
   // 盗塁死
-  const handleCaughtStealingChange = (e: any) =>
+  const handleCaughtStealingChange = (e: any) => {
+    setExistingCaughtStealing(Number(e.target.value));
     setCaughtStealing(Number(e.target.value));
+  };
 
   // 打球方向
   const createHandlePositionChange = (index: number) => (keys: any) => {
@@ -298,15 +334,21 @@ export default function BattingRecord() {
         three_base_hit: threeBaseHit, // 3塁打数
         home_run: homeRun, // 本塁打数
         total_bases: totalBases, // 塁打数
-        runs_batted_in: runsBattedIn,
-        run: run,
+        runs_batted_in: existingRunsBattedIn
+          ? existingRunsBattedIn
+          : runsBattedIn,
+        run: existingRun ? existingRun : run,
         strike_out: strikeOuts, // 三振数
         base_on_balls: baseOnBalls, //四球
         hit_by_pitch: hitByPitch, // 死球
         sacrifice_hit: sacrificeHit, //犠打
-        error: defensiveError,
-        stealing_base: stealingBase,
-        caught_stealing: caughtStealing,
+        error: existingDefensiveError ? existingDefensiveError : defensiveError,
+        stealing_base: existingStealingBase
+          ? existingStealingBase
+          : stealingBase,
+        caught_stealing: existingCaughtStealing
+          ? existingCaughtStealing
+          : caughtStealing,
       },
     };
     for (let i = 0; i < battingBoxes.length; i++) {
@@ -354,16 +396,14 @@ export default function BattingRecord() {
       } else {
         await createBattingAverage(battingAverageData);
       }
-      setTimeout(() => {
-        router.push(`/game-result/pitching/`);
-      }, 10);
+      router.push(`/game-result/pitching/`);
     } catch (error) {
       console.log(`batting average ${error}`);
     }
   };
   return (
     <>
-      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"次へ"}/>
+      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"次へ"} />
       <main className="h-full">
         <div className="pb-32 relative">
           <ErrorMessages errors={errors} />
@@ -465,7 +505,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="打点"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingRunsBattedIn !== undefined
+                          ? existingRunsBattedIn.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleRunsBattedInChange}
                     />
@@ -477,7 +521,9 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="得点"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingRun !== undefined ? existingRun.toString() : "0"
+                      }
                       min={0}
                       onChange={handleRunChange}
                     />
@@ -489,7 +535,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="失策"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingDefensiveError !== undefined
+                          ? existingDefensiveError.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleErrorChange}
                     />
@@ -501,7 +551,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="盗塁"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingStealingBase !== undefined
+                          ? existingStealingBase.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleStealingBaseChange}
                     />
@@ -513,7 +567,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="盗塁死"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingCaughtStealing !== undefined
+                          ? existingCaughtStealing.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleCaughtStealingChange}
                     />
