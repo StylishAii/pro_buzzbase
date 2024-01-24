@@ -8,7 +8,12 @@ import { getCurrentPlateAppearance } from "@app/services/plateAppearanceService"
 import { getPositionName } from "@app/services/positionService";
 import { getTeamName } from "@app/services/teamsService";
 import { getTournamentName } from "@app/services/tournamentsService";
+import {
+  getCurrentUserId,
+  getCurrentUsersUserId,
+} from "@app/services/userService";
 import { Button, Chip, Divider } from "@nextui-org/react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -32,6 +37,9 @@ export default function ResultsSummary() {
   const [battingAverage, setBattingAverage] = useState<BattingAverage[]>([]);
   const [pitchingResult, setPitchingResult] = useState<PitchingResult[]>([]);
   const [isDetailDataFetched, setIsDetailDataFetched] = useState(false);
+  const [currentUsersUserId, setCurrentUsersUserId] = useState("");
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [memo, setMemo] = useState();
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
@@ -73,10 +81,11 @@ export default function ResultsSummary() {
   useEffect(() => {
     if (matchResult.length > 0 && !isDetailDataFetched) {
       fetchMatchResultDetailData();
+      currentUsersUserIdData(currentUserId);
     }
   }, [matchResult, isDetailDataFetched]);
 
-  // データ取得
+  // 試合データ取得
   const fetchCurrentResultData = async (localStorageGameResultId: number) => {
     try {
       const matchResultData = await getCurrentMatchResult(
@@ -91,12 +100,32 @@ export default function ResultsSummary() {
       const plateAppearanceData = await getCurrentPlateAppearance(
         localStorageGameResultId
       );
+      const currentUserIdData = await getCurrentUserId();
+      if (matchResultData && matchResultData.length > 0) {
+        setMemo(matchResultData[0].memo);
+      }
       setMatchResult(matchResultData);
       setBattingAverage(battingAverageData);
       setPitchingResult(pitchingResultData);
       setPlateAppearance(plateAppearanceData);
+      setCurrentUserId(currentUserIdData);
     } catch (error) {
       console.log(`fetch error: ${error}`);
+    }
+  };
+
+  // memo
+  const getMatchMemo = (memo: Text) => {
+    setMemo(memo);
+  };
+
+  // user_id
+  const currentUsersUserIdData = async (id: number | null) => {
+    try {
+      const response = await getCurrentUsersUserId(id);
+      setCurrentUsersUserId(response);
+    } catch (error) {
+      console.log(`get user_id error: ${error}`);
     }
   };
 
@@ -201,7 +230,6 @@ export default function ResultsSummary() {
   const handleShare = () => {};
   const handleResultEdit = () => {};
 
-  console.log(pitchingResult);
   return (
     <>
       <SummaryResultHeader onSummaryResult={handleResultEdit} text="編集" />
@@ -437,6 +465,22 @@ export default function ResultsSummary() {
                 )}
               </div>
             </div>
+            {memo !== undefined ? (
+              <>
+                <p className="mt-4 text-sm text-zinc-500">MEMO</p>
+                <div className="mt-2 border-1 border-zinc-500 rounded-lg p-3">
+                  <p className="text-sm text-zinc-200">{memo}</p>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+            <Link
+              href={`/mypage/${currentUsersUserId}`}
+              className="text-yellow-600 border-b-1 border-yellow-600 text-sm mt-8 ml-auto mr-0 block w-fit"
+            >
+              マイページへ
+            </Link>
           </div>
         </div>
       </main>

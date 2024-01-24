@@ -273,6 +273,8 @@ interface MatchResult {
   my_team_id: number;
   opponent_team_id: number;
   defensive_position: string;
+  user_id: string;
+  memo: text;
 }
 
 interface BattingAverage {
