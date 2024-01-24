@@ -30,7 +30,7 @@ export default function ResultsSummary() {
     PlateAppearanceSummary[]
   >([]);
   const [battingAverage, setBattingAverage] = useState<BattingAverage[]>([]);
-  const [pitchingResult, setPitchingResult] = useState([]);
+  const [pitchingResult, setPitchingResult] = useState<PitchingResult[]>([]);
   const [isDetailDataFetched, setIsDetailDataFetched] = useState(false);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
@@ -183,11 +183,25 @@ export default function ResultsSummary() {
     }
   };
 
+  // 投球数
+  const getInningPitched = (innings_pitched: number) => {
+    const wholePart = Math.floor(innings_pitched);
+    const fractionalPart = innings_pitched - wholePart;
+
+    let fractionalString = "";
+    if (fractionalPart >= 0.32 && fractionalPart <= 0.34) {
+      fractionalString = "1/3";
+    } else if (fractionalPart >= 0.65 && fractionalPart <= 0.67) {
+      fractionalString = "2/3";
+    }
+
+    return `${wholePart}回${fractionalString ? `${fractionalString}` : ""}`;
+  };
+
   const handleShare = () => {};
   const handleResultEdit = () => {};
 
   console.log(pitchingResult);
-  console.log(plateAppearance);
   return (
     <>
       <SummaryResultHeader onSummaryResult={handleResultEdit} text="編集" />
@@ -334,6 +348,94 @@ export default function ResultsSummary() {
               </div>
               <Divider className="my-4" />
               {/* 投手成績 */}
+              <div>
+                {pitchingResult ? (
+                  pitchingResult.map((pitching) => (
+                    <div key={pitching.id}>
+                      <p className="text-xs text-zinc-400 mb-2">投手</p>
+                      <div className="flex gap-x-4">
+                        {pitching.win === 1 ? (
+                          <p className="text-red-500 font-bold">勝利投手</p>
+                        ) : pitching.loss === 1 ? (
+                          <p className="text-blue-500 font-bold">敗戦投手</p>
+                        ) : (
+                          <></>
+                        )}
+                        <div className="flex gap-x-4">
+                          <span>
+                            {getInningPitched(pitching.innings_pitched)}
+                          </span>
+                          <span>{pitching.number_of_pitches}球</span>
+                        </div>
+                      </div>
+                      <div className="mt-1.5 grid grid-cols-3 gap-x-3 gap-y-1">
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">
+                            ホールド:
+                          </p>
+                          <span className="block text-base font-bold">
+                            {pitching.hold}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">セーブ:</p>
+                          <span className="block text-base font-bold">
+                            {pitching.saves}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">失点:</p>
+                          <span className="block text-base font-bold">
+                            {pitching.run_allowed}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">自責点:</p>
+                          <span className="block text-base font-bold">
+                            {pitching.earned_run}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">被安打:</p>
+                          <span className="block text-base font-bold">
+                            {pitching.hits_allowed}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">
+                            被本塁打:
+                          </p>
+                          <span className="block text-base font-bold">
+                            {pitching.home_runs_hit}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">奪三振:</p>
+                          <span className="block text-base font-bold">
+                            {pitching.strikeouts}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">四球:</p>
+                          <span className="block text-base font-bold">
+                            {pitching.base_on_balls}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <p className="text-sm text-zinc-400 mr-2">死球:</p>
+                          <span className="block text-base font-bold">
+                            {pitching.hit_by_pitch}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-zinc-500">
+                    投手成績はありません。
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>

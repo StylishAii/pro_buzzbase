@@ -302,3 +302,22 @@ interface PlateAppearanceSummary {
   batter_box_number: number | null;
   batting_result: string;
 }
+
+interface PitchingResult {
+  base_on_balls: number;
+  earned_run: number;
+  game_result_id: number;
+  got_to_the_distance: boolean;
+  hit_by_pitch: number;
+  hits_allowed: number;
+  hold: number;
+  home_runs_hit: number;
+  id: number;
+  innings_pitched: number;
+  loss: number;
+  number_of_pitches: number;
+  run_allowed: number;
+  saves: number;
+  strikeouts: number;
+  win: number;
+}
