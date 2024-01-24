@@ -200,9 +200,7 @@ export default function PitchingRecord() {
         await createPitchingResult(pitchingResultData);
         console.log(pitchingResultData);
       }
-      setTimeout(() => {
-        router.push(`/game-result/summary/`);
-      }, 10);
+      router.push(`/game-result/summary/`);
     } catch (error) {
       console.log(error);
     }

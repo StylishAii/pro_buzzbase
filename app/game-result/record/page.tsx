@@ -452,9 +452,7 @@ export default function GameRecord() {
           );
         }
       }
-      setTimeout(() => {
-        router.push(`/game-result/batting/`);
-      }, 10);
+      router.push(`/game-result/batting/`);
     } catch (error) {
       console.log(error);
       throw error;
