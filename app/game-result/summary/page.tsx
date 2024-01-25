@@ -224,7 +224,7 @@ export default function ResultsSummary() {
 
   const handleShare = () => {};
   const handleResultComplete = () => {
-    router.push("game-result/record");
+    router.push("/game-result/lists");
   };
 
   return (
