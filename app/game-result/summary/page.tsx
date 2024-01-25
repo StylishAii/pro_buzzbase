@@ -224,14 +224,14 @@ export default function ResultsSummary() {
 
   const handleShare = () => {};
   const handleResultComplete = () => {
-    router.push(`/mypage/${currentUserId}`);
+    router.push("game-result/record");
   };
 
   return (
     <>
       <SummaryResultHeader
         onSummaryResult={handleResultComplete}
-        text="マイページへ"
+        text="試合一覧へ"
       />
       <main className="h-full">
         <div className="pb-32 relative">
