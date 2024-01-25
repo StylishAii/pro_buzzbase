@@ -11,6 +11,7 @@ import {
 import {
   checkExistingPlateAppearance,
   createPlateAppearance,
+  getCurrentPlateAppearance,
   updatePlateAppearance,
 } from "@app/services/plateAppearanceService";
 import { getCurrentUserId } from "@app/services/userService";
@@ -135,12 +136,31 @@ export default function BattingRecord() {
   const [existingCaughtStealing, setExistingCaughtStealing] = useState(0);
   const [errors, setErrors] = useState<string[]>([]);
   const [isLocalStorageId, setIsLocalStorageId] = useState(true);
+  const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
+  const [selectedResults, setSelectedResults] = useState<number[]>([]);
   const [battingBoxes, setBattingBoxes] = useState<
     Array<{ position: number; result: number; text: string }>
   >([
     {
       position: 0,
       result: 0,
+      text: battingResultsPositions[0].direction + battingResultsList[0].result,
+    },
+  ]);
+  const [existingBattingBoxes, setExistingBattingBoxes] = useState<
+    Array<{
+      positionId: number;
+      positionName: string;
+      resultId: number;
+      resultName: string;
+      text: string;
+    }>
+  >([
+    {
+      positionId: 0,
+      positionName: "",
+      resultId: 0,
+      resultName: "",
       text: battingResultsPositions[0].direction + battingResultsList[0].result,
     },
   ]);
@@ -179,8 +199,25 @@ export default function BattingRecord() {
     if (savedGameResultId) {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
       fetchExistingBattingAverage(JSON.parse(savedGameResultId));
+      fetchExistingPlateAppearance(JSON.parse(savedGameResultId));
     }
   }, [pathname]);
+
+  useEffect(() => {
+    if (
+      existingBattingBoxes.length > 0 &&
+      existingBattingBoxes[0].positionId !== 0
+    ) {
+      const updatedBattingBoxes = existingBattingBoxes.map((box) => {
+        return {
+          position: box.positionId,
+          result: box.resultId,
+          text: box.text,
+        };
+      });
+      setBattingBoxes(updatedBattingBoxes);
+    }
+  }, [existingBattingBoxes]);
 
   // 既に同じgame_result_idが存在する場合
   const fetchExistingBattingAverage = async (gameResultId: number) => {
@@ -190,7 +227,6 @@ export default function BattingRecord() {
         gameResultId,
         currentUserId
       );
-      console.log(existingBattingAverage);
       setExistingRunsBattedIn(existingBattingAverage.runs_batted_in);
       setExistingRun(existingBattingAverage.run);
       setExistingDefensiveError(existingBattingAverage.error);
@@ -198,6 +234,44 @@ export default function BattingRecord() {
       setExistingCaughtStealing(existingBattingAverage.caught_stealing);
     } catch (error) {
       console.log(`Error fetch existing batting average:`, error);
+    }
+  };
+
+  const fetchExistingPlateAppearance = async (gameResultId: number) => {
+    try {
+      const existingPlateAppearances = await getCurrentPlateAppearance(
+        gameResultId
+      );
+      if (existingPlateAppearances.length > 0) {
+        const newBattingBoxes = existingPlateAppearances.map((plate: any) => {
+          const positionId =
+            battingResultsPositions.find(
+              (p) => p.id === plate.batting_position_id
+            )?.id || null;
+          const positionName =
+            battingResultsPositions.find(
+              (p) => p.id === plate.batting_position_id
+            )?.direction || "";
+          const resultId =
+            battingResultsList.find((p) => p.id === plate.plate_result_id)
+              ?.id || null;
+          const resultName =
+            battingResultsList.find((p) => p.id === plate.plate_result_id)
+              ?.result || "";
+          const text = `${positionName}${resultName}`;
+
+          return {
+            positionId,
+            positionName,
+            resultId,
+            resultName,
+            text,
+          };
+        });
+        setExistingBattingBoxes(newBattingBoxes);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -253,12 +327,14 @@ export default function BattingRecord() {
   // 打球方向
   const createHandlePositionChange = (index: number) => (keys: any) => {
     const newPosition = Number(keys.values().next().value);
+    setSelectedPositions([newPosition]);
     updateBattingBox(index, newPosition, battingBoxes[index].result);
   };
 
   // 打球結果
   const createHandleResultChange = (index: number) => (keys: any) => {
     const newResult = Number(keys.values().next().value);
+    setSelectedResults([newResult]);
     updateBattingBox(index, battingBoxes[index].position, newResult);
   };
 
@@ -352,6 +428,7 @@ export default function BattingRecord() {
       },
     };
     for (let i = 0; i < battingBoxes.length; i++) {
+      const battingBox = battingBoxes[i];
       const battingResult = battingBoxes[i].text.replace("-", "");
       const plateAppearanceData = {
         plate_appearance: {
@@ -359,6 +436,8 @@ export default function BattingRecord() {
           user_id: currentUserId,
           batter_box_number: i + 1,
           batting_result: battingResult,
+          batting_position_id: battingBox.position,
+          plate_result_id: battingBox.result,
         },
       };
       // 打席ごと
@@ -380,8 +459,6 @@ export default function BattingRecord() {
         console.log(`plate error :${error}`);
       }
     }
-    console.log(battingBoxes);
-    console.log(battingAverageData);
     // 打撃トータル
     try {
       const existingBattingAverage = await checkExistingBattingAverage(
@@ -441,6 +518,11 @@ export default function BattingRecord() {
                             onSelectionChange={createHandlePositionChange(
                               index
                             )}
+                            selectedKeys={
+                              box.position !== null
+                                ? [box.position.toString()]
+                                : []
+                            }
                           >
                             {battingResultsPositions.map((position) => (
                               <SelectItem key={position.id} value={position.id}>
@@ -457,6 +539,9 @@ export default function BattingRecord() {
                             aria-label="打球結果"
                             value={box.result}
                             onSelectionChange={createHandleResultChange(index)}
+                            selectedKeys={
+                              box.result !== null ? [box.result.toString()] : []
+                            }
                           >
                             {battingResultsList.map((result) => (
                               <SelectItem key={result.id} value={result.id}>
