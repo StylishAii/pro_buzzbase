@@ -315,7 +315,7 @@ export default function BattingRecord() {
 
   // 盗塁
   const handleStealingBaseChange = (e: any) => {
-    setExistingCaughtStealing(Number(e.target.value));
+    setExistingStealingBase(Number(e.target.value));
     setStealingBase(Number(e.target.value));
   };
 
