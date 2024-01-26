@@ -33,7 +33,7 @@ export default function MatchResultList() {
         <div className="mt-8">
           {Array.from({ length: 5 }, (_, index) => (
             <div key={index} className="mt-8">
-              <MatchResultsItem />
+              {/* <MatchResultsItem /> */}
             </div>
           ))}
         </div>
