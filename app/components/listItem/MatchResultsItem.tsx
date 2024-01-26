@@ -1,6 +1,14 @@
 import { getTeamName } from "@app/services/teamsService";
 import { getTournamentName } from "@app/services/tournamentsService";
-import { Card, CardBody, CardHeader, Chip, Divider } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Divider,
+} from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type MatchResultsItemProps = {
@@ -26,6 +34,7 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
   const { gameResult, plateAppearance } = props;
   const [opponentTeamNames, setOpponentTeamNames] = useState<TeamNames>({});
   const [tournamentNames, setTournamentNames] = useState<TournamentNames>({});
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTeamNames = async () => {
@@ -134,11 +143,27 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
 
     return `${wholePart}回${fractionalString ? `${fractionalString}` : ""}`;
   };
+
+  const handleGameResultEdit = (gameResultId: number) => {
+    localStorage.setItem("gameResultId", JSON.stringify(gameResultId));
+    router.push(`/game-result/summary/${gameResultId}`);
+  };
+
   return (
     <>
       {gameResult.map((game, index) => (
         <div key={game.game_result_id}>
-          <Card className="px-4 py-3">
+          <Card className="px-4 py-3 relative">
+            <Button
+              color="primary"
+              variant="ghost"
+              radius="full"
+              size="sm"
+              className="w-fit absolute right-4 top-3 z-100"
+              onClick={() => handleGameResultEdit(game.game_result_id)}
+            >
+              詳細
+            </Button>
             <CardHeader className="p-0 flex-col items-start">
               <div className="flex items-center gap-x-2">
                 {game.match_result.match_type ? (
