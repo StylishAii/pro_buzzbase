@@ -134,7 +134,7 @@ export default function ResultsSummary() {
     } else if (match.my_team_score < match.opponent_team_score) {
       return <p className="text-blue-500 text-lg">×</p>;
     } else {
-      return <p className="text-lg">-</p>;
+      return <p className="text-lg">ー</p>;
     }
   };
 
