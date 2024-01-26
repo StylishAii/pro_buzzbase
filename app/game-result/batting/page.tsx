@@ -8,6 +8,7 @@ import {
   createBattingAverage,
   updateBattingAverage,
 } from "@app/services/battingAveragesService";
+import { updateBattingAverageId } from "@app/services/gameResultsService";
 import {
   checkExistingPlateAppearance,
   createPlateAppearance,
@@ -471,7 +472,21 @@ export default function BattingRecord() {
           battingAverageData
         );
       } else {
-        await createBattingAverage(battingAverageData);
+        const response = await createBattingAverage(battingAverageData);
+        if (
+          typeof currentUserId !== "undefined" &&
+          localStorageGameResultId !== null
+        ) {
+          const updateGameResultData = {
+            game_result: {
+              batting_average_id: response.id,
+            },
+          };
+          await updateBattingAverageId(
+            localStorageGameResultId,
+            updateGameResultData
+          );
+        }
       }
       router.push(`/game-result/pitching/`);
     } catch (error) {
