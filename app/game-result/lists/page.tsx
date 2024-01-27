@@ -2,7 +2,7 @@
 
 import HeaderLogo from "@app/components/header/HeaderLogo";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
-import MatchResultsItem from "@app/components/listItem/MatchResultsItem";
+import MatchResultList from "@app/components/user/MatchResultList";
 import {
   createGameResult,
   getGameResults,
@@ -68,10 +68,7 @@ export default function GameResultList() {
               新規追加
             </Button>
             <div className="mt-5 grid gap-y-5">
-              <MatchResultsItem
-                gameResult={gameResultIndex}
-                plateAppearance={plateAppearance}
-              />
+              <MatchResultList />
             </div>
           </div>
         </div>
