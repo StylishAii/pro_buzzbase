@@ -16,6 +16,7 @@ type PersonalBattingAverages = {
   times_at_bat: number;
   total_bases: number;
   two_base_hit: number;
+  at_bats: number;
 };
 
 type Props = {
@@ -114,7 +115,9 @@ export default function BattingAverageTable(props: Props) {
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>打数</p>
-              <span className={styleTableData}>-</span>
+              <span className={styleTableData}>
+                {displayValue(battingAverage?.at_bats)}
+              </span>
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>二塁打</p>

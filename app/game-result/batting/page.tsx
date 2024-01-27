@@ -51,7 +51,8 @@ const battingResultsList = [
   { id: 14, result: "四球" },
   { id: 15, result: "死球" },
   { id: 16, result: "打撃妨害" },
-  { id: 17, result: "併殺打" },
+  { id: 17, result: "走塁妨害" },
+  { id: 18, result: "併殺打" },
 ];
 
 const resultShortForms: Record<string, string> = {
@@ -68,6 +69,7 @@ const resultShortForms: Record<string, string> = {
   "犠打/犠飛": "犠",
   振り逃げ: "振逃",
   打撃妨害: "打妨",
+  走塁妨害: "走妨",
   併殺打: "併",
 };
 
@@ -89,7 +91,13 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
     const validBoxes = battingBoxes.filter(
       (box) => box.position !== 0 || box.result !== 0
     );
+    const excludedResults = [14, 15, 11, 16, 17];
+    const excludedCount = battingBoxes.filter((box) =>
+      excludedResults.includes(box.result)
+    ).length;
+
     const timesAtBat = validBoxes.length;
+    const atBats = timesAtBat - excludedCount;
     const hit = battingBoxes.filter((box) => box.result === 7).length;
     const twoBaseHit = battingBoxes.filter((box) => box.result === 8).length;
     const threeBaseHit = battingBoxes.filter((box) => box.result === 9).length;
@@ -109,6 +117,7 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
 
     return {
       timesAtBat,
+      atBats,
       hit,
       twoBaseHit,
       threeBaseHit,
@@ -182,6 +191,7 @@ export default function BattingRecord() {
 
   const {
     timesAtBat,
+    atBats,
     hit,
     twoBaseHit,
     threeBaseHit,
@@ -406,6 +416,7 @@ export default function BattingRecord() {
         user_id: currentUserId,
         // plate_appearances: ,
         times_at_bat: timesAtBat, // 打席数
+        at_bats: atBats,
         hit: hit, // 安打数
         two_base_hit: twoBaseHit, // 2塁打数
         three_base_hit: threeBaseHit, // 3塁打数

@@ -299,6 +299,7 @@ interface BattingAverage {
   times_at_bat: number | null;
   total_bases: number | null;
   two_base_hit: number | null;
+  at_bats: number | null;
 }
 
 interface PlateAppearanceSummary {
