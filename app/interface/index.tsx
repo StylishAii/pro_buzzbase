@@ -127,11 +127,12 @@ interface updateUser {
   user_id: string;
 }
 
+type AvailableYear = number | string;
+
 interface ResultsSelectBoxProps {
   radius?: "none" | "sm" | "md" | "lg" | "full" | undefined;
   className?: string;
   data: { label: string }[];
-  defaultSelectedKeys: string[];
   color?:
     | "danger"
     | "default"
@@ -143,6 +144,9 @@ interface ResultsSelectBoxProps {
   variant?: "flat" | "faded" | "bordered" | "underlined" | undefined;
   labelPlacement?: "outside" | "outside-left" | "inside";
   size?: "sm" | "md" | "lg" | undefined;
+  onChange: any;
+  propsYears: AvailableYear[];
+  selectedKeys?: string[];
 }
 
 interface HeaderSaveProps {

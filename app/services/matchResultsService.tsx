@@ -87,3 +87,12 @@ export const getCurrentMatchResult = async (gameResultId: number | null) => {
     throw error;
   }
 };
+
+export const getCurrentUserMatchResult = async () => {
+  try {
+    const response = await axiosInstance.get(
+      "/api/v1/match_results/current_user_match_index"
+    );
+    return response.data;
+  } catch (error) {}
+};
