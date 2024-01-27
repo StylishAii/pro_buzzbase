@@ -1,7 +1,10 @@
 import MatchResultsItem from "@app/components/listItem/MatchResultsItem";
 import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
 import { gameType, years } from "@app/data/TestData";
-import { getGameResults } from "@app/services/gameResultsService";
+import {
+  getFilterGameResults,
+  getGameResults,
+} from "@app/services/gameResultsService";
 import { getMatchResults } from "@app/services/matchResultsService";
 import { getCurrentPlateAppearance } from "@app/services/plateAppearanceService";
 import { getCurrentUserId } from "@app/services/userService";
@@ -28,6 +31,34 @@ export default function MatchResultList() {
   const [selectedMatchType, setSelectedMatchType] = useState("");
   const [gameResultIndex, setGameResultIndex] = useState<GameResult[]>([]);
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (availableYears.length > 0 && availableMatchType.length > 0) {
+      setSelectedYear(availableYears[0].toString());
+      setSelectedMatchType(availableMatchType[0].toString());
+    }
+  }, [availableYears]);
+
+  useEffect(() => {
+    const fetchFilteredData = async () => {
+      try {
+        const filteredData = await getFilterGameResults(
+          selectedYear,
+          selectedMatchType
+        );
+        setGameResultIndex(filteredData);
+      } catch (error) {
+        console.error(`Filtered game lists fetch error:`, error);
+      }
+    };
+    if (selectedYear && selectedMatchType) {
+      fetchFilteredData();
+    }
+  }, [selectedYear, selectedMatchType]);
 
   const fetchData = async () => {
     try {
@@ -76,47 +107,13 @@ export default function MatchResultList() {
     }
   };
 
-  // const fetchFilteredData = async () => {
-  //   try {
-  //     const gameResultsDataLists = await getFilterGameResults(
-  //       selectedYear,
-  //       selectedMatchType
-  //     );
-  //     const plateAppearanceDataLists = await Promise.all(
-  //       gameResultsDataLists.map((gameResult) =>
-  //         getCurrentPlateAppearance(gameResult.game_result_id)
-  //       )
-  //     );
-
-  //     setGameResultIndex(gameResultsDataLists);
-  //     setPlateAppearance(plateAppearanceDataLists);
-  //   } catch (error) {
-  //     console.log(`Filtered game lists fetch error:`, error);
-  //   }
-  // };
-
   const handleYearChange = (event: any) => {
     setSelectedYear(event.target.value);
   };
 
   const handleMatchTypeChange = (event: any) => {
     setSelectedMatchType(event.target.value);
-    console.log(event.target.value);
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (availableYears.length > 0 && availableMatchType.length > 0) {
-      setSelectedYear(availableYears[0].toString());
-      setSelectedMatchType(availableMatchType[0].toString());
-    }
-  }, [availableYears]);
-
-  useEffect(() => {}, [selectedYear, selectedMatchType]);
-
   return (
     <>
       <div className="bg-bg_sub p-4 rounded-xl">
@@ -152,10 +149,20 @@ export default function MatchResultList() {
         </div>
         <div className="mt-8">
           <div className="mt-8 grid gap-y-5">
-            <MatchResultsItem
-              gameResult={gameResultIndex}
-              plateAppearance={plateAppearance}
-            />
+            {gameResultIndex.length > 0 ? (
+              <>
+                <MatchResultsItem
+                  gameResult={gameResultIndex}
+                  plateAppearance={plateAppearance}
+                />
+              </>
+            ) : (
+              <>
+                <p className="text-sm text-zinc-400 text-center pb-3">
+                  試合結果はありません。
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>

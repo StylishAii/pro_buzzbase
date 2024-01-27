@@ -13,7 +13,6 @@ export default function ResultsSelectBox({
   propsYears,
   selectedKeys,
 }: ResultsSelectBoxProps) {
-  console.log(propsYears);
   return (
     <>
       <Select
