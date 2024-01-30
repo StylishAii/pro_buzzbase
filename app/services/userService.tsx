@@ -21,10 +21,20 @@ export const updateUser = async (data: updateUser) => {
   return response;
 };
 
-export const getUserData = async (user_id: string) => {
+export const getUserData = async () => {
+  try {
+    const response = await axiosInstance.get("/api/v1/user/");
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserIdData = async (user_id: string) => {
   try {
     const response = await axiosInstance.get(
-      `/api/v1/user/?user_id=${user_id}`
+      `/api/v1/users/show_user_id_data?user_id=${user_id}`
     );
     return response.data;
   } catch (error) {

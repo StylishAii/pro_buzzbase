@@ -6,7 +6,7 @@ import { GloveIcon } from "@app/components/icon/GloveIcon";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import IndividualResultsList from "@app/components/user/IndividualResultsList";
 import MatchResultList from "@app/components/user/MatchResultList";
-import { getUserData } from "@app/services/userService";
+import { getCurrentUserId, getUserIdData } from "@app/services/userService";
 import { Button, Link, Tab, Tabs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import Header from "@app/components/header/Header";
@@ -15,7 +15,8 @@ import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import { getPrefectures } from "@app/services/prefectureService";
 import { getUserAwards } from "@app/services/awardsService";
 import AvatarComponent from "@app/components/user/AvatarComponent";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 
 type Position = {
   id: string;
@@ -30,6 +31,7 @@ type userData = {
   introduction: string;
   positions: Position[];
   team_id: number;
+  id: number;
 };
 
 type Team = {
@@ -45,8 +47,10 @@ export default function MyPage() {
   const [teamCategoryName, setTeamCategoryName] = useState("");
   const [teamPrefectureName, setTeamPrefectureName] = useState("");
   const [userAwards, setUserAwards] = useState<UserAwards[]>([]);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const [userId, setUserId] = useState("");
   const pathName = usePathname();
+  const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
     const pathParts = pathName.split("/");
@@ -57,11 +61,28 @@ export default function MyPage() {
     }
   }, [pathName]);
 
-  console.log(userId);
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchCurrentUserIdData();
+    }
+  }, [isLoggedIn]);
+
+  const fetchCurrentUserIdData = async () => {
+    try {
+      if (isLoggedIn) {
+        const currentUserIdData = await getCurrentUserId();
+        setCurrentUserId(currentUserIdData);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const isCurrentUserPage = currentUserId === userData?.id;
 
   const fetchData = async (userId: string) => {
     try {
-      const data = await getUserData(userId);
+      const data = await getUserIdData(userId);
       setUserData(data);
       if (data.team_id) {
         const teamsData = await getTeams();
@@ -218,13 +239,24 @@ export default function MyPage() {
                 </div>
               </div>
               <div className="flex items-center gap-x-4 mt-4">
-                <Button
-                  href={`${userData.user_id}/edit`}
-                  as={Link}
-                  className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
-                >
-                  プロフィール編集
-                </Button>
+                {isCurrentUserPage ? (
+                  <>
+                    <Button
+                      href={`${userData.user_id}/edit`}
+                      as={Link}
+                      className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
+                    >
+                      プロフィール編集
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5">
+                      フォローする
+                    </Button>
+                  </>
+                )}
+
                 <Button
                   href="/share"
                   as={Link}
