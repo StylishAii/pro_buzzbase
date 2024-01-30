@@ -1,5 +1,15 @@
 import axiosInstance from "@app/utils/axiosInstance";
 
+export const getTournamentName = async (id: number | null) => {
+  try {
+    const response = await axiosInstance.get(`/api/v1/tournaments/${id}`);
+    return response.data.name;
+  } catch (error) {
+    console.log(error);
+    return "";
+  }
+};
+
 export const getTournaments = async () => {
   try {
     const response = await axiosInstance.get("/api/v1/tournaments");

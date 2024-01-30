@@ -54,3 +54,17 @@ export const checkExistingPlateAppearance = async (
     return null;
   }
 };
+
+export const getCurrentPlateAppearance = async (
+  gameResultId: number | null
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/current_plate_search?game_result_id=${gameResultId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

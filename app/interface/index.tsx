@@ -157,6 +157,11 @@ interface HeaderNextProps {
   onMatchResultSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+interface HeaderSummaryResultProps {
+  onSummaryResult: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  text: string;
+}
+
 interface updateUserPositions {
   userId: number;
   positionIds: number[];
@@ -261,4 +266,59 @@ interface PitchingResultData {
     base_on_balls: number;
     hit_by_pitch: number;
   };
+}
+
+interface MatchResult {
+  tournament_id: number | null;
+  my_team_id: number;
+  opponent_team_id: number;
+  defensive_position: string;
+  user_id: string;
+}
+
+interface BattingAverage {
+  base_on_balls: number | null;
+  caught_stealing: number | null;
+  error: number | null;
+  game_result_id: number;
+  hit: number | null;
+  hit_by_pitch: number | null;
+  home_run: number | null;
+  id: number | null;
+  plate_appearances: number | null;
+  run: number | null;
+  runs_batted_in: number | null;
+  sacrifice_hit: number | null;
+  stealing_base: number | null;
+  strike_out: number | null;
+  three_base_hit: number | null;
+  times_at_bat: number | null;
+  total_bases: number | null;
+  two_base_hit: number | null;
+}
+
+interface PlateAppearanceSummary {
+  game_result_id: number;
+  user_id: number;
+  batter_box_number: number | null;
+  batting_result: string;
+}
+
+interface PitchingResult {
+  base_on_balls: number;
+  earned_run: number;
+  game_result_id: number;
+  got_to_the_distance: boolean;
+  hit_by_pitch: number;
+  hits_allowed: number;
+  hold: number;
+  home_runs_hit: number;
+  id: number;
+  innings_pitched: number;
+  loss: number;
+  number_of_pitches: number;
+  run_allowed: number;
+  saves: number;
+  strikeouts: number;
+  win: number;
 }

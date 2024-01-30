@@ -43,3 +43,14 @@ export const getCurrentUserId = async () => {
     console.log(error);
   }
 };
+
+export const getCurrentUsersUserId = async (id: number | null) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/users/${id}/show_current_user_id`
+    );
+    return response.data.user_id;
+  } catch (error) {
+    console.log(error);
+  }
+};
