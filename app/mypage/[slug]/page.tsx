@@ -15,6 +15,7 @@ import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import { getPrefectures } from "@app/services/prefectureService";
 import { getUserAwards } from "@app/services/awardsService";
 import AvatarComponent from "@app/components/user/AvatarComponent";
+import { usePathname, useRouter } from "next/navigation";
 
 type Position = {
   id: string;
@@ -44,47 +45,57 @@ export default function MyPage() {
   const [teamCategoryName, setTeamCategoryName] = useState("");
   const [teamPrefectureName, setTeamPrefectureName] = useState("");
   const [userAwards, setUserAwards] = useState<UserAwards[]>([]);
+  const [userId, setUserId] = useState("");
+  const pathName = usePathname();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getUserData();
-        setUserData(data);
-        if (data.team_id) {
-          const teamsData = await getTeams();
-          const baseballCategoryData = await getBaseballCategory();
-          const prefectureData = await getPrefectures();
-          const userTeam = teamsData.find(
-            (team: { id: any }) => team.id === data.team_id
-          );
-          if (userTeam) {
-            setTeamData([userTeam]);
-          }
-          const category = baseballCategoryData.find(
-            (category: { id: number }) => category.id === userTeam.category_id
-          );
-          if (category) {
-            setTeamCategoryName(category.name);
-          }
-          const prefecture = prefectureData.find(
-            (prefecture: { id: number }) =>
-              prefecture.id === userTeam.prefecture_id
-          );
-          if (prefecture) {
-            setTeamPrefectureName(prefecture.name);
-          }
-        }
+    const pathParts = pathName.split("/");
+    const userIdPart = pathParts[pathParts.length - 1];
+    if (userIdPart && userIdPart !== "undefined") {
+      setUserId(userIdPart);
+      fetchData(userIdPart);
+    }
+  }, [pathName]);
 
-        const awardData = await getUserAwards(data.id);
-        if (awardData) {
-          setUserAwards(awardData);
+  console.log(userId);
+
+  const fetchData = async (userId: string) => {
+    try {
+      const data = await getUserData(userId);
+      setUserData(data);
+      if (data.team_id) {
+        const teamsData = await getTeams();
+        const baseballCategoryData = await getBaseballCategory();
+        const prefectureData = await getPrefectures();
+        const userTeam = teamsData.find(
+          (team: { id: any }) => team.id === data.team_id
+        );
+        if (userTeam) {
+          setTeamData([userTeam]);
         }
-      } catch (error) {
-        console.log(error);
+        const category = baseballCategoryData.find(
+          (category: { id: number }) => category.id === userTeam.category_id
+        );
+        if (category) {
+          setTeamCategoryName(category.name);
+        }
+        const prefecture = prefectureData.find(
+          (prefecture: { id: number }) =>
+            prefecture.id === userTeam.prefecture_id
+        );
+        if (prefecture) {
+          setTeamPrefectureName(prefecture.name);
+        }
       }
-    };
-    fetchData();
-  }, []);
+
+      const awardData = await getUserAwards(data.id);
+      if (awardData) {
+        setUserAwards(awardData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!userData) {
     return (
