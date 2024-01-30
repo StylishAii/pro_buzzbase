@@ -3,6 +3,7 @@ import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
 import { gameType, years } from "@app/data/TestData";
 import {
   getFilterGameResults,
+  getFilterGameResultsUserId,
   getGameResults,
 } from "@app/services/gameResultsService";
 import { getMatchResults } from "@app/services/matchResultsService";
@@ -14,11 +15,16 @@ type GameResult = {
   game_result_id: number;
 };
 
+type UserId = {
+  userId: number;
+};
+
 type AvailableYear = number | string;
 
 type AvailableMatchType = string;
 
-export default function MatchResultList() {
+export default function MatchResultList(props: UserId) {
+  const { userId } = props;
   const [availableYears, setAvailableYears] = useState<AvailableYear[]>([]);
   const [selectAvailableYears, setSelectAvailableYears] = useState<
     AvailableYear[]
@@ -33,8 +39,12 @@ export default function MatchResultList() {
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (userId) {
+      fetchFilteredData();
+    } else {
+      fetchData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (availableYears.length > 0 && availableMatchType.length > 0) {
@@ -44,21 +54,35 @@ export default function MatchResultList() {
   }, [availableYears]);
 
   useEffect(() => {
-    const fetchFilteredData = async () => {
-      try {
-        const filteredData = await getFilterGameResults(
-          selectedYear,
-          selectedMatchType
-        );
-        setGameResultIndex(filteredData);
-      } catch (error) {
-        console.error(`Filtered game lists fetch error:`, error);
-      }
-    };
     if (selectedYear && selectedMatchType) {
       fetchFilteredData();
     }
-  }, [selectedYear, selectedMatchType]);
+  }, [selectedYear, selectedMatchType, userId]);
+
+  const fetchFilteredData = async () => {
+    try {
+      let filteredData;
+      if (userId) {
+        filteredData = await getFilterGameResultsUserId(
+          userId,
+          selectedYear,
+          selectedMatchType
+        );
+      } else {
+        filteredData = await getFilterGameResults(
+          selectedYear,
+          selectedMatchType
+        );
+      }
+      if (filteredData) {
+        setGameResultIndex(filteredData);
+      } else {
+        setGameResultIndex([]);
+      }
+    } catch (error) {
+      console.error(`Filtered game lists fetch error:`, error);
+    }
+  };
 
   const fetchData = async () => {
     try {

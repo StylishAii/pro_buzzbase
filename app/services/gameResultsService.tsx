@@ -81,3 +81,19 @@ export const getFilterGameResults = async (year: any, matchType: any) => {
     throw error;
   }
 };
+
+export const getFilterGameResultsUserId = async (
+  userId: number,
+  year: any,
+  matchType: any
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/game_results/filtered_game_associated_data_user_id?user_id=${userId}&year=${year}&match_type=${matchType}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

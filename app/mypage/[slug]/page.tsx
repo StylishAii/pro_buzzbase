@@ -48,7 +48,7 @@ export default function MyPage() {
   const [teamPrefectureName, setTeamPrefectureName] = useState("");
   const [userAwards, setUserAwards] = useState<UserAwards[]>([]);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState(0);
   const pathName = usePathname();
   const { isLoggedIn } = useAuthContext();
 
@@ -56,7 +56,6 @@ export default function MyPage() {
     const pathParts = pathName.split("/");
     const userIdPart = pathParts[pathParts.length - 1];
     if (userIdPart && userIdPart !== "undefined") {
-      setUserId(userIdPart);
       fetchData(userIdPart);
     }
   }, [pathName]);
@@ -84,6 +83,7 @@ export default function MyPage() {
     try {
       const data = await getUserIdData(userId);
       setUserData(data);
+      setUserId(data.id);
       if (data.team_id) {
         const teamsData = await getTeams();
         const baseballCategoryData = await getBaseballCategory();
@@ -285,7 +285,7 @@ export default function MyPage() {
                     title="試合"
                     className="font-bold tracking-wide"
                   >
-                    <MatchResultList />
+                    <MatchResultList userId={userId} />
                   </Tab>
                   {/* <Tab
                 key="message"
