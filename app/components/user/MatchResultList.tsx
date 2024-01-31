@@ -6,9 +6,15 @@ import {
   getFilterGameResultsUserId,
   getGameResults,
 } from "@app/services/gameResultsService";
-import { getMatchResults } from "@app/services/matchResultsService";
-import { getCurrentPlateAppearance } from "@app/services/plateAppearanceService";
-import { getCurrentUserId } from "@app/services/userService";
+import {
+  getMatchResults,
+  getMatchResultsUserId,
+} from "@app/services/matchResultsService";
+import {
+  getCurrentPlateAppearance,
+  getCurrentPlateAppearanceUserId,
+} from "@app/services/plateAppearanceService";
+import { getCurrentUserId, getUserId } from "@app/services/userService";
 import { useEffect, useState } from "react";
 
 type GameResult = {
@@ -26,15 +32,12 @@ type AvailableMatchType = string;
 export default function MatchResultList(props: UserId) {
   const { userId } = props;
   const [availableYears, setAvailableYears] = useState<AvailableYear[]>([]);
-  const [selectAvailableYears, setSelectAvailableYears] = useState<
-    AvailableYear[]
-  >([]);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedYear, setSelectedYear] = useState("通算");
   const [availableMatchType, setAvailableMatchType] = useState<AvailableYear[]>(
     []
   );
-  const [selectedMatchType, setSelectedMatchType] = useState("");
+  const [selectedMatchType, setSelectedMatchType] = useState("全て");
   const [gameResultIndex, setGameResultIndex] = useState<GameResult[]>([]);
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
 
@@ -47,13 +50,6 @@ export default function MatchResultList(props: UserId) {
   }, [userId]);
 
   useEffect(() => {
-    if (availableYears.length > 0 && availableMatchType.length > 0) {
-      setSelectedYear(availableYears[0].toString());
-      setSelectedMatchType(availableMatchType[0].toString());
-    }
-  }, [availableYears]);
-
-  useEffect(() => {
     if (selectedYear && selectedMatchType) {
       fetchFilteredData();
     }
@@ -61,23 +57,62 @@ export default function MatchResultList(props: UserId) {
 
   const fetchFilteredData = async () => {
     try {
-      let filteredData;
+      let filteredGameResultData;
+      let plateAppearanceDataLists;
       if (userId) {
-        filteredData = await getFilterGameResultsUserId(
+        // ユーザーごと試合一覧
+        filteredGameResultData = await getFilterGameResultsUserId(
           userId,
           selectedYear,
           selectedMatchType
         );
-      } else {
-        filteredData = await getFilterGameResults(
-          selectedYear,
-          selectedMatchType
+        // ユーザーごと打席結果
+        plateAppearanceDataLists = await Promise.all(
+          filteredGameResultData.map((gameResult: GameResult) =>
+            getCurrentPlateAppearanceUserId(userId, gameResult.game_result_id)
+          )
         );
+        (dateString: string) => {
+          const date = new Date(dateString);
+          return date.getFullYear();
+        };
+        // ユーザーごとシーズン
+        const matchResultData = await getMatchResultsUserId(userId);
+        const matchResultDate = matchResultData.map(
+          (result: any) => result.date_and_time
+        );
+        const yearArray: AvailableYear[] = matchResultDate.map(
+          (dateString: string) => {
+            const date = new Date(dateString);
+            return date.getFullYear();
+          }
+        );
+        const uniqueYears = Array.from(new Set(yearArray));
+        uniqueYears.unshift("通算");
+        setAvailableYears(uniqueYears);
+        // ユーザーごと試合タイプ
+        const matchTypeData: AvailableMatchType[] = matchResultData.map(
+          (type: any) => type.match_type
+        );
+        const uniqueMatchType = Array.from(new Set(matchTypeData));
+        const uniqueMatchTypeChange = uniqueMatchType.map((type) => {
+          if (type === "open") {
+            return "オープン戦";
+          } else if (type === "regular") {
+            return "公式戦";
+          } else {
+            return type;
+          }
+        });
+        uniqueMatchTypeChange.unshift("全て");
+        setAvailableMatchType(uniqueMatchTypeChange);
       }
-      if (filteredData) {
-        setGameResultIndex(filteredData);
+      if (filteredGameResultData && plateAppearanceDataLists) {
+        setGameResultIndex(filteredGameResultData);
+        setPlateAppearance(plateAppearanceDataLists);
       } else {
         setGameResultIndex([]);
+        setPlateAppearance([]);
       }
     } catch (error) {
       console.error(`Filtered game lists fetch error:`, error);
@@ -106,7 +141,6 @@ export default function MatchResultList(props: UserId) {
       const uniqueYears = Array.from(new Set(yearArray));
       uniqueYears.unshift("通算");
       setAvailableYears(uniqueYears);
-      setSelectAvailableYears(uniqueYears);
 
       const matchTypeData: AvailableMatchType[] = matchResultData.map(
         (type: any) => type.match_type

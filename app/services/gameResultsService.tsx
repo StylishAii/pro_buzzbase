@@ -12,6 +12,18 @@ export const getGameResults = async () => {
   }
 };
 
+export const getGameResultsUserId = async (user_id: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/game_results/game_associated_data_index_user_id?user_id=${user_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const createGameResult = async () => {
   try {
     const response = await axiosInstance.post("/api/v1/game_results");

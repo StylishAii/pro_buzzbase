@@ -10,6 +10,18 @@ export const getMatchResults = async () => {
   }
 };
 
+export const getMatchResultsUserId = async (userId: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/match_index_user_id?user_id=${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const createMatchResults = async (
   matchResultsData: MatchResultsData
 ) => {
