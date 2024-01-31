@@ -52,6 +52,7 @@ export default function MatchResultList(props: UserId) {
   useEffect(() => {
     if (selectedYear && selectedMatchType) {
       fetchFilteredData();
+      fetchData();
     }
   }, [selectedYear, selectedMatchType, userId]);
 
@@ -121,7 +122,10 @@ export default function MatchResultList(props: UserId) {
 
   const fetchData = async () => {
     try {
-      const gameResultsDataLists = await getGameResults();
+      const gameResultsDataLists = await getFilterGameResults(
+        selectedYear,
+        selectedMatchType
+      );
       const plateAppearanceDataLists = await Promise.all(
         gameResultsDataLists.map((gameResult: GameResult) =>
           getCurrentPlateAppearance(gameResult.game_result_id)
