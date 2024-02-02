@@ -24,6 +24,18 @@ export const updateUser = async (data: updateUser) => {
 export const getUserData = async () => {
   try {
     const response = await axiosInstance.get("/api/v1/user/");
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUserIdData = async (user_id: string) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/users/show_user_id_data?user_id=${user_id}`
+    );
     return response.data;
   } catch (error) {
     throw error;
@@ -48,6 +60,17 @@ export const getCurrentUsersUserId = async (id: number | null) => {
   try {
     const response = await axiosInstance.get(
       `/api/v1/users/${id}/show_current_user_id`
+    );
+    return response.data.user_id;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserId = async (user_id: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/users/show_by_user_id?user_id=${user_id}`
     );
     return response.data.user_id;
   } catch (error) {

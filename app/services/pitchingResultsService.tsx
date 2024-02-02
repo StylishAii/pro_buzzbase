@@ -62,3 +62,27 @@ export const getCurrentPitchingResult = async (gameResultId: number | null) => {
     throw error;
   }
 };
+
+export const getPersonalPitchingResult = async (userId: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/pitching_results/personal_pitching_result?user_id=${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getPersonalPitchingResultStats = async (userId: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/pitching_results/personal_pitching_stats?user_id=${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

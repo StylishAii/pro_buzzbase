@@ -10,6 +10,18 @@ export const getMatchResults = async () => {
   }
 };
 
+export const getMatchResultsUserId = async (userId: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/match_index_user_id?user_id=${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const createMatchResults = async (
   matchResultsData: MatchResultsData
 ) => {
@@ -86,4 +98,13 @@ export const getCurrentMatchResult = async (gameResultId: number | null) => {
     console.log(error);
     throw error;
   }
+};
+
+export const getCurrentUserMatchResult = async () => {
+  try {
+    const response = await axiosInstance.get(
+      "/api/v1/match_results/current_user_match_index"
+    );
+    return response.data;
+  } catch (error) {}
 };

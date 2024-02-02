@@ -13,7 +13,6 @@ import {
   getCurrentUsersUserId,
 } from "@app/services/userService";
 import { Button, Chip, Divider } from "@nextui-org/react";
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -229,10 +228,7 @@ export default function ResultsSummary() {
 
   return (
     <>
-      <SummaryResultHeader
-        onSummaryResult={handleResultComplete}
-        text="編集"
-      />
+      <SummaryResultHeader onSummaryResult={handleResultComplete} text="編集" />
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-20 px-4">

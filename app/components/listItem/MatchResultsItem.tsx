@@ -159,7 +159,7 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
               variant="ghost"
               radius="full"
               size="sm"
-              className="w-fit absolute right-4 top-3 z-100"
+              className="w-fit absolute right-4 top-3 z-20"
               onClick={() => handleGameResultEdit(game.game_result_id)}
             >
               詳細
