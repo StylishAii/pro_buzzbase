@@ -74,3 +74,15 @@ export const getPersonalPitchingResult = async (userId: number) => {
     throw error;
   }
 };
+
+export const getPersonalPitchingResultStats = async (userId: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/pitching_results/personal_pitching_stats?user_id=${userId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

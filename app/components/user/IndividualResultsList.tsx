@@ -6,7 +6,10 @@ import {
   getPersonalBattingAverage,
   getPersonalBattingStatus,
 } from "@app/services/battingAveragesService";
-import { getPersonalPitchingResult } from "@app/services/pitchingResultsService";
+import {
+  getPersonalPitchingResult,
+  getPersonalPitchingResultStats,
+} from "@app/services/pitchingResultsService";
 import { useEffect, useState } from "react";
 
 type UserId = {
@@ -50,12 +53,24 @@ type PersonalPitchingResults = {
   hold: number;
   saves: number;
   innings_pitched: number;
+  hits_allowed: number;
   home_runs_hit: number;
   strikeouts: number;
   base_on_balls: number;
   hit_by_pitch: number;
   run_allowed: number;
   earned_run: number;
+};
+
+type PersonalPitchingStatus = {
+  bb_per_nine: number;
+  complete_games: number;
+  era: number;
+  k_bb: number;
+  k_per_nine: number;
+  shutouts: number;
+  whip: number;
+  win_percentage: number;
 };
 
 export default function IndividualResultsList(props: UserId) {
@@ -69,6 +84,9 @@ export default function IndividualResultsList(props: UserId) {
   const [personalPitchingResults, setPersonalPitchingResults] = useState<
     PersonalPitchingResults[]
   >([]);
+  const [personalPitchingStatus, setPersonalPitchingStatus] = useState<
+    PersonalPitchingStatus | undefined
+  >(undefined);
 
   useEffect(() => {
     fetchBattingAverages();
@@ -90,6 +108,8 @@ export default function IndividualResultsList(props: UserId) {
     try {
       const response = await getPersonalPitchingResult(userId);
       setPersonalPitchingResults(response);
+      const responseStats = await getPersonalPitchingResultStats(userId);
+      setPersonalPitchingStatus(responseStats);
     } catch (error) {
       console.log(`Fetch Personal Pitching Results error:`, error);
     }
@@ -129,6 +149,7 @@ export default function IndividualResultsList(props: UserId) {
         <h2 className="text-xl mt-8">投手成績</h2>
         <PitchingRecordTable
           personalPitchingResults={personalPitchingResults}
+          personalPitchingStatus={personalPitchingStatus}
         />
       </div>
     </>

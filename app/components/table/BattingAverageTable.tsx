@@ -123,7 +123,7 @@ export default function BattingAverageTable(props: Props) {
               </span>
             </div>
             <div className={styleTableBox}>
-              <p className={styleTableTitle}>ISOD</p>
+              <p className={`${styleTableTitle} rounded-bl-md`}>ISOD</p>
               <span className={styleTableData}>
                 {displayValue(battingStatus?.isod)}
               </span>
