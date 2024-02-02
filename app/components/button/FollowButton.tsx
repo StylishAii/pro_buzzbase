@@ -2,7 +2,10 @@ import { userFollow, userUnFollow } from "@app/services/userService";
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
 
-export default function FollowButton({ userId, isFollowing }) {
+export default function FollowButton({
+  userId,
+  isFollowing,
+}: FollowButtonProps) {
   const [following, setFollowing] = useState(isFollowing);
 
   const handleFollow = async () => {
