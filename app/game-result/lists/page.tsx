@@ -8,6 +8,7 @@ import {
   getGameResults,
 } from "@app/services/gameResultsService";
 import { getCurrentPlateAppearance } from "@app/services/plateAppearanceService";
+import { getCurrentUserId } from "@app/services/userService";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ type GameResult = {
 export default function GameResultList() {
   const [gameResultIndex, setGameResultIndex] = useState<GameResult[]>([]);
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
+  const [currentUserId, setCurrentUserId] = useState(0);
   const router = useRouter();
 
   const fetchData = async () => {
@@ -29,9 +31,11 @@ export default function GameResultList() {
           getCurrentPlateAppearance(gameResult.game_result_id)
         )
       );
+      const currentUserIdData = await getCurrentUserId();
 
       setGameResultIndex(gameResultsDataLists);
       setPlateAppearance(plateAppearanceDataLists);
+      setCurrentUserId(currentUserIdData);
     } catch (error) {
       console.log(`game lists fetch error:`, error);
     }
@@ -68,7 +72,7 @@ export default function GameResultList() {
               新規追加
             </Button>
             <div className="mt-5 grid gap-y-5">
-              <MatchResultList />
+              <MatchResultList userId={currentUserId} />
             </div>
           </div>
         </div>
