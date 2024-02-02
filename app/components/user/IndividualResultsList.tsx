@@ -6,6 +6,7 @@ import {
   getPersonalBattingAverage,
   getPersonalBattingStatus,
 } from "@app/services/battingAveragesService";
+import { getPersonalPitchingResult } from "@app/services/pitchingResultsService";
 import { useEffect, useState } from "react";
 
 type UserId = {
@@ -42,6 +43,21 @@ type PersonalBattingStatus = {
   ops: number;
 };
 
+type PersonalPitchingResults = {
+  number_of_appearances: number;
+  win: number;
+  loss: number;
+  hold: number;
+  saves: number;
+  innings_pitched: number;
+  home_runs_hit: number;
+  strikeouts: number;
+  base_on_balls: number;
+  hit_by_pitch: number;
+  run_allowed: number;
+  earned_run: number;
+};
+
 export default function IndividualResultsList(props: UserId) {
   const { userId } = props;
   const [personalBattingAverages, setPersonalBattingAverages] = useState<
@@ -50,9 +66,13 @@ export default function IndividualResultsList(props: UserId) {
   const [personalBattingStatus, setPersonalBattingStatus] = useState<
     PersonalBattingStatus | undefined
   >(undefined);
+  const [personalPitchingResults, setPersonalPitchingResults] = useState<
+    PersonalPitchingResults[]
+  >([]);
 
   useEffect(() => {
     fetchBattingAverages();
+    fetchPitchingResults();
   }, [userId]);
 
   const fetchBattingAverages = async () => {
@@ -63,6 +83,15 @@ export default function IndividualResultsList(props: UserId) {
       setPersonalBattingStatus(responseStatus);
     } catch (error) {
       console.log(`Fetch Personal Batting Averages error:`, error);
+    }
+  };
+
+  const fetchPitchingResults = async () => {
+    try {
+      const response = await getPersonalPitchingResult(userId);
+      setPersonalPitchingResults(response);
+    } catch (error) {
+      console.log(`Fetch Personal Pitching Results error:`, error);
     }
   };
   return (
@@ -98,7 +127,9 @@ export default function IndividualResultsList(props: UserId) {
           personalBattingStatus={personalBattingStatus}
         />
         <h2 className="text-xl mt-8">投手成績</h2>
-        <PitchingRecordTable />
+        <PitchingRecordTable
+          personalPitchingResults={personalPitchingResults}
+        />
       </div>
     </>
   );
