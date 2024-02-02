@@ -52,9 +52,8 @@ export default function MatchResultList(props: UserId) {
   useEffect(() => {
     if (selectedYear && selectedMatchType) {
       fetchFilteredData();
-      fetchData();
     }
-  }, [selectedYear, selectedMatchType, userId]);
+  }, [selectedYear, selectedMatchType]);
 
   const fetchFilteredData = async () => {
     try {
@@ -67,6 +66,7 @@ export default function MatchResultList(props: UserId) {
           selectedYear,
           selectedMatchType
         );
+        console.log(filteredGameResultData)
         // ユーザーごと打席結果
         plateAppearanceDataLists = await Promise.all(
           filteredGameResultData.map((gameResult: GameResult) =>
@@ -126,6 +126,7 @@ export default function MatchResultList(props: UserId) {
         selectedYear,
         selectedMatchType
       );
+      console.log(gameResultsDataLists)
       const plateAppearanceDataLists = await Promise.all(
         gameResultsDataLists.map((gameResult: GameResult) =>
           getCurrentPlateAppearance(gameResult.game_result_id)
