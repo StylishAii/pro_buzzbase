@@ -278,7 +278,7 @@ export default function MyPage() {
                     title="成績"
                     className="font-bold tracking-wide"
                   >
-                    <IndividualResultsList />
+                    <IndividualResultsList userId={userId} />
                   </Tab>
                   <Tab
                     key="game"

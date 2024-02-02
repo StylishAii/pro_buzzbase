@@ -19,18 +19,35 @@ type PersonalBattingAverages = {
   at_bats: number;
 };
 
+type PersonalBattingStatus = {
+  batting_average: number;
+  bb_per_k: number;
+  iso: number;
+  isod: number;
+  on_base_percentage: number;
+  ops: number;
+};
+
 type Props = {
   personalBattingAverages: PersonalBattingAverages[];
+  personalBattingStatus: PersonalBattingStatus | undefined;
 };
 
 export default function BattingAverageTable(props: Props) {
-  const { personalBattingAverages } = props;
-
+  const { personalBattingAverages, personalBattingStatus } = props;
   const battingAverage =
     personalBattingAverages.length > 0 ? personalBattingAverages[0] : undefined;
 
-  const displayValue = (value: number | undefined) =>
-    value !== undefined ? value : "-";
+  const displayValue = (value: number | undefined) => {
+    if (value === undefined) {
+      return "-";
+    } else {
+      const formattedValue = value.toString();
+      return formattedValue.startsWith("0.")
+        ? formattedValue.substring(1)
+        : formattedValue;
+    }
+  };
 
   const styleTableBox = "grid grid-cols-2 text-center";
   const styleTableTitle =
@@ -44,7 +61,9 @@ export default function BattingAverageTable(props: Props) {
           <div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>打率</p>
-              <span className={styleTableData}>-</span>
+              <span className={styleTableData}>
+                {displayValue(personalBattingStatus?.batting_average)}
+              </span>
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>打席</p>
@@ -90,19 +109,21 @@ export default function BattingAverageTable(props: Props) {
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>出塁率</p>
-              <span className={styleTableData}>-</span>
+              <span className={styleTableData}>
+                {displayValue(personalBattingStatus?.on_base_percentage)}
+              </span>
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>OPS</p>
-              <span className={styleTableData}>-</span>
+              <span className={styleTableData}>
+                {displayValue(personalBattingStatus?.ops)}
+              </span>
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>ISOD</p>
-              <span className={styleTableData}>-</span>
-            </div>
-            <div className={styleTableBox}>
-              <p className={`${styleTableTitle} rounded-bl-md`}>BABIP</p>
-              <span className={styleTableData}>-</span>
+              <span className={styleTableData}>
+                {displayValue(personalBattingStatus?.isod)}
+              </span>
             </div>
           </div>
 
@@ -156,20 +177,20 @@ export default function BattingAverageTable(props: Props) {
               </span>
             </div>
             <div className={styleTableBox}>
-              <p className={styleTableTitle}>盗塁率</p>
-              <span className={styleTableData}>-</span>
-            </div>
-            <div className={styleTableBox}>
               <p className={styleTableTitle}>ISO</p>
-              <span className={styleTableData}>-</span>
+              <span className={styleTableData}>
+                {displayValue(personalBattingStatus?.iso)}
+              </span>
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>BB/K</p>
-              <span className={styleTableData}>-</span>
+              <span className={styleTableData}>
+                {displayValue(personalBattingStatus?.bb_per_k)}
+              </span>
             </div>
             <div className={styleTableBox}>
-              <p className={styleTableTitle}>SB</p>
-              <span className={`${styleTableData} rounded-br-md`}>-</span>
+              <p className={styleTableTitle}>---</p>
+              <span className={`${styleTableData} rounded-br-md`}>---</span>
             </div>
           </div>
         </div>

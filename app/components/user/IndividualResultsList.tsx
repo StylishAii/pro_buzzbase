@@ -2,26 +2,69 @@ import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
 import BattingAverageTable from "@app/components/table/BattingAverageTable";
 import PitchingRecordTable from "@app/components/table/PitchingRecordTable";
 import { gameType, years } from "@app/data/TestData";
-import { getPersonalBattingAverage } from "@app/services/battingAveragesService";
+import {
+  getPersonalBattingAverage,
+  getPersonalBattingStatus,
+} from "@app/services/battingAveragesService";
 import { useEffect, useState } from "react";
 
-export default function IndividualResultsList() {
-  const [personalBattingAverages, setPersonalBattingAverages] = useState([]);
+type UserId = {
+  userId: number;
+};
+
+type PersonalBattingAverages = {
+  number_of_matches: number;
+  base_on_balls: number;
+  caught_stealing: number;
+  error: number;
+  hit: number;
+  hit_by_pitch: number;
+  home_run: number;
+  id: number;
+  run: number;
+  runs_batted_in: number;
+  sacrifice_hit: number;
+  stealing_base: number;
+  strike_out: number;
+  three_base_hit: number;
+  times_at_bat: number;
+  total_bases: number;
+  two_base_hit: number;
+  at_bats: number;
+};
+
+type PersonalBattingStatus = {
+  batting_average: number;
+  bb_per_k: number;
+  iso: number;
+  isod: number;
+  on_base_percentage: number;
+  ops: number;
+};
+
+export default function IndividualResultsList(props: UserId) {
+  const { userId } = props;
+  const [personalBattingAverages, setPersonalBattingAverages] = useState<
+    PersonalBattingAverages[]
+  >([]);
+  const [personalBattingStatus, setPersonalBattingStatus] = useState<
+    PersonalBattingStatus | undefined
+  >(undefined);
 
   useEffect(() => {
     fetchBattingAverages();
-  }, []);
+  }, [userId]);
 
   const fetchBattingAverages = async () => {
     try {
-      const response = await getPersonalBattingAverage();
+      const response = await getPersonalBattingAverage(userId);
       setPersonalBattingAverages(response);
+      const responseStatus = await getPersonalBattingStatus(userId);
+      setPersonalBattingStatus(responseStatus);
     } catch (error) {
       console.log(`Fetch Personal Batting Averages error:`, error);
     }
   };
-
-  console.log(personalBattingAverages);
   return (
     <>
       <div className="bg-bg_sub p-4 rounded-xl">
@@ -52,6 +95,7 @@ export default function IndividualResultsList() {
         <h2 className="text-xl">打撃成績</h2>
         <BattingAverageTable
           personalBattingAverages={personalBattingAverages}
+          personalBattingStatus={personalBattingStatus}
         />
         <h2 className="text-xl mt-8">投手成績</h2>
         <PitchingRecordTable />
