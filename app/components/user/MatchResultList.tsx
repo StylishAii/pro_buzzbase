@@ -52,9 +52,8 @@ export default function MatchResultList(props: UserId) {
   useEffect(() => {
     if (selectedYear && selectedMatchType) {
       fetchFilteredData();
-      fetchData();
     }
-  }, [selectedYear, selectedMatchType, userId]);
+  }, [selectedYear, selectedMatchType]);
 
   const fetchFilteredData = async () => {
     try {

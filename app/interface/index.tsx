@@ -327,3 +327,8 @@ interface PitchingResult {
   strikeouts: number;
   win: number;
 }
+
+interface FollowButtonProps {
+  userId: number;
+  isFollowing: boolean;
+}
