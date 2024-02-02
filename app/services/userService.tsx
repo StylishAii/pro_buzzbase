@@ -77,3 +77,27 @@ export const getUserId = async (user_id: number) => {
     console.log(error);
   }
 };
+
+export const userFollow = async (userId: number) => {
+  try {
+    const response = await axiosInstance.post(
+      `/api/v1/relationships?followed_id=${userId}`
+    );
+    return response.data
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const userUnFollow = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/v1/relationships/${id}`
+    );
+    return response.data
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

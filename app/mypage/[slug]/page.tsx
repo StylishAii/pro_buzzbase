@@ -17,6 +17,7 @@ import { getUserAwards } from "@app/services/awardsService";
 import AvatarComponent from "@app/components/user/AvatarComponent";
 import { usePathname } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
+import FollowButton from "@app/components/button/FollowButton";
 
 type Position = {
   id: string;
@@ -24,14 +25,17 @@ type Position = {
 };
 
 type userData = {
-  image: any;
-  name: string;
-  user_id: string;
-  url: string;
-  introduction: string;
-  positions: Position[];
-  team_id: number;
-  id: number;
+  user: {
+    image: any;
+    name: string;
+    user_id: string;
+    url: string;
+    introduction: string;
+    positions: Position[];
+    team_id: number;
+    id: number;
+  };
+  isFollowing: boolean;
 };
 
 type Team = {
@@ -77,19 +81,19 @@ export default function MyPage() {
     }
   };
 
-  const isCurrentUserPage = currentUserId === userData?.id;
+  const isCurrentUserPage = currentUserId === userData?.user.id;
 
   const fetchData = async (userId: string) => {
     try {
       const data = await getUserIdData(userId);
       setUserData(data);
-      setUserId(data.id);
-      if (data.team_id) {
+      setUserId(data.user.id);
+      if (data.user.team_id) {
         const teamsData = await getTeams();
         const baseballCategoryData = await getBaseballCategory();
         const prefectureData = await getPrefectures();
         const userTeam = teamsData.find(
-          (team: { id: any }) => team.id === data.team_id
+          (team: { id: any }) => team.id === data.user.team_id
         );
         if (userTeam) {
           setTeamData([userTeam]);
@@ -109,7 +113,7 @@ export default function MyPage() {
         }
       }
 
-      const awardData = await getUserAwards(data.id);
+      const awardData = await getUserAwards(data.user.id);
       if (awardData) {
         setUserAwards(awardData);
       }
@@ -134,14 +138,14 @@ export default function MyPage() {
           <div className="pt-16 pb-36 bg-main">
             <div className=" px-4">
               <AvatarComponent userData={userData} />
-              {userData.introduction?.length > 0 ? (
+              {userData.user.introduction?.length > 0 ? (
                 <>
-                  <p className="text-sm mt-4">{userData.introduction}</p>
+                  <p className="text-sm mt-4">{userData.user.introduction}</p>
                 </>
               ) : (
                 ""
               )}
-              {userData.positions?.length > 0 ? (
+              {userData.user.positions?.length > 0 ? (
                 <>
                   <ul className="flex items-center gap-x-2 mt-4 relative -left-0.5">
                     <li>
@@ -149,14 +153,14 @@ export default function MyPage() {
                     </li>
                     <li>
                       <ul className="flex items-center">
-                        {userData.positions.map((position, index) => (
+                        {userData.user.positions.map((position, index) => (
                           <React.Fragment key={position.id}>
                             <li>
                               <p className="text-sm text-zinc-400">
                                 {position.name}
                               </p>
                             </li>
-                            {index < userData.positions.length - 1 && (
+                            {index < userData.user.positions.length - 1 && (
                               <li>
                                 <p className="text-sm text-zinc-400">
                                   &nbsp;/&nbsp;
@@ -172,7 +176,7 @@ export default function MyPage() {
               ) : (
                 ""
               )}
-              {userData.team_id ? (
+              {userData.user.team_id ? (
                 <>
                   <ul className="flex items-center gap-x-1.5 mt-1.5">
                     <li>
@@ -242,7 +246,7 @@ export default function MyPage() {
                 {isCurrentUserPage ? (
                   <>
                     <Button
-                      href={`${userData.user_id}/edit`}
+                      href={`${userData.user.user_id}/edit`}
                       as={Link}
                       className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
                     >
@@ -251,16 +255,17 @@ export default function MyPage() {
                   </>
                 ) : (
                   <>
-                    <Button className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5">
-                      フォローする
-                    </Button>
+                    <FollowButton
+                      userId={userData.user.id}
+                      isFollowing={userData.isFollowing}
+                    />
                   </>
                 )}
 
                 <Button
                   href="/share"
                   as={Link}
-                  className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
+                  className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 font-bold"
                 >
                   シェアする
                 </Button>
