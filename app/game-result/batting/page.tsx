@@ -8,9 +8,11 @@ import {
   createBattingAverage,
   updateBattingAverage,
 } from "@app/services/battingAveragesService";
+import { updateBattingAverageId } from "@app/services/gameResultsService";
 import {
   checkExistingPlateAppearance,
   createPlateAppearance,
+  getCurrentPlateAppearance,
   updatePlateAppearance,
 } from "@app/services/plateAppearanceService";
 import { getCurrentUserId } from "@app/services/userService";
@@ -49,7 +51,8 @@ const battingResultsList = [
   { id: 14, result: "四球" },
   { id: 15, result: "死球" },
   { id: 16, result: "打撃妨害" },
-  { id: 17, result: "併殺打" },
+  { id: 17, result: "走塁妨害" },
+  { id: 18, result: "併殺打" },
 ];
 
 const resultShortForms: Record<string, string> = {
@@ -66,6 +69,7 @@ const resultShortForms: Record<string, string> = {
   "犠打/犠飛": "犠",
   振り逃げ: "振逃",
   打撃妨害: "打妨",
+  走塁妨害: "走妨",
   併殺打: "併",
 };
 
@@ -87,7 +91,13 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
     const validBoxes = battingBoxes.filter(
       (box) => box.position !== 0 || box.result !== 0
     );
+    const excludedResults = [14, 15, 11, 16, 17];
+    const excludedCount = battingBoxes.filter((box) =>
+      excludedResults.includes(box.result)
+    ).length;
+
     const timesAtBat = validBoxes.length;
+    const atBats = timesAtBat - excludedCount;
     const hit = battingBoxes.filter((box) => box.result === 7).length;
     const twoBaseHit = battingBoxes.filter((box) => box.result === 8).length;
     const threeBaseHit = battingBoxes.filter((box) => box.result === 9).length;
@@ -107,6 +117,7 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
 
     return {
       timesAtBat,
+      atBats,
       hit,
       twoBaseHit,
       threeBaseHit,
@@ -124,18 +135,42 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
 export default function BattingRecord() {
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [runsBattedIn, setRunsBattedIn] = useState(0);
+  const [existingRunsBattedIn, setExistingRunsBattedIn] = useState(0);
   const [run, setRun] = useState(0);
+  const [existingRun, setExistingRun] = useState(0);
   const [defensiveError, setDefensiveError] = useState(0);
+  const [existingDefensiveError, setExistingDefensiveError] = useState(0);
   const [stealingBase, setStealingBase] = useState(0);
+  const [existingStealingBase, setExistingStealingBase] = useState(0);
   const [caughtStealing, setCaughtStealing] = useState(0);
+  const [existingCaughtStealing, setExistingCaughtStealing] = useState(0);
   const [errors, setErrors] = useState<string[]>([]);
   const [isLocalStorageId, setIsLocalStorageId] = useState(true);
+  const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
+  const [selectedResults, setSelectedResults] = useState<number[]>([]);
   const [battingBoxes, setBattingBoxes] = useState<
     Array<{ position: number; result: number; text: string }>
   >([
     {
       position: 0,
       result: 0,
+      text: battingResultsPositions[0].direction + battingResultsList[0].result,
+    },
+  ]);
+  const [existingBattingBoxes, setExistingBattingBoxes] = useState<
+    Array<{
+      positionId: number;
+      positionName: string;
+      resultId: number;
+      resultName: string;
+      text: string;
+    }>
+  >([
+    {
+      positionId: 0,
+      positionName: "",
+      resultId: 0,
+      resultName: "",
       text: battingResultsPositions[0].direction + battingResultsList[0].result,
     },
   ]);
@@ -156,6 +191,7 @@ export default function BattingRecord() {
 
   const {
     timesAtBat,
+    atBats,
     hit,
     twoBaseHit,
     threeBaseHit,
@@ -173,8 +209,82 @@ export default function BattingRecord() {
     const savedGameResultId = localStorage.getItem("gameResultId");
     if (savedGameResultId) {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
+      fetchExistingBattingAverage(JSON.parse(savedGameResultId));
+      fetchExistingPlateAppearance(JSON.parse(savedGameResultId));
     }
   }, [pathname]);
+
+  useEffect(() => {
+    if (
+      existingBattingBoxes.length > 0 &&
+      existingBattingBoxes[0].positionId !== 0
+    ) {
+      const updatedBattingBoxes = existingBattingBoxes.map((box) => {
+        return {
+          position: box.positionId,
+          result: box.resultId,
+          text: box.text,
+        };
+      });
+      setBattingBoxes(updatedBattingBoxes);
+    }
+  }, [existingBattingBoxes]);
+
+  // 既に同じgame_result_idが存在する場合
+  const fetchExistingBattingAverage = async (gameResultId: number) => {
+    try {
+      const currentUserId = await getCurrentUserId();
+      const existingBattingAverage = await checkExistingBattingAverage(
+        gameResultId,
+        currentUserId
+      );
+      setExistingRunsBattedIn(existingBattingAverage.runs_batted_in);
+      setExistingRun(existingBattingAverage.run);
+      setExistingDefensiveError(existingBattingAverage.error);
+      setExistingStealingBase(existingBattingAverage.stealing_base);
+      setExistingCaughtStealing(existingBattingAverage.caught_stealing);
+    } catch (error) {
+      console.log(`Error fetch existing batting average:`, error);
+    }
+  };
+
+  const fetchExistingPlateAppearance = async (gameResultId: number) => {
+    try {
+      const existingPlateAppearances = await getCurrentPlateAppearance(
+        gameResultId
+      );
+      if (existingPlateAppearances.length > 0) {
+        const newBattingBoxes = existingPlateAppearances.map((plate: any) => {
+          const positionId =
+            battingResultsPositions.find(
+              (p) => p.id === plate.batting_position_id
+            )?.id || null;
+          const positionName =
+            battingResultsPositions.find(
+              (p) => p.id === plate.batting_position_id
+            )?.direction || "";
+          const resultId =
+            battingResultsList.find((p) => p.id === plate.plate_result_id)
+              ?.id || null;
+          const resultName =
+            battingResultsList.find((p) => p.id === plate.plate_result_id)
+              ?.result || "";
+          const text = `${positionName}${resultName}`;
+
+          return {
+            positionId,
+            positionName,
+            resultId,
+            resultName,
+            text,
+          };
+        });
+        setExistingBattingBoxes(newBattingBoxes);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // 打席追加
   const addBox = () => {
@@ -196,33 +306,46 @@ export default function BattingRecord() {
   };
 
   // 打点
-  const handleRunsBattedInChange = (e: any) =>
+  const handleRunsBattedInChange = (e: any) => {
+    setExistingRunsBattedIn(Number(e.target.value));
     setRunsBattedIn(Number(e.target.value));
+  };
 
   // 得点
-  const handleRunChange = (e: any) => setRun(Number(e.target.value));
+  const handleRunChange = (e: any) => {
+    setExistingRun(Number(e.target.value));
+    setRun(Number(e.target.value));
+  };
 
   // 失策
-  const handleErrorChange = (e: any) =>
+  const handleErrorChange = (e: any) => {
+    setExistingDefensiveError(Number(e.target.value));
     setDefensiveError(Number(e.target.value));
+  };
 
   // 盗塁
-  const handleStealingBaseChange = (e: any) =>
+  const handleStealingBaseChange = (e: any) => {
+    setExistingStealingBase(Number(e.target.value));
     setStealingBase(Number(e.target.value));
+  };
 
   // 盗塁死
-  const handleCaughtStealingChange = (e: any) =>
+  const handleCaughtStealingChange = (e: any) => {
+    setExistingCaughtStealing(Number(e.target.value));
     setCaughtStealing(Number(e.target.value));
+  };
 
   // 打球方向
   const createHandlePositionChange = (index: number) => (keys: any) => {
     const newPosition = Number(keys.values().next().value);
+    setSelectedPositions([newPosition]);
     updateBattingBox(index, newPosition, battingBoxes[index].result);
   };
 
   // 打球結果
   const createHandleResultChange = (index: number) => (keys: any) => {
     const newResult = Number(keys.values().next().value);
+    setSelectedResults([newResult]);
     updateBattingBox(index, battingBoxes[index].position, newResult);
   };
 
@@ -293,23 +416,31 @@ export default function BattingRecord() {
         user_id: currentUserId,
         // plate_appearances: ,
         times_at_bat: timesAtBat, // 打席数
+        at_bats: atBats,
         hit: hit, // 安打数
         two_base_hit: twoBaseHit, // 2塁打数
         three_base_hit: threeBaseHit, // 3塁打数
         home_run: homeRun, // 本塁打数
         total_bases: totalBases, // 塁打数
-        runs_batted_in: runsBattedIn,
-        run: run,
+        runs_batted_in: existingRunsBattedIn
+          ? existingRunsBattedIn
+          : runsBattedIn,
+        run: existingRun ? existingRun : run,
         strike_out: strikeOuts, // 三振数
         base_on_balls: baseOnBalls, //四球
         hit_by_pitch: hitByPitch, // 死球
         sacrifice_hit: sacrificeHit, //犠打
-        error: defensiveError,
-        stealing_base: stealingBase,
-        caught_stealing: caughtStealing,
+        error: existingDefensiveError ? existingDefensiveError : defensiveError,
+        stealing_base: existingStealingBase
+          ? existingStealingBase
+          : stealingBase,
+        caught_stealing: existingCaughtStealing
+          ? existingCaughtStealing
+          : caughtStealing,
       },
     };
     for (let i = 0; i < battingBoxes.length; i++) {
+      const battingBox = battingBoxes[i];
       const battingResult = battingBoxes[i].text.replace("-", "");
       const plateAppearanceData = {
         plate_appearance: {
@@ -317,6 +448,8 @@ export default function BattingRecord() {
           user_id: currentUserId,
           batter_box_number: i + 1,
           batting_result: battingResult,
+          batting_position_id: battingBox.position,
+          plate_result_id: battingBox.result,
         },
       };
       // 打席ごと
@@ -338,8 +471,6 @@ export default function BattingRecord() {
         console.log(`plate error :${error}`);
       }
     }
-    console.log(battingBoxes);
-    console.log(battingAverageData);
     // 打撃トータル
     try {
       const existingBattingAverage = await checkExistingBattingAverage(
@@ -352,18 +483,30 @@ export default function BattingRecord() {
           battingAverageData
         );
       } else {
-        await createBattingAverage(battingAverageData);
+        const response = await createBattingAverage(battingAverageData);
+        if (
+          typeof currentUserId !== "undefined" &&
+          localStorageGameResultId !== null
+        ) {
+          const updateGameResultData = {
+            game_result: {
+              batting_average_id: response.id,
+            },
+          };
+          await updateBattingAverageId(
+            localStorageGameResultId,
+            updateGameResultData
+          );
+        }
       }
-      setTimeout(() => {
-        router.push(`/game-result/pitching/`);
-      }, 10);
+      router.push(`/game-result/pitching/`);
     } catch (error) {
       console.log(`batting average ${error}`);
     }
   };
   return (
     <>
-      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"次へ"}/>
+      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"次へ"} />
       <main className="h-full">
         <div className="pb-32 relative">
           <ErrorMessages errors={errors} />
@@ -401,6 +544,11 @@ export default function BattingRecord() {
                             onSelectionChange={createHandlePositionChange(
                               index
                             )}
+                            selectedKeys={
+                              box.position !== null
+                                ? [box.position.toString()]
+                                : []
+                            }
                           >
                             {battingResultsPositions.map((position) => (
                               <SelectItem key={position.id} value={position.id}>
@@ -417,6 +565,9 @@ export default function BattingRecord() {
                             aria-label="打球結果"
                             value={box.result}
                             onSelectionChange={createHandleResultChange(index)}
+                            selectedKeys={
+                              box.result !== null ? [box.result.toString()] : []
+                            }
                           >
                             {battingResultsList.map((result) => (
                               <SelectItem key={result.id} value={result.id}>
@@ -465,7 +616,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="打点"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingRunsBattedIn !== undefined
+                          ? existingRunsBattedIn.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleRunsBattedInChange}
                     />
@@ -477,7 +632,9 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="得点"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingRun !== undefined ? existingRun.toString() : "0"
+                      }
                       min={0}
                       onChange={handleRunChange}
                     />
@@ -489,7 +646,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="失策"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingDefensiveError !== undefined
+                          ? existingDefensiveError.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleErrorChange}
                     />
@@ -501,7 +662,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="盗塁"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingStealingBase !== undefined
+                          ? existingStealingBase.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleStealingBaseChange}
                     />
@@ -513,7 +678,11 @@ export default function BattingRecord() {
                       labelPlacement="outside-left"
                       placeholder="盗塁死"
                       className="[&>div]:w-20"
-                      defaultValue="0"
+                      value={
+                        existingCaughtStealing !== undefined
+                          ? existingCaughtStealing.toString()
+                          : "0"
+                      }
                       min={0}
                       onChange={handleCaughtStealingChange}
                     />

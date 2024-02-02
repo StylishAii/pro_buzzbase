@@ -14,7 +14,7 @@ import {
   getTournaments,
   updateTournament,
 } from "@app/services/tournamentsService";
-import { getUserData } from "@app/services/userService";
+import { getCurrentUserId, getUserData } from "@app/services/userService";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -65,17 +65,26 @@ type userData = {
 
 export default function GameRecord() {
   const [userData, setUserData] = useState<userData | null>(null);
+  const [existingGameDate, setExistingGameDate] = useState<string>("");
   const [myTeam, setMyTeam] = useState("");
+  const [existingMyTeam, setExistingMyTeam] = useState("");
   const [teamsData, setTeamsData] = useState<Team[]>([]);
   const [positionData, setPositionData] = useState<Position[]>([]);
   const [tournamentData, setTournamentData] = useState<TournamentData[]>([]);
   const [myPosition, setMyPosition] = useState("");
   const [matchType, setMatchType] = useState("regular");
   const [opponentTeam, setOpponentTeam] = useState("");
+  const [existingOpponentTeam, setExistingOpponentTeam] = useState<
+    number | undefined
+  >(undefined);
   const [myTeamScore, setMyTeamScore] = useState(0);
   const [opponentTeamScore, setOpponentTeamScore] = useState(0);
   const [matchBattingOrder, setMatchBattingOrder] = useState("");
+  const [existingMatchBattingOrder, setExistingMatchBattingOrder] =
+    useState("");
   const [defensivePosition, setDefensivePosition] = useState<string>("");
+  const [existingDefensivePosition, setExistingDefensivePosition] =
+    useState<string>("");
   const [tournament, setTournament] = useState<number | null>(null);
   const [inputTournamentName, setInputTournamentName] = useState("");
   const [matchMemo, setMatchMemo] = useState<string | null>(null);
@@ -125,6 +134,7 @@ export default function GameRecord() {
     const savedGameResultId = localStorage.getItem("gameResultId");
     if (savedGameResultId) {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
+      fetchExistingMatchResult(JSON.parse(savedGameResultId));
     }
     if (
       !(pathname === "/game-result/battings") &&
@@ -133,7 +143,37 @@ export default function GameRecord() {
     ) {
       localStorage.removeItem("gameResultId");
     }
-  }, []);
+  }, [pathname]);
+
+  // 既に同じgame_result_idが存在する場合
+  const fetchExistingMatchResult = async (gameResultId: number) => {
+    try {
+      const currentUserId = await getCurrentUserId();
+      const existingMatchResult = await checkExistingMatchResults(
+        gameResultId,
+        currentUserId
+      );
+      console.log(existingMatchResult);
+      if (existingMatchResult) {
+        const date = new Date(existingMatchResult.date_and_time);
+        const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+        setExistingGameDate(formattedDate);
+        setMatchType(existingMatchResult.match_type);
+        setTournament(existingMatchResult.tournament_id);
+        setExistingMyTeam(existingMatchResult.my_team_id);
+        setMyTeamScore(existingMatchResult.my_team_score);
+        setOpponentTeamScore(existingMatchResult.opponent_team_score);
+        setExistingMatchBattingOrder(existingMatchResult.batting_order);
+        setMatchMemo(existingMatchResult.memo);
+        setExistingOpponentTeam(existingMatchResult.opponent_team_id);
+        setExistingDefensivePosition(existingMatchResult.defensive_position);
+      }
+    } catch (error) {
+      console.error("Error fetching existing match result:", error);
+    }
+  };
 
   useEffect(() => {
     // 守備位置設定
@@ -148,6 +188,16 @@ export default function GameRecord() {
     }
   }, [userData, positionData]);
 
+  // チーム名検索(編集時)
+  useEffect(() => {
+    if (existingMyTeam) {
+      const foundTeam = teamsData.find((team) => team.id === existingMyTeam);
+      if (foundTeam) {
+        setMyTeam(foundTeam.name);
+      }
+    }
+  }, [existingMyTeam, teamsData]);
+
   // 今日の日付
   const [gameDate, setGameDate] = useState(() => {
     const today = new Date();
@@ -160,6 +210,7 @@ export default function GameRecord() {
   const handleDateChange = (event: {
     target: { value: SetStateAction<string> };
   }) => {
+    setExistingGameDate(event.target.value);
     setGameDate(event.target.value);
   };
 
@@ -172,12 +223,14 @@ export default function GameRecord() {
 
   // 自チーム名設定
   const handleMyTeamChange = (event: any) => {
+    setExistingMyTeam(event.target.value);
     setMyTeam(event.target.value);
   };
 
   // 相手チーム設定
-  const handleOpponentTeamChange = (event: any) => {
-    setOpponentTeam(event);
+  const handleOpponentTeamChange = (teamName: any) => {
+    setExistingOpponentTeam(Number(teamName));
+    setOpponentTeam(teamName);
   };
 
   const handleTournamentInputChange = (value: string) => {
@@ -198,14 +251,16 @@ export default function GameRecord() {
   };
 
   // 打順
-  const handleBattingOrderChange = (value: any) => {
-    const order = Array.from(value)[0] as string;
+  const handleBattingOrderChange = (event: { target: { value: any } }) => {
+    const order = event.target.value;
+    setExistingMatchBattingOrder(order);
     setMatchBattingOrder(order);
   };
 
   // 守備位置
-  const handleDefensivePositionChange = (value: any) => {
-    const position = Array.from(value)[0] as string;
+  const handleDefensivePositionChange = (event: { target: { value: any } }) => {
+    const position = event.target.value;
+    setExistingDefensivePosition(position);
     setDefensivePosition(position);
   };
 
@@ -268,7 +323,7 @@ export default function GameRecord() {
       setIsOpponentTeamScoreValid(true);
     }
 
-    if (!matchBattingOrder) {
+    if (!matchBattingOrder && !existingMatchBattingOrder) {
       setIsBattingOrderValid(false);
       isValid = false;
       newErrors.push("打順が未入力です。");
@@ -357,12 +412,20 @@ export default function GameRecord() {
           user_id: Number(userId),
           date_and_time: gameDate,
           match_type: matchType,
-          my_team_id: Number(myTeamId),
-          opponent_team_id: Number(opponentTeamId),
+          my_team_id: Number(existingMyTeam)
+            ? Number(existingMyTeam)
+            : Number(myTeamId),
+          opponent_team_id: existingOpponentTeam
+            ? existingOpponentTeam
+            : Number(opponentTeamId),
           my_team_score: myTeamScore,
           opponent_team_score: opponentTeamScore,
-          batting_order: matchBattingOrder,
-          defensive_position: myPosition ? myPosition : defensivePosition,
+          batting_order: existingMatchBattingOrder
+            ? existingMatchBattingOrder
+            : matchBattingOrder,
+          defensive_position: existingDefensivePosition
+            ? existingDefensivePosition
+            : myPosition,
           tournament_id: tournamentId,
           memo: matchMemo,
         },
@@ -394,9 +457,7 @@ export default function GameRecord() {
           );
         }
       }
-      setTimeout(() => {
-        router.push(`/game-result/batting/`);
-      }, 10);
+      router.push(`/game-result/batting/`);
     } catch (error) {
       console.log(error);
       throw error;
@@ -431,7 +492,7 @@ export default function GameRecord() {
                   labelPlacement="outside-left"
                   className="flex justify-between items-center"
                   color={isMatchDate ? "default" : "danger"}
-                  value={gameDate}
+                  value={existingGameDate ? existingGameDate : gameDate}
                   onChange={handleDateChange}
                 />
                 <Divider className="my-4" />
@@ -440,6 +501,7 @@ export default function GameRecord() {
                   label="試合種類"
                   orientation="horizontal"
                   defaultValue={matchType}
+                  value={matchType}
                   color="primary"
                   size="sm"
                   className="text-sm flex justify-between items-center flex-row [&>span]:text-white"
@@ -459,6 +521,9 @@ export default function GameRecord() {
                   size="md"
                   onInputChange={handleTournamentInputChange}
                   onSelectionChange={handleTournamentSelectionChange}
+                  selectedKey={
+                    tournament !== undefined ? tournament?.toString() : null
+                  }
                 >
                   {tournamentData.map((data) => (
                     <AutocompleteItem key={data.id} value={data.name}>
@@ -491,11 +556,20 @@ export default function GameRecord() {
                   className="[&>div]:justify-between"
                   size="sm"
                   color={isOpponentTeamValid ? "default" : "danger"}
+                  selectedKey={
+                    existingOpponentTeam
+                      ? existingOpponentTeam.toString()
+                      : null
+                  }
                   onInputChange={(value) => setOpponentTeam(value)}
                   onSelectionChange={handleOpponentTeamChange}
                 >
                   {teamsData.map((data) => (
-                    <AutocompleteItem key={data.id} value={data.name}>
+                    <AutocompleteItem
+                      key={data.id}
+                      value={data.name}
+                      textValue={data.name}
+                    >
                       {data.name}
                     </AutocompleteItem>
                   ))}
@@ -515,6 +589,7 @@ export default function GameRecord() {
                       placeholder="自分"
                       className="flex justify-between items-center w-20"
                       defaultValue={myTeamScore.toString()}
+                      value={myTeamScore.toString()}
                       color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleMyScoreChange}
@@ -529,6 +604,7 @@ export default function GameRecord() {
                       labelPlacement="outside"
                       className="flex justify-between items-center w-20"
                       defaultValue={opponentTeamScore.toString()}
+                      value={opponentTeamScore.toString()}
                       color={isOpponentTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleOpponentScoreChange}
@@ -545,10 +621,19 @@ export default function GameRecord() {
                   fullWidth={false}
                   color={isBattingOrderValid ? "default" : "danger"}
                   className="grid justify-between items-center grid-cols-[auto_78px]"
-                  onSelectionChange={handleBattingOrderChange}
+                  onChange={handleBattingOrderChange}
+                  selectedKeys={
+                    existingMatchBattingOrder !== undefined
+                      ? [existingMatchBattingOrder.toString()]
+                      : []
+                  }
                 >
                   {battingOrder.map((order) => (
-                    <SelectItem key={order.id} value={order.id.toString()}>
+                    <SelectItem
+                      key={order.id}
+                      value={order.id.toString()}
+                      textValue={order.turn}
+                    >
                       {order.turn}
                     </SelectItem>
                   ))}
@@ -563,12 +648,13 @@ export default function GameRecord() {
                   fullWidth={false}
                   color={isDefensivePositionValid ? "default" : "danger"}
                   placeholder="守備"
-                  selectedKeys={
-                    defensivePosition ? defensivePosition : myPosition
-                  }
-                  defaultSelectedKeys={myPosition}
-                  onSelectionChange={handleDefensivePositionChange}
+                  onChange={handleDefensivePositionChange}
                   className="grid justify-between items-center grid-cols-[auto_110px]"
+                  selectedKeys={
+                    existingDefensivePosition
+                      ? existingDefensivePosition
+                      : myPosition
+                  }
                 >
                   {positionData.map((position) => (
                     <SelectItem
@@ -589,6 +675,7 @@ export default function GameRecord() {
                   placeholder="試合の中で気づいたこと、感じたことをメモしておこう！"
                   className="col-span-12 md:col-span-6 mb-6 md:mb-0"
                   onChange={(event) => setMatchMemo(event.target.value)}
+                  value={matchMemo !== null ? matchMemo : ""}
                 />
               </form>
             </div>

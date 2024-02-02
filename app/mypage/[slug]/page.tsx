@@ -6,14 +6,17 @@ import { GloveIcon } from "@app/components/icon/GloveIcon";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import IndividualResultsList from "@app/components/user/IndividualResultsList";
 import MatchResultList from "@app/components/user/MatchResultList";
-import { getUserData } from "@app/services/userService";
-import { Avatar, Button, Link, Tab, Tabs } from "@nextui-org/react";
+import { getCurrentUserId, getUserIdData } from "@app/services/userService";
+import { Button, Link, Tab, Tabs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import Header from "@app/components/header/Header";
 import { getTeams } from "@app/services/teamsService";
 import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import { getPrefectures } from "@app/services/prefectureService";
 import { getUserAwards } from "@app/services/awardsService";
+import AvatarComponent from "@app/components/user/AvatarComponent";
+import { usePathname } from "next/navigation";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 
 type Position = {
   id: string;
@@ -28,6 +31,7 @@ type userData = {
   introduction: string;
   positions: Position[];
   team_id: number;
+  id: number;
 };
 
 type Team = {
@@ -43,47 +47,76 @@ export default function MyPage() {
   const [teamCategoryName, setTeamCategoryName] = useState("");
   const [teamPrefectureName, setTeamPrefectureName] = useState("");
   const [userAwards, setUserAwards] = useState<UserAwards[]>([]);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [userId, setUserId] = useState(0);
+  const pathName = usePathname();
+  const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getUserData();
-        setUserData(data);
-        if (data.team_id) {
-          const teamsData = await getTeams();
-          const baseballCategoryData = await getBaseballCategory();
-          const prefectureData = await getPrefectures();
-          const userTeam = teamsData.find(
-            (team: { id: any }) => team.id === data.team_id
-          );
-          if (userTeam) {
-            setTeamData([userTeam]);
-          }
-          const category = baseballCategoryData.find(
-            (category: { id: number }) => category.id === userTeam.category_id
-          );
-          if (category) {
-            setTeamCategoryName(category.name);
-          }
-          const prefecture = prefectureData.find(
-            (prefecture: { id: number }) =>
-              prefecture.id === userTeam.prefecture_id
-          );
-          if (prefecture) {
-            setTeamPrefectureName(prefecture.name);
-          }
-        }
+    const pathParts = pathName.split("/");
+    const userIdPart = pathParts[pathParts.length - 1];
+    if (userIdPart && userIdPart !== "undefined") {
+      fetchData(userIdPart);
+    }
+  }, [pathName]);
 
-        const awardData = await getUserAwards(data.id);
-        if (awardData) {
-          setUserAwards(awardData);
-        }
-      } catch (error) {
-        console.log(error);
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchCurrentUserIdData();
+    }
+  }, [isLoggedIn]);
+
+  const fetchCurrentUserIdData = async () => {
+    try {
+      if (isLoggedIn) {
+        const currentUserIdData = await getCurrentUserId();
+        setCurrentUserId(currentUserIdData);
       }
-    };
-    fetchData();
-  }, []);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const isCurrentUserPage = currentUserId === userData?.id;
+
+  const fetchData = async (userId: string) => {
+    try {
+      const data = await getUserIdData(userId);
+      setUserData(data);
+      setUserId(data.id);
+      if (data.team_id) {
+        const teamsData = await getTeams();
+        const baseballCategoryData = await getBaseballCategory();
+        const prefectureData = await getPrefectures();
+        const userTeam = teamsData.find(
+          (team: { id: any }) => team.id === data.team_id
+        );
+        if (userTeam) {
+          setTeamData([userTeam]);
+        }
+        const category = baseballCategoryData.find(
+          (category: { id: number }) => category.id === userTeam.category_id
+        );
+        if (category) {
+          setTeamCategoryName(category.name);
+        }
+        const prefecture = prefectureData.find(
+          (prefecture: { id: number }) =>
+            prefecture.id === userTeam.prefecture_id
+        );
+        if (prefecture) {
+          setTeamPrefectureName(prefecture.name);
+        }
+      }
+
+      const awardData = await getUserAwards(data.id);
+      if (awardData) {
+        setUserAwards(awardData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!userData) {
     return (
@@ -100,21 +133,7 @@ export default function MyPage() {
         <main className="h-full">
           <div className="pt-16 pb-36 bg-main">
             <div className=" px-4">
-              <div className="flex gap-5">
-                <Avatar
-                  size="lg"
-                  isBordered
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${userData.image.url}`}
-                />
-                <div className="flex flex-col gap-1.5 items-start justify-center">
-                  <h1 className="text-lg font-semibold leading-none">
-                    {userData.name}
-                  </h1>
-                  <p className="text-sm tracking-tight text-zinc-400">
-                    @{userData.user_id}
-                  </p>
-                </div>
-              </div>
+              <AvatarComponent userData={userData} />
               {userData.introduction?.length > 0 ? (
                 <>
                   <p className="text-sm mt-4">{userData.introduction}</p>
@@ -220,13 +239,24 @@ export default function MyPage() {
                 </div>
               </div>
               <div className="flex items-center gap-x-4 mt-4">
-                <Button
-                  href={`${userData.user_id}/edit`}
-                  as={Link}
-                  className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
-                >
-                  プロフィール編集
-                </Button>
+                {isCurrentUserPage ? (
+                  <>
+                    <Button
+                      href={`${userData.user_id}/edit`}
+                      as={Link}
+                      className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
+                    >
+                      プロフィール編集
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5">
+                      フォローする
+                    </Button>
+                  </>
+                )}
+
                 <Button
                   href="/share"
                   as={Link}
@@ -248,14 +278,14 @@ export default function MyPage() {
                     title="成績"
                     className="font-bold tracking-wide"
                   >
-                    <IndividualResultsList />
+                    <IndividualResultsList userId={userId} />
                   </Tab>
                   <Tab
                     key="game"
                     title="試合"
                     className="font-bold tracking-wide"
                   >
-                    <MatchResultList />
+                    <MatchResultList userId={userId} />
                   </Tab>
                   {/* <Tab
                 key="message"

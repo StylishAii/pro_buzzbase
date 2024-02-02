@@ -1,5 +1,15 @@
 import axiosInstance from "@app/utils/axiosInstance";
 
+export const getTeamName = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/api/v1/teams/${id}/team_name`);
+    return response.data.name;
+  } catch (error) {
+    console.log(error);
+    return "";
+  }
+};
+
 export const getTeams = async () => {
   try {
     const response = await axiosInstance.get("/api/v1/teams");

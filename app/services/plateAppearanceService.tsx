@@ -54,3 +54,32 @@ export const checkExistingPlateAppearance = async (
     return null;
   }
 };
+
+export const getCurrentPlateAppearance = async (
+  gameResultId: number | null
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/current_plate_search?game_result_id=${gameResultId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getCurrentPlateAppearanceUserId = async (
+  userId: number,
+  gameResultId: number | null
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/current_plate_search_user_id?user_id=${userId}&game_result_id=${gameResultId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
