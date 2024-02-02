@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
+import { updatePitchingResultId } from "@app/services/gameResultsService";
 import {
   checkExistingPitchingResult,
   createPitchingResult,
@@ -297,7 +298,21 @@ export default function PitchingRecord() {
           pitchingResultData
         );
       } else {
-        await createPitchingResult(pitchingResultData);
+        const response = await createPitchingResult(pitchingResultData);
+        if (
+          typeof currentUserId !== "undefined" &&
+          localStorageGameResultId !== null
+        ) {
+          const updatePitchingResultData = {
+            game_result: {
+              pitching_result_id: response.id,
+            },
+          };
+          await updatePitchingResultId(
+            localStorageGameResultId,
+            updatePitchingResultData
+          );
+        }
       }
       router.push(`/game-result/summary/`);
     } catch (error) {

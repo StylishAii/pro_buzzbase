@@ -224,33 +224,18 @@ export default function ResultsSummary() {
 
   const handleShare = () => {};
   const handleResultComplete = () => {
-    router.push("/game-result/lists");
+    router.push("/game-result/record");
   };
 
   return (
     <>
       <SummaryResultHeader
         onSummaryResult={handleResultComplete}
-        text="試合一覧へ"
+        text="編集"
       />
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-20 px-4">
-            <h2 className="text-xl font-bold text-center">試合結果まとめ</h2>
-            <p className="text-sm text-center mt-6">
-              成績を友達にシェアしよう！
-            </p>
-            <div className="flex justify-center">
-              <Button
-                color="primary"
-                size="sm"
-                endContent={<ShareIcon stroke="#F4F4F4" />}
-                className="mt-4"
-                onChange={handleShare}
-              >
-                成績をシェア
-              </Button>
-            </div>
             {/* 試合情報 */}
             <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
               {matchResult ? (
@@ -475,12 +460,20 @@ export default function ResultsSummary() {
             ) : (
               <></>
             )}
-            <Link
-              href={`/mypage/${currentUsersUserId}`}
-              className="text-yellow-600 border-b-1 border-yellow-600 text-sm mt-8 ml-auto mr-0 block w-fit"
-            >
-              マイページへ
-            </Link>
+            <p className="text-sm text-center mt-6">
+              成績を友達にシェアしよう！
+            </p>
+            <div className="flex justify-center">
+              <Button
+                color="primary"
+                size="sm"
+                endContent={<ShareIcon stroke="#F4F4F4" />}
+                className="mt-4"
+                onChange={handleShare}
+              >
+                成績をシェア
+              </Button>
+            </div>
           </div>
         </div>
       </main>

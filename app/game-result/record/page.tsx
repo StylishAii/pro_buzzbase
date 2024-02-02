@@ -223,6 +223,7 @@ export default function GameRecord() {
 
   // 自チーム名設定
   const handleMyTeamChange = (event: any) => {
+    setExistingMyTeam(event.target.value);
     setMyTeam(event.target.value);
   };
 
@@ -411,8 +412,12 @@ export default function GameRecord() {
           user_id: Number(userId),
           date_and_time: gameDate,
           match_type: matchType,
-          my_team_id: Number(myTeamId),
-          opponent_team_id: Number(opponentTeamId),
+          my_team_id: Number(existingMyTeam)
+            ? Number(existingMyTeam)
+            : Number(myTeamId),
+          opponent_team_id: existingOpponentTeam
+            ? existingOpponentTeam
+            : Number(opponentTeamId),
           my_team_score: myTeamScore,
           opponent_team_score: opponentTeamScore,
           batting_order: existingMatchBattingOrder
@@ -420,7 +425,7 @@ export default function GameRecord() {
             : matchBattingOrder,
           defensive_position: existingDefensivePosition
             ? existingDefensivePosition
-            : defensivePosition,
+            : myPosition,
           tournament_id: tournamentId,
           memo: matchMemo,
         },
@@ -645,7 +650,6 @@ export default function GameRecord() {
                   placeholder="守備"
                   onChange={handleDefensivePositionChange}
                   className="grid justify-between items-center grid-cols-[auto_110px]"
-                  defaultSelectedKeys={myPosition}
                   selectedKeys={
                     existingDefensivePosition
                       ? existingDefensivePosition
