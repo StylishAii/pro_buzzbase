@@ -1,8 +1,12 @@
 "use client";
 import FollowButton from "@app/components/button/FollowButton";
 import HeaderBack from "@app/components/header/HeaderBack";
-import { getFollowersUser, getUserId } from "@app/services/userService";
-import { User } from "@nextui-org/react";
+import {
+  getCurrentUserId,
+  getFollowersUser,
+  getUserId,
+} from "@app/services/userService";
+import { User, user } from "@nextui-org/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
@@ -15,6 +19,7 @@ export default function Followers() {
   const [followers, setFollowers] = useState<FollowingUser[]>([]);
   const [userIdName, setUserIdName] = useState("");
   const [userId, setUserId] = useState<UserId>();
+  const [currentUserId, setCurrentUserId] = useState(null);
   const pathName = usePathname();
 
   useEffect(() => {
@@ -38,6 +43,8 @@ export default function Followers() {
       if (response) {
         setUserId(response);
       }
+      const responseCurrentUserId = await getCurrentUserId();
+      setCurrentUserId(responseCurrentUserId);
     } catch (error) {
       console.log(error);
     }
@@ -88,10 +95,16 @@ export default function Followers() {
                     />
                   </Link>
                   <div>
-                    <FollowButton
-                      userId={follow.id}
-                      isFollowing={follow.isFollowing}
-                    />
+                    {follow.id === currentUserId ? (
+                      <></>
+                    ) : (
+                      <>
+                        <FollowButton
+                          userId={follow.id}
+                          isFollowing={follow.isFollowing}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               ))}

@@ -1,7 +1,11 @@
 "use client";
 import FollowButton from "@app/components/button/FollowButton";
 import HeaderBack from "@app/components/header/HeaderBack";
-import { getFollowingUser, getUserId } from "@app/services/userService";
+import {
+  getCurrentUserId,
+  getFollowingUser,
+  getUserId,
+} from "@app/services/userService";
 import { User } from "@nextui-org/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,6 +19,7 @@ export default function Following() {
   const [following, setFollowing] = useState<FollowingUser[]>([]);
   const [userIdName, setUserIdName] = useState("");
   const [userId, setUserId] = useState<UserId>();
+  const [currentUserId, setCurrentUserId] = useState(null);
   const pathName = usePathname();
 
   useEffect(() => {
@@ -38,6 +43,8 @@ export default function Following() {
       if (response) {
         setUserId(response);
       }
+      const responseCurrentUserId = await getCurrentUserId();
+      setCurrentUserId(responseCurrentUserId);
     } catch (error) {
       console.log(error);
     }
@@ -74,7 +81,10 @@ export default function Following() {
             </div>
             <div className="px-4 py-5 grid gap-y-3">
               {following.map((follow) => (
-                <div key={follow.id} className="grid grid-cols-[1fr_auto] items-center ">
+                <div
+                  key={follow.id}
+                  className="grid grid-cols-[1fr_auto] items-center "
+                >
                   <Link href={`/mypage/${follow.user_id}/`} className="block">
                     <User
                       name={follow.name}
@@ -85,10 +95,16 @@ export default function Following() {
                     />
                   </Link>
                   <div>
-                    <FollowButton
-                      userId={follow.id}
-                      isFollowing={follow.isFollowing}
-                    />
+                    {follow.id === currentUserId ? (
+                      <></>
+                    ) : (
+                      <>
+                        <FollowButton
+                          userId={follow.id}
+                          isFollowing={follow.isFollowing}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
