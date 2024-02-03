@@ -43,8 +43,6 @@ export default function Following() {
     }
   };
 
-  console.log(userId);
-
   const fetchFollowingUser = async (userId: number) => {
     try {
       const response = await getFollowingUser(userId);
@@ -53,8 +51,6 @@ export default function Following() {
       console.log("フォローの取得に失敗しました", error);
     }
   };
-
-  console.log(following);
 
   return (
     <>
