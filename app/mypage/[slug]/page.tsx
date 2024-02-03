@@ -232,18 +232,26 @@ export default function MyPage() {
               )}
 
               <div className="flex items-center gap-x-4 mt-2">
-                <div className="flex gap-x-1">
-                  <span className="text-sm font-bold">{userData.following_count}</span>
-                  <p className="text-sm font-light text-zinc-400 tracking-tighter">
-                    フォロー中
-                  </p>
-                </div>
-                <div className="flex gap-x-1">
-                  <span className="text-sm font-bold">{userData.followers_count}</span>
-                  <p className="text-sm font-light text-zinc-400 tracking-tighter">
-                    フォロワー
-                  </p>
-                </div>
+                <Link href={`/mypage/${userData.user.user_id}/following/`}>
+                  <div className="flex gap-x-1">
+                    <span className="text-sm font-bold text-white">
+                      {userData.following_count}
+                    </span>
+                    <p className="text-sm font-light text-zinc-400 tracking-tighter">
+                      フォロー中
+                    </p>
+                  </div>
+                </Link>
+                <Link href={`/mypage/${userData.user.user_id}/followers/`}>
+                  <div className="flex gap-x-1">
+                    <span className="text-sm font-bold text-white">
+                      {userData.followers_count}
+                    </span>
+                    <p className="text-sm font-light text-zinc-400 tracking-tighter">
+                      フォロワー
+                    </p>
+                  </div>
+                </Link>
               </div>
               <div className="flex items-center gap-x-4 mt-4">
                 {isCurrentUserPage ? (
