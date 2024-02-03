@@ -332,3 +332,12 @@ interface FollowButtonProps {
   userId: number;
   isFollowing: boolean;
 }
+
+interface FollowingUser {
+  id: number;
+  image: {
+    url: string;
+  };
+  name: string;
+  user_id: string;
+}
