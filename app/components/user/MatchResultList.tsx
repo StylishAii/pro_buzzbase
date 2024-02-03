@@ -14,7 +14,7 @@ import {
   getCurrentPlateAppearance,
   getCurrentPlateAppearanceUserId,
 } from "@app/services/plateAppearanceService";
-import { getCurrentUserId, getUserId } from "@app/services/userService";
+import { getCurrentUserId} from "@app/services/userService";
 import { useEffect, useState } from "react";
 
 type GameResult = {

@@ -67,12 +67,12 @@ export const getCurrentUsersUserId = async (id: number | null) => {
   }
 };
 
-export const getUserId = async (user_id: number) => {
+export const getUserId = async (user_id: string) => {
   try {
     const response = await axiosInstance.get(
       `/api/v1/users/show_by_user_id?user_id=${user_id}`
     );
-    return response.data.user_id;
+    return response.data;
   } catch (error) {
     console.log(error);
   }
@@ -83,7 +83,7 @@ export const userFollow = async (userId: number) => {
     const response = await axiosInstance.post(
       `/api/v1/relationships?followed_id=${userId}`
     );
-    return response.data
+    return response.data;
   } catch (error) {
     console.log(error);
     throw error;
@@ -92,10 +92,32 @@ export const userFollow = async (userId: number) => {
 
 export const userUnFollow = async (id: number) => {
   try {
-    const response = await axiosInstance.delete(
-      `/api/v1/relationships/${id}`
+    const response = await axiosInstance.delete(`/api/v1/relationships/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getFollowingUser = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/users/${id}/following_users`
     );
-    return response.data
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getFollowersUser = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/users/${id}/followers_users`
+    );
+    return response.data;
   } catch (error) {
     console.log(error);
     throw error;
