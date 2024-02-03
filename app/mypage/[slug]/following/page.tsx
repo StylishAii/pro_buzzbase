@@ -1,4 +1,5 @@
 "use client";
+import FollowButton from "@app/components/button/FollowButton";
 import HeaderBack from "@app/components/header/HeaderBack";
 import { getFollowingUser, getUserId } from "@app/services/userService";
 import { User } from "@nextui-org/react";
@@ -77,7 +78,7 @@ export default function Following() {
             </div>
             <div className="px-4 py-5 grid gap-y-3">
               {following.map((follow) => (
-                <div key={follow.id}>
+                <div key={follow.id} className="grid grid-cols-[1fr_auto] items-center ">
                   <Link href={`/mypage/${follow.user_id}/`} className="block">
                     <User
                       name={follow.name}
@@ -87,6 +88,12 @@ export default function Following() {
                       }}
                     />
                   </Link>
+                  <div>
+                    <FollowButton
+                      userId={follow.id}
+                      isFollowing={follow.isFollowing}
+                    />
+                  </div>
                 </div>
               ))}
             </div>

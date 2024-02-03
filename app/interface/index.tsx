@@ -340,4 +340,5 @@ interface FollowingUser {
   };
   name: string;
   user_id: string;
+  isFollowing: boolean;
 }
