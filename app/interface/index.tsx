@@ -342,3 +342,11 @@ interface FollowingUser {
   user_id: string;
   isFollowing: boolean;
 }
+
+interface GroupsData {
+  icon: {
+    url: string;
+  };
+  id: number;
+  name: string;
+}

@@ -1,8 +1,28 @@
+"use client";
 import Header from "@app/components/header/Header";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
-import { Button, Divider, Link } from "@nextui-org/react";
+import { getGroups } from "@app/services/groupService";
+import { Avatar, Button, Divider, Link } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 
 export default function Group() {
+  const [groups, setGroups] = useState<GroupsData[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const responseGroups = await getGroups();
+      setGroups(responseGroups);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(groups);
+
   return (
     <>
       <div className="buzz-dark">
@@ -33,6 +53,21 @@ export default function Group() {
               <Divider className="mt-8" />
               <div className="mt-7">
                 <h2 className="text-2xl font-bold">グループ</h2>
+                <div className="mt-5 grid gap-y-5">
+                  {groups.map((group) => (
+                    <div
+                      key={group.id}
+                      className="grid grid-cols-[56px_1fr] items-center gap-x-4"
+                    >
+                      <Avatar
+                        size="lg"
+                        isBordered
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`}
+                      />
+                      <p className="text-lg font-bold">{group.name}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </main>
