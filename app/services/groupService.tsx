@@ -23,3 +23,13 @@ export const getGroups = async () => {
     throw error;
   }
 };
+
+export const getGroupDetail = async (id: number) => {
+  try {
+    const response = await axiosInstance.get(`/api/v1/groups/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
