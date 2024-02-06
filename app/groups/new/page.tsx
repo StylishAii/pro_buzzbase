@@ -4,6 +4,7 @@ import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave"
 import { createGroup } from "@app/services/groupService";
 import { getCurrentUserId, getFollowingUser } from "@app/services/userService";
 import { Avatar, Checkbox, Input, User } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function GroupNew() {
@@ -18,6 +19,7 @@ export default function GroupNew() {
     icon: null,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     fetchData();
@@ -121,8 +123,8 @@ export default function GroupNew() {
       formData.append("invite_user_ids[]", userId.toString());
     });
     try {
-      await createGroup(formData);
-      console.log(group);
+      const response = await createGroup(formData);
+      router.push(`/groups/${response.id}/`);
     } catch (error) {
       console.log(error);
     }
