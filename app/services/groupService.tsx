@@ -14,9 +14,11 @@ export const createGroup = async (formData: FormData) => {
   }
 };
 
-export const getGroups = async () => {
+export const getGroups = async (userId: number) => {
   try {
-    const response = await axiosInstance.get("/api/v1/groups");
+    const response = await axiosInstance.get(
+      `/api/v1/groups/?userId=${userId}`
+    );
     return response.data;
   } catch (error) {
     console.log(error);

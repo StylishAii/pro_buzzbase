@@ -2,33 +2,50 @@
 import Header from "@app/components/header/Header";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
 import { getGroups } from "@app/services/groupService";
+import { getCurrentUserId } from "@app/services/userService";
 import { Avatar, Button, Divider, Link } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
 export default function Group() {
   const [groups, setGroups] = useState<GroupsData[]>([]);
+  const [currentUserId, setCurrentUserId] = useState<number | undefined>(
+    undefined
+  );
 
   useEffect(() => {
-    fetchData();
+    fetchUserIdData();
   }, []);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    if (currentUserId !== undefined) {
+      fetchData(currentUserId);
+    }
+  }, [currentUserId]);
+
+  const fetchUserIdData = async () => {
     try {
-      const responseGroups = await getGroups();
+      const responseCurrentUserId = await getCurrentUserId();
+      setCurrentUserId(responseCurrentUserId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchData = async (currentUserId: number) => {
+    try {
+      const responseGroups = await getGroups(currentUserId);
       setGroups(responseGroups);
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(groups);
-
   return (
     <>
       <div className="buzz-dark">
         <Header />
-        <div className="h-full">
-          <main className="h-full">
+        <div className="h-full bg-main">
+          <main className="h-full pb-16">
             <div className="px-4 py-14">
               <p className="text-base mt-6">
                 ユーザーを招待してグループを作成しよう！
@@ -55,17 +72,18 @@ export default function Group() {
                 <h2 className="text-2xl font-bold">グループ</h2>
                 <div className="mt-5 grid gap-y-5">
                   {groups.map((group) => (
-                    <div
-                      key={group.id}
-                      className="grid grid-cols-[56px_1fr] items-center gap-x-4"
-                    >
-                      <Avatar
-                        size="lg"
-                        isBordered
-                        src={`${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`}
-                      />
-                      <p className="text-lg font-bold">{group.name}</p>
-                    </div>
+                    <Link key={group.id} href={`/groups/${group.id}`}>
+                      <div className="grid grid-cols-[56px_1fr] items-center gap-x-4">
+                        <Avatar
+                          size="lg"
+                          isBordered
+                          src={`${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`}
+                        />
+                        <p className="text-lg font-bold text-white">
+                          {group.name}
+                        </p>
+                      </div>
+                    </Link>
                   ))}
                 </div>
               </div>
