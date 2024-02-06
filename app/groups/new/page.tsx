@@ -1,4 +1,5 @@
 "use client";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
 import { createGroup } from "@app/services/groupService";
 import { getCurrentUserId, getFollowingUser } from "@app/services/userService";
@@ -9,6 +10,9 @@ export default function GroupNew() {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [following, setFollowing] = useState<FollowingUser[]>([]);
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
+  const [isGroupName, setIsGroupName] = useState(true);
+  const [isGroupUsers, setIsGroupUsers] = useState(true);
   const [group, setGroup] = useState<{ name: string; icon: string | null }>({
     name: "",
     icon: null,
@@ -68,8 +72,46 @@ export default function GroupNew() {
     });
   };
 
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 2000);
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    let newErrors = [];
+
+    if (!group.name) {
+      setIsGroupName(false);
+      isValid = false;
+      newErrors.push("グループ名を設定してください");
+    } else {
+      setIsGroupName(true);
+    }
+
+    if (selectedUserIds.length === 0) {
+      setIsGroupUsers(false);
+      isValid = false;
+      newErrors.push("メンバーを選択してください");
+    } else {
+      setIsGroupUsers(true);
+    }
+
+    if (!isValid) {
+      setErrorsWithTimeout(newErrors);
+    }
+
+    return isValid;
+  };
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+    setErrors([]);
     const formData = new FormData();
     formData.append("group[name]", group.name);
     if (fileInputRef.current?.files && fileInputRef.current.files.length > 0) {
@@ -86,15 +128,14 @@ export default function GroupNew() {
     }
   };
 
-  console.log(selectedUserIds);
-
   return (
     <>
       <div className="buzz-dark">
         <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"作成"} />
         <div className="h-full bg-main">
           <main className="h-full">
-            <div className="px-4 py-14">
+            <div className="px-4 py-14 relative">
+              <ErrorMessages errors={errors} />
               <h2 className="text-2xl font-bold mt-5">グループ設定</h2>
               <form>
                 <div className="grid grid-cols-[72px_1fr] gap-x-6 items-start mt-6">
@@ -129,7 +170,7 @@ export default function GroupNew() {
                       type="text"
                       variant="underlined"
                       label="グループ名"
-                      color="primary"
+                      color={isGroupName ? "primary" : "danger"}
                       size="lg"
                       onChange={handleChange}
                     />
