@@ -82,6 +82,9 @@ type BattingAverage = {
   id: number | null;
   runs_batted_in: number | null;
   stealing_base: number | null;
+  name: string;
+  user_id: string;
+  image_url: string;
 };
 
 type BattingStats = {
@@ -126,7 +129,6 @@ export default function GroupDetail({ params }: GroupDetailProps) {
     try {
       const responseGroupDetail = await getGroupDetail(params.slug);
       setGroupData(responseGroupDetail);
-      setBattingAverages(responseGroupDetail.batting_averages);
       setAcceptedUsers(responseGroupDetail.accepted_users);
 
       if (responseGroupDetail) {
@@ -147,6 +149,24 @@ export default function GroupDetail({ params }: GroupDetailProps) {
           }
         );
         setBattingStats(battingStatsWithUsersData);
+
+        const battingAverageWithUsersData = responseGroupDetail.batting_averages
+          .flat()
+          .map((stats: any) => {
+            const userInfo = responseGroupDetail.accepted_users.find(
+              (user: any) => user.id === stats.user_id
+            );
+            if (userInfo) {
+              return {
+                ...stats,
+                name: userInfo.name,
+                user_id: userInfo.user_id,
+                image_url: userInfo.image.url,
+              };
+            }
+            return stats;
+          });
+        setBattingAverages(battingAverageWithUsersData);
       }
     } catch (error) {
       console.log(error);
@@ -195,6 +215,12 @@ export default function GroupDetail({ params }: GroupDetailProps) {
                         </Button>
                       ))}
                     </div>
+                    <div className="mt-6">
+                      <GroupBattingRankingTable
+                        battingAverage={battingAverage}
+                        battingStats={battingStats}
+                      />
+                    </div>
                   </Tab>
                   <Tab
                     key="pitching"
@@ -218,12 +244,6 @@ export default function GroupDetail({ params }: GroupDetailProps) {
                     </div>
                   </Tab>
                 </Tabs>
-                <div className="mt-6">
-                  <GroupBattingRankingTable
-                    battingAverage={battingAverage}
-                    battingStats={battingStats}
-                  />
-                </div>
               </div>
             </div>
           </main>
