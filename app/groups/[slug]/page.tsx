@@ -1,7 +1,8 @@
 "use client";
 import HeaderBackLink from "@app/components/header/HeaderBackLink";
+import GroupBattingRankingTable from "@app/components/table/GroupBattingRankingTable";
 import { getGroupDetail } from "@app/services/groupService";
-import { Avatar, Button, Tab, Tabs } from "@nextui-org/react";
+import { Button, Tab, Tabs } from "@nextui-org/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -29,12 +30,18 @@ type GroupsDetailData = {
       id: number | null;
       runs_batted_in: number | null;
       stealing_base: number | null;
+      name: string;
+      user_id: string;
+      image: {
+        url: string;
+      };
     }
   ];
   batting_stats: [
     {
       batting_average: number;
       on_base_percentage: number;
+      user_id: string;
     }
   ];
   pitching_aggregate: [
@@ -60,6 +67,31 @@ type GroupsDetailData = {
   id: number;
 };
 
+type AcceptedUsers = {
+  id: number;
+  image: {
+    url: string;
+  };
+  name: string;
+  user_id: string;
+};
+
+type BattingAverage = {
+  hit: number | null;
+  home_run: number | null;
+  id: number | null;
+  runs_batted_in: number | null;
+  stealing_base: number | null;
+};
+
+type BattingStats = {
+  batting_average: number;
+  on_base_percentage: number;
+  name: string;
+  user_id: string;
+  image_url: string;
+};
+
 const BattingAverageTitle = [
   { id: 0, title: "打率" },
   { id: 1, title: "本塁打" },
@@ -82,6 +114,9 @@ export default function GroupDetail({ params }: GroupDetailProps) {
   const [groupData, setGroupData] = useState<GroupsDetailData | undefined>(
     undefined
   );
+  const [acceptedUsers, setAcceptedUsers] = useState<AcceptedUsers[]>();
+  const [battingAverage, setBattingAverages] = useState<BattingAverage[]>();
+  const [battingStats, setBattingStats] = useState<BattingStats[]>();
 
   useEffect(() => {
     fetchData();
@@ -91,6 +126,28 @@ export default function GroupDetail({ params }: GroupDetailProps) {
     try {
       const responseGroupDetail = await getGroupDetail(params.slug);
       setGroupData(responseGroupDetail);
+      setBattingAverages(responseGroupDetail.batting_averages);
+      setAcceptedUsers(responseGroupDetail.accepted_users);
+
+      if (responseGroupDetail) {
+        const battingStatsWithUsersData = responseGroupDetail.batting_stats.map(
+          (stats: any) => {
+            const userInfo = responseGroupDetail.accepted_users.find(
+              (user: any) => user.id === stats.user_id
+            );
+            if (userInfo) {
+              return {
+                ...stats,
+                name: userInfo.name,
+                user_id: userInfo.user_id,
+                image_url: userInfo.image.url,
+              };
+            }
+            return stats;
+          }
+        );
+        setBattingStats(battingStatsWithUsersData);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -108,6 +165,7 @@ export default function GroupDetail({ params }: GroupDetailProps) {
         <div className="h-full">
           <main className="h-full">
             <div className="pt-16 pb-36 px-4 bg-main">
+              <h2 className="text-xl font-bold mt-4">個人成績ランキング</h2>
               <div>
                 <Tabs
                   color="primary"
@@ -115,7 +173,7 @@ export default function GroupDetail({ params }: GroupDetailProps) {
                   aria-label="成績種類"
                   radius="md"
                   variant="solid"
-                  className="w-full grid mt-4"
+                  className="w-full grid mt-5"
                 >
                   <Tab
                     key="batting"
@@ -160,6 +218,12 @@ export default function GroupDetail({ params }: GroupDetailProps) {
                     </div>
                   </Tab>
                 </Tabs>
+                <div className="mt-6">
+                  <GroupBattingRankingTable
+                    battingAverage={battingAverage}
+                    battingStats={battingStats}
+                  />
+                </div>
               </div>
             </div>
           </main>
