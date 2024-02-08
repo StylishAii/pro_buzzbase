@@ -1,6 +1,7 @@
 "use client";
 import HeaderBackLink from "@app/components/header/HeaderBackLink";
 import GroupBattingRankingTable from "@app/components/table/GroupBattingRankingTable";
+import GroupPitchingRankingTable from "@app/components/table/GroupPitchingRankingTable";
 import { getGroupDetail } from "@app/services/groupService";
 import { Button, Tab, Tabs } from "@nextui-org/react";
 import Link from "next/link";
@@ -56,6 +57,7 @@ type GroupsDetailData = {
     {
       era: number;
       win_percentage: number;
+      user_id: string;
     }
   ];
   group: {
@@ -95,6 +97,24 @@ type BattingStats = {
   image_url: string;
 };
 
+type PitchingAggregate = {
+  win: number;
+  hold: number;
+  saves: number;
+  strikeouts: number;
+  name: string;
+  user_id: string;
+  image_url: string;
+};
+
+type PitchingStats = {
+  era: number;
+  win_percentage: number;
+  name: string;
+  user_id: string;
+  image_url: string;
+};
+
 const BattingAverageTitle = [
   { id: 0, title: "打率" },
   { id: 1, title: "本塁打" },
@@ -120,6 +140,9 @@ export default function GroupDetail({ params }: GroupDetailProps) {
   const [acceptedUsers, setAcceptedUsers] = useState<AcceptedUsers[]>();
   const [battingAverage, setBattingAverages] = useState<BattingAverage[]>();
   const [battingStats, setBattingStats] = useState<BattingStats[]>();
+  const [pitchingAggregate, setPitchingAggregate] =
+    useState<PitchingAggregate[]>();
+  const [pitchingStats, setPitchingStats] = useState<PitchingStats[]>();
 
   useEffect(() => {
     fetchData();
@@ -167,13 +190,47 @@ export default function GroupDetail({ params }: GroupDetailProps) {
             return stats;
           });
         setBattingAverages(battingAverageWithUsersData);
+
+        const pitchingAggregateWithUsersData =
+          responseGroupDetail.pitching_aggregate.flat().map((stats: any) => {
+            const userInfo = responseGroupDetail.accepted_users.find(
+              (user: any) => user.id === stats.user_id
+            );
+            if (userInfo) {
+              return {
+                ...stats,
+                name: userInfo.name,
+                user_id: userInfo.user_id,
+                image_url: userInfo.image.url,
+              };
+            }
+            return stats;
+          });
+        setPitchingAggregate(pitchingAggregateWithUsersData);
+
+        const pitchingStatsWithUsersData = responseGroupDetail.pitching_stats
+          .filter((stats: any) => stats != null)
+          .map((stats: any) => {
+            const userInfo = responseGroupDetail.accepted_users.find(
+              (user: any) => user.id === stats.user_id
+            );
+            if (userInfo) {
+              return {
+                ...stats,
+                name: userInfo.name,
+                user_id: userInfo.user_id,
+                image_url: userInfo.image.url,
+              };
+            }
+            return stats;
+          });
+        setPitchingStats(pitchingStatsWithUsersData);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(groupData);
   return (
     <>
       <div className="buzz-dark">
@@ -241,6 +298,12 @@ export default function GroupDetail({ params }: GroupDetailProps) {
                           {title.title}
                         </Button>
                       ))}
+                    </div>{" "}
+                    <div className="mt-6">
+                      <GroupPitchingRankingTable
+                        pitchingAggregate={pitchingAggregate}
+                        pitchingStats={pitchingStats}
+                      />
                     </div>
                   </Tab>
                 </Tabs>
