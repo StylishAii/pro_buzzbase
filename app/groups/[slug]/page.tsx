@@ -6,6 +6,8 @@ import { getGroupDetail } from "@app/services/groupService";
 import { Button, Tab, Tabs } from "@nextui-org/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import React from "react";
+import AnchorLink from "react-anchor-link-smooth-scroll";
 
 type GroupDetailProps = {
   params: {
@@ -116,21 +118,21 @@ type PitchingStats = {
 };
 
 const BattingAverageTitle = [
-  { id: 0, title: "打率" },
-  { id: 1, title: "本塁打" },
-  { id: 2, title: "打点" },
-  { id: 3, title: "安打" },
-  { id: 4, title: "盗塁" },
-  { id: 5, title: "出塁率" },
+  { id: 0, title: "打率", Link: "#battingAverage" },
+  { id: 1, title: "本塁打", Link: "#homeRun" },
+  { id: 2, title: "打点", Link: "#run" },
+  { id: 3, title: "安打", Link: "#hit" },
+  { id: 4, title: "盗塁", Link: "#stealingBase" },
+  { id: 5, title: "出塁率", Link: "#onBasePercentage" },
 ];
 
 const PitchingResultTitle = [
-  { id: 0, title: "防御率" },
-  { id: 1, title: "勝利" },
-  { id: 2, title: "セーブ" },
-  { id: 3, title: "HP" },
-  { id: 4, title: "奪三振" },
-  { id: 5, title: "勝率" },
+  { id: 0, title: "防御率", Link: "#era" },
+  { id: 1, title: "勝利", Link: "#win" },
+  { id: 2, title: "セーブ", Link: "#saves" },
+  { id: 3, title: "HP", Link: "#hp" },
+  { id: 4, title: "奪三振", Link: "#strikeouts" },
+  { id: 5, title: "勝率", Link: "#winPercentage" },
 ];
 
 export default function GroupDetail({ params }: GroupDetailProps) {
@@ -261,14 +263,14 @@ export default function GroupDetail({ params }: GroupDetailProps) {
                       {BattingAverageTitle.map((title) => (
                         <Button
                           key={title.id}
-                          href=""
-                          as={Link}
                           color="primary"
                           variant="ghost"
                           size="sm"
                           radius="sm"
                         >
-                          {title.title}
+                          <AnchorLink offset="100" href={title.Link}>
+                            {title.title}
+                          </AnchorLink>
                         </Button>
                       ))}
                     </div>
@@ -288,14 +290,14 @@ export default function GroupDetail({ params }: GroupDetailProps) {
                       {PitchingResultTitle.map((title) => (
                         <Button
                           key={title.id}
-                          href=""
-                          as={Link}
                           color="primary"
                           variant="ghost"
                           size="sm"
                           radius="sm"
                         >
-                          {title.title}
+                          <AnchorLink offset="100" href={title.Link}>
+                            {title.title}
+                          </AnchorLink>
                         </Button>
                       ))}
                     </div>{" "}

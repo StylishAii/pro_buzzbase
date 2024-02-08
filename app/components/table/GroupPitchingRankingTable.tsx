@@ -57,7 +57,7 @@ export default function GroupPitchingRankingTable(props: Props) {
   return (
     <>
       {/* 防御率 */}
-      <Table aria-label="防御率">
+      <Table aria-label="防御率" id="era">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             防御率
@@ -91,7 +91,7 @@ export default function GroupPitchingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 勝利 */}
-      <Table className="mt-8" aria-label="勝利">
+      <Table className="mt-8" aria-label="勝利" id="win">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             勝利
@@ -125,7 +125,7 @@ export default function GroupPitchingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* セーブ */}
-      <Table className="mt-8" aria-label="セーブ">
+      <Table className="mt-8" aria-label="セーブ" id="saves">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             セーブ
@@ -159,7 +159,7 @@ export default function GroupPitchingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* HP */}
-      <Table className="mt-8" aria-label="HP">
+      <Table className="mt-8" aria-label="HP" id="hp">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             HP
@@ -193,7 +193,7 @@ export default function GroupPitchingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 奪三振 */}
-      <Table className="mt-8" aria-label="奪三振">
+      <Table className="mt-8" aria-label="奪三振" id="strikeouts">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             奪三振
@@ -227,7 +227,7 @@ export default function GroupPitchingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 勝率 */}
-      <Table className="mt-8" aria-label="勝率">
+      <Table className="mt-8" aria-label="勝率" id="winPercentage">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             勝率
