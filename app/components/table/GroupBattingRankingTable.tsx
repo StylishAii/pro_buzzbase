@@ -59,12 +59,10 @@ export default function GroupBattingRankingTable(props: Props) {
     battingStats?.sort((a, b) => b.on_base_percentage - a.on_base_percentage) ||
     [];
 
-  console.log(battingAverage);
-  console.log(battingStats);
   return (
     <>
       {/* 打率 */}
-      <Table>
+      <Table aria-label="打率">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             打率
@@ -98,7 +96,7 @@ export default function GroupBattingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 本塁打 */}
-      <Table className="mt-8">
+      <Table className="mt-8" aria-label="本塁打">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             本塁打
@@ -132,7 +130,7 @@ export default function GroupBattingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 打点 */}
-      <Table className="mt-8">
+      <Table className="mt-8" aria-label="打点">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             打点
@@ -166,7 +164,7 @@ export default function GroupBattingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 安打 */}
-      <Table className="mt-8">
+      <Table className="mt-8" aria-label="安打">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             安打
@@ -200,7 +198,7 @@ export default function GroupBattingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 盗塁 */}
-      <Table className="mt-8">
+      <Table className="mt-8" aria-label="盗塁">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             盗塁
@@ -234,7 +232,7 @@ export default function GroupBattingRankingTable(props: Props) {
         </TableBody>
       </Table>
       {/* 出塁率 */}
-      <Table className="mt-8">
+      <Table className="mt-8" aria-label="出塁率">
         <TableHeader>
           <TableColumn className="text-base text-white font-bold text-center">
             出塁率
