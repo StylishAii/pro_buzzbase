@@ -270,7 +270,8 @@ export default function BattingRecord() {
           const resultName =
             battingResultsList.find((p) => p.id === plate.plate_result_id)
               ?.result || "";
-          const text = `${positionName}${resultName}`;
+          const shortFormResult = resultShortForms[resultName] || resultName;
+          const text = `${positionName}${shortFormResult}`;
 
           return {
             positionId,
