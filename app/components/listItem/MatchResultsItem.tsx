@@ -47,11 +47,15 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
             game.match_result.opponent_team_id
           );
           names[game.match_result.opponent_team_id] = teamName;
-          const tournamentName = await getTournamentName(
-            game.match_result.tournament_id
-          );
-          namesTournament[game.match_result.tournament_id] = tournamentName;
-        } 
+          if (game.match_result && game.match_result.tournament_id) {
+            const tournamentName = await getTournamentName(
+              game.match_result.tournament_id
+            );
+            namesTournament[game.match_result.tournament_id] = tournamentName;
+          } else {
+            namesTournament[game.match_result?.tournament_id] = "";
+          }
+        }
       }
 
       setOpponentTeamNames(names);
