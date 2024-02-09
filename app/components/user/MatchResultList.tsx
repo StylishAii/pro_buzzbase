@@ -106,6 +106,13 @@ export default function MatchResultList(props: UserId) {
         uniqueMatchTypeChange.unshift("全て");
         setAvailableMatchType(uniqueMatchTypeChange);
       }
+      if (filteredGameResultData && filteredGameResultData.length > 0) {
+        filteredGameResultData.sort((a: any, b: any) => {
+          const dateA = new Date(a.match_result.date_and_time).getTime();
+          const dateB = new Date(b.match_result.date_and_time).getTime();
+          return dateB - dateA;
+        });
+      }
       if (filteredGameResultData && plateAppearanceDataLists) {
         setGameResultIndex(filteredGameResultData);
         setPlateAppearance(plateAppearanceDataLists);
@@ -156,6 +163,11 @@ export default function MatchResultList(props: UserId) {
         } else {
           return type;
         }
+      });
+      gameResultsDataLists.sort((a: any, b: any) => {
+        const dateA = new Date(a.match_result.date_and_time).getTime();
+        const dateB = new Date(b.match_result.date_and_time).getTime();
+        return dateB - dateA;
       });
       uniqueMatchTypeChange.unshift("全て");
       setAvailableMatchType(uniqueMatchTypeChange);
