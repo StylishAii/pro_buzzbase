@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
-import HeaderNext from "@app/components/header/HeaderNext";
+import HeaderResult from "@app/components/header/HeaderResult";
+import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
 import { updateGameResult } from "@app/services/gameResultsService";
 import {
   checkExistingMatchResults,
@@ -18,6 +19,7 @@ import { getCurrentUserId, getUserData } from "@app/services/userService";
 import {
   Autocomplete,
   AutocompleteItem,
+  Button,
   Divider,
   Input,
   Radio,
@@ -466,23 +468,23 @@ export default function GameRecord() {
 
   return (
     <>
-      <HeaderNext onMatchResultSave={handleSubmit} />
+      <HeaderResult />
       <main className="h-full">
-        <div className="pb-32 relative">
+        <div className="pb-40 relative">
           <ErrorMessages errors={errors} />
-          <div className="pt-20 px-4">
-            <h2 className="text-xl font-bold text-center">
+          <div className="pt-12 px-4">
+            <div className="flex items-center justify-center gap-x-2">
+              <p className="text-xl font-medium text-yellow-500">試合結果</p>
+              <span className="opacity-40">→</span>
+              <p className="text-xl font-medium opacity-40">打撃結果</p>
+              <span className="opacity-40">→</span>
+              <p className="text-xl font-medium opacity-40">投手結果</p>
+            </div>
+            <h2 className="text-base text-center mt-5">
               試合結果を入力しよう！
             </h2>
-            <div className="flex items-center justify-center gap-x-2 mt-5">
-              <p className="text-sm">試合結果</p>
-              <span className="opacity-50">→</span>
-              <p className="text-sm opacity-50">打撃結果</p>
-              <span className="opacity-50">→</span>
-              <p className="text-sm opacity-50">投手結果</p>
-            </div>
-            <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
-              <form>
+            <form>
+              <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
                 <Input
                   isRequired
                   type="date"
@@ -677,8 +679,20 @@ export default function GameRecord() {
                   onChange={(event) => setMatchMemo(event.target.value)}
                   value={matchMemo !== null ? matchMemo : ""}
                 />
-              </form>
-            </div>
+              </div>
+              <div className="mt-8">
+                <Button
+                  color="primary"
+                  size="md"
+                  radius="sm"
+                  className="ml-auto mr-0 px-6 font-bold text-base flex items-center"
+                  onClick={handleSubmit}
+                  endContent={<NextArrowIcon stroke="#fff" />}
+                >
+                  打撃結果
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </main>
