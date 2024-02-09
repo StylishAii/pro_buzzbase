@@ -4,7 +4,6 @@ import { gameType, years } from "@app/data/TestData";
 import {
   getFilterGameResults,
   getFilterGameResultsUserId,
-  getGameResults,
 } from "@app/services/gameResultsService";
 import {
   getMatchResults,
@@ -14,7 +13,7 @@ import {
   getCurrentPlateAppearance,
   getCurrentPlateAppearanceUserId,
 } from "@app/services/plateAppearanceService";
-import { getCurrentUserId} from "@app/services/userService";
+import { getCurrentUserId } from "@app/services/userService";
 import { useEffect, useState } from "react";
 
 type GameResult = {
