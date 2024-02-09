@@ -42,12 +42,16 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
       const namesTournament: TournamentNames = {};
 
       for (const game of gameResult) {
-        const teamName = await getTeamName(game.match_result.opponent_team_id);
-        names[game.match_result.opponent_team_id] = teamName;
-        const tournamentName = await getTournamentName(
-          game.match_result.tournament_id
-        );
-        namesTournament[game.match_result.tournament_id] = tournamentName;
+        if (game.match_result && game.match_result.opponent_team_id) {
+          const teamName = await getTeamName(
+            game.match_result.opponent_team_id
+          );
+          names[game.match_result.opponent_team_id] = teamName;
+          const tournamentName = await getTournamentName(
+            game.match_result.tournament_id
+          );
+          namesTournament[game.match_result.tournament_id] = tournamentName;
+        } 
       }
 
       setOpponentTeamNames(names);
@@ -61,9 +65,9 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
     my_team_score: number;
     opponent_team_score: number;
   }) => {
-    if (match.my_team_score > match.opponent_team_score) {
+    if (match?.my_team_score > match?.opponent_team_score) {
       return <p className="text-red-500">◯</p>;
-    } else if (match.my_team_score < match.opponent_team_score) {
+    } else if (match?.my_team_score < match?.opponent_team_score) {
       return <p className="text-blue-500 text-lg">×</p>;
     } else {
       return <p className="text-lg">ー</p>;
@@ -166,7 +170,7 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
             </Button>
             <CardHeader className="p-0 flex-col items-start">
               <div className="flex items-center gap-x-2">
-                {game.match_result.match_type ? (
+                {game.match_result?.match_type ? (
                   <>
                     <Chip
                       variant="faded"
@@ -192,15 +196,15 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
                 )}
               </div>
               <p className="text-sm mt-2 text-zinc-400">
-                {tournamentNames[game.match_result.tournament_id]}
+                {tournamentNames[game.match_result?.tournament_id]}
               </p>
               <div className="flex gap-x-3 items-center mt-1">
                 <div className="flex gap-x-2 items-baseline">
                   {renderScoreResult(game.match_result)}
                   <div className="flex gap-x-2 items-baseline">
                     <p className="text-lg font-bold">
-                      {game.match_result.my_team_score} -{" "}
-                      {game.match_result.opponent_team_score}
+                      {game.match_result?.my_team_score} -{" "}
+                      {game.match_result?.opponent_team_score}
                     </p>
                   </div>
                 </div>
@@ -209,7 +213,7 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
                     vs.
                   </span>
                   <p className="text-base font-bold">
-                    {opponentTeamNames[game.match_result.opponent_team_id]}
+                    {opponentTeamNames[game.match_result?.opponent_team_id]}
                   </p>
                 </div>
               </div>
@@ -231,19 +235,31 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
               </ul>
               <p className="text-sm font-normal text-zinc-400 mt-2">投手</p>
               <ul className="flex flex-wrap gap-2 ">
-                <li className="font-light">
-                  {getInningPitched(game.pitching_result.innings_pitched)}
-                </li>
-                <li className="font-light">
-                  {game.pitching_result.run_allowed}失点
-                </li>
-
-                {game.pitching_result.win === 1 ? (
-                  <li className="text-red-500 font-bold">勝利投手</li>
-                ) : game.pitching_result.loss === 1 ? (
-                  <li className="text-blue-400 font-bold">敗戦投手</li>
+                {game.pitching_result &&
+                game.pitching_result.innings_pitched != null ? (
+                  <>
+                    <li className="font-light">
+                      {getInningPitched(game.pitching_result.innings_pitched)}
+                    </li>
+                    <li className="font-light">
+                      {game.pitching_result.run_allowed}失点
+                    </li>
+                  </>
                 ) : (
-                  ""
+                  <></>
+                )}
+                {game.pitching_result ? (
+                  <>
+                    {game.pitching_result.win === 1 ? (
+                      <li className="text-red-500 font-bold">勝利投手</li>
+                    ) : game.pitching_result.loss === 1 ? (
+                      <li className="text-blue-400 font-bold">敗戦投手</li>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                ) : (
+                  <></>
                 )}
               </ul>
             </CardBody>
