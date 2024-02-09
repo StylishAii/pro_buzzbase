@@ -79,7 +79,7 @@ export default function Following() {
                 フォロワー
               </Link>
             </div>
-            <div className="px-4 py-5 grid gap-y-3">
+            <div className="px-4 py-5 pb-24 grid gap-y-5 bg-main">
               {following.map((follow) => (
                 <div
                   key={follow.id}

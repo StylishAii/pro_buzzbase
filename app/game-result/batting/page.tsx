@@ -439,15 +439,16 @@ export default function BattingRecord() {
           : caughtStealing,
       },
     };
-    for (let i = 0; i < battingBoxes.length; i++) {
+    const filteredBattingBoxes = battingBoxes.filter((box) => box.result !== 0);
+    for (let i = 0; i < filteredBattingBoxes.length; i++) {
       const battingBox = battingBoxes[i];
-      const battingResult = battingBoxes[i].text.replace("-", "");
+      if (battingBox.text.replace("-", "") === "") continue;
       const plateAppearanceData = {
         plate_appearance: {
           game_result_id: localStorageGameResultId,
           user_id: currentUserId,
           batter_box_number: i + 1,
-          batting_result: battingResult,
+          batting_result: battingBox.text.replace("-", ""),
           batting_position_id: battingBox.position,
           plate_result_id: battingBox.result,
         },
@@ -466,6 +467,7 @@ export default function BattingRecord() {
           );
         } else {
           await createPlateAppearance(plateAppearanceData);
+          console.log(plateAppearanceData);
         }
       } catch (error) {
         console.log(`plate error :${error}`);

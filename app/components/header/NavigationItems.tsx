@@ -16,7 +16,7 @@ const NavigationItems = () => {
       icon: RecordIcon,
     },
     {
-      href: isLoggedIn ? "/group" : "/signin",
+      href: isLoggedIn ? "/groups" : "/signin",
       label: "グループ",
       icon: GroupIcon,
     },
