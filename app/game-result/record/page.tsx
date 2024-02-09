@@ -654,7 +654,7 @@ export default function GameRecord() {
                   className="grid justify-between items-center grid-cols-[auto_110px]"
                   selectedKeys={
                     existingDefensivePosition
-                      ? existingDefensivePosition
+                      ? [existingDefensivePosition]
                       : myPosition
                   }
                 >
@@ -687,7 +687,7 @@ export default function GameRecord() {
                   radius="sm"
                   className="ml-auto mr-0 px-6 font-bold text-base flex items-center"
                   onClick={handleSubmit}
-                  endContent={<NextArrowIcon stroke="#fff" />}
+                  endContent={<NextArrowIcon stroke="#F4F4F4" />}
                 >
                   打撃結果
                 </Button>
