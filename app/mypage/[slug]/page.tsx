@@ -139,7 +139,7 @@ export default function MyPage() {
       <div className="h-full">
         <main className="h-full">
           <div className="pt-16 pb-36 bg-main">
-            <div className=" px-4">
+            <div className="px-4">
               <AvatarComponent userData={userData} />
               {userData.user.introduction?.length > 0 ? (
                 <>
