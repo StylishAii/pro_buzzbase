@@ -21,6 +21,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const winOrLoss = [
+  { id: -1, value: "-" },
   { id: 0, value: "勝利投手" },
   { id: 1, value: "敗戦投手" },
 ];
@@ -168,6 +169,11 @@ export default function PitchingRecord() {
       setExistingWin(0);
       setLoss(1);
       setExistingLoss(1);
+    } else if (selectValue === "-1") {
+      setWin(0);
+      setExistingWin(0);
+      setLoss(0);
+      setExistingLoss(0);
     }
   };
 
@@ -357,7 +363,7 @@ export default function PitchingRecord() {
                         ? ["0"]
                         : existingLoss === 1
                         ? ["1"]
-                        : []
+                        : ["-1"]
                     }
                   >
                     {winOrLoss.map((result) => (
