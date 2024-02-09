@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
-import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
+import HeaderResult from "@app/components/header/HeaderResult";
+import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
 import { updatePitchingResultId } from "@app/services/gameResultsService";
 import {
   checkExistingPitchingResult,
@@ -9,6 +10,7 @@ import {
 } from "@app/services/pitchingResultsService";
 import { getCurrentUserId } from "@app/services/userService";
 import {
+  Button,
   Checkbox,
   Divider,
   Input,
@@ -321,23 +323,24 @@ export default function PitchingRecord() {
   };
   return (
     <>
-      <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"保存"} />
+      <HeaderResult />
       <main className="h-full">
         <div className="pb-32 relative">
           <ErrorMessages errors={errors} />
-          <div className="pt-20 px-4">
-            <h2 className="text-xl font-bold text-center">
-              投手成績を入力しよう！
-            </h2>
-            <div className="flex items-center justify-center gap-x-2 mt-5">
-              <p className="text-sm opacity-50">試合結果</p>
-              <span className="opacity-50">→</span>
-              <p className="text-sm opacity-50">打撃結果</p>
-              <span className="opacity-50">→</span>
-              <p className="text-sm">投手結果</p>
+          <div className="pt-12 px-4">
+            <div className="flex items-center justify-center gap-x-2">
+              <p className="text-xl font-medium opacity-40">試合結果</p>
+              <span className="opacity-40">→</span>
+              <p className="text-xl font-medium opacity-40">打撃結果</p>
+              <span className="opacity-40">→</span>
+              <p className="text-xl font-medium text-yellow-500">投手結果</p>
             </div>
-            <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
-              <form>
+            <h2 className="text-base text-center mt-5">
+              投手結果を入力しよう！
+            </h2>
+
+            <form>
+              <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
                 <>
                   {/* 勝敗 */}
                   <Select
@@ -609,8 +612,20 @@ export default function PitchingRecord() {
                     />
                   </div>
                 </>
-              </form>
-            </div>
+              </div>
+              <div className="mt-8">
+                <Button
+                  color="primary"
+                  size="md"
+                  radius="sm"
+                  className="ml-auto mr-0 px-6 font-bold text-base flex items-center"
+                  onClick={handleSubmit}
+                  endContent={<NextArrowIcon stroke="#F4F4F4" />}
+                >
+                  試合結果まとめ
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       </main>
