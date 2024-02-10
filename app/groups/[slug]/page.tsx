@@ -235,7 +235,7 @@ export default function GroupDetail({ params }: GroupDetailProps) {
 
   return (
     <>
-      <div className="buzz-dark">
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
         <HeaderBackLink
           backLink={"/groups"}
           groupName={groupData?.group.name}

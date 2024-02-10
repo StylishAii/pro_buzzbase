@@ -23,9 +23,11 @@ export default function Header() {
                   content={5}
                   isInvisible={false}
                   shape="circle"
+                  size="sm"
+                  
                 >
                   <Link>
-                    <NotificationIcon size={24} />
+                    <NotificationIcon size={20} />
                   </Link>
                 </Badge>
               </>

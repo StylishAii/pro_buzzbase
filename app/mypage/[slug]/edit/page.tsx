@@ -411,7 +411,7 @@ export default function ProfileEdit() {
   };
 
   return (
-    <div className="buzz-dark bg-main pb-24">
+    <div className="buzz-dark bg-main pb-24 flex flex-col w-full min-h-screen">
       <HeaderSave onProfileUpdate={handleSubmit} />
       <div className="h-full buzz-dark">
         <main className="h-full">

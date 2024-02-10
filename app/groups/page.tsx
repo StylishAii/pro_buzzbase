@@ -42,7 +42,7 @@ export default function Group() {
 
   return (
     <>
-      <div className="buzz-dark">
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
         <Header />
         <div className="h-full bg-main">
           <main className="h-full pb-16">
