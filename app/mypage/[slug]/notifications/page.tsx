@@ -1,0 +1,75 @@
+"use client";
+import Header from "@app/components/header/Header";
+import { GroupIcon } from "@app/components/icon/GroupIcon";
+import { getNotifications } from "@app/services/notificationsService";
+import { Avatar, Button, Divider } from "@nextui-org/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+export default function Notifications() {
+  const [notifications, setNotifications] = useState<
+    Notifications[] | undefined
+  >(undefined);
+
+  useEffect(() => {
+    fetchDate();
+  }, []);
+
+  const fetchDate = async () => {
+    try {
+      const response = await getNotifications();
+      setNotifications(response);
+    } catch (error) {}
+  };
+
+  console.log(notifications);
+
+  return (
+    <>
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
+        <Header />
+        <div className="h-full">
+          <main className="h-full">
+            <div className="px-4 py-16">
+              <h2 className="text-xl font-bold">通知</h2>
+              <div className="py-5 pb-24 grid gap-y-5 bg-main">
+                {notifications?.map((notice) => (
+                  <div key={notice.id}>
+                    {notice.event_type === "group_invitation" ? (
+                      <>
+                        <div className="grid grid-cols-[32px_1fr] gap-x-3">
+                          <GroupIcon fill="#e08e0a" width="32" height="32" />
+                          <div className="flex flex-col items-start gap-y-1 pt-1.5">
+                            <Avatar
+                              src={`${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`}
+                              size="sm"
+                              isBordered
+                              className="min-w-[28px] max-w-[28px] min-h-[28px] max-h-[28px]"
+                            />
+                            <p className="text-sm text-zinc-400">
+                              <span className="text-base text-white font-bold">
+                                {notice.actor_name}
+                              </span>
+                              さんから
+                              <span className="text-base text-white font-bold">
+                                {notice.group_name}
+                              </span>
+                              グループへ招待されました
+                            </p>
+                          </div>
+                        </div>
+                        <Divider className="mt-3" />
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </>
+  );
+}

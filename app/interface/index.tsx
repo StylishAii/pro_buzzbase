@@ -350,3 +350,16 @@ interface GroupsData {
   id: number;
   name: string;
 }
+
+interface Notifications {
+  id: number;
+  actor_name: string;
+  event_type: string;
+  event_id: number;
+  read_at: Date;
+  created_at: Date;
+  actor_icon: {
+    url: string;
+  };
+  group_name: string;
+}
