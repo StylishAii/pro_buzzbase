@@ -2,6 +2,7 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderResult from "@app/components/header/HeaderResult";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { updatePitchingResultId } from "@app/services/gameResultsService";
 import {
   checkExistingPitchingResult,
@@ -49,6 +50,13 @@ const fractions = [
 ];
 
 export default function PitchingRecord() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  if (!isLoggedIn) {
+    return router.push("/signin");
+  }
+
   const [win, setWin] = useState(0);
   const [existingWin, setExistingWin] = useState(0);
   const [loss, setLoss] = useState(0);
@@ -86,7 +94,6 @@ export default function PitchingRecord() {
     number | null
   >(null);
   const [errors, setErrors] = useState<string[]>([]);
-  const router = useRouter();
   const pathname = usePathname();
 
   const fetchData = async () => {

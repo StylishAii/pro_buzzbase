@@ -4,6 +4,7 @@ import PlusButton from "@app/components/button/PlusButton";
 import HeaderResult from "@app/components/header/HeaderResult";
 import { DeleteIcon } from "@app/components/icon/DeleteIcon";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import {
   checkExistingBattingAverage,
   createBattingAverage,
@@ -134,6 +135,12 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
 };
 
 export default function BattingRecord() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  if (!isLoggedIn) {
+    return router.push("/signin");
+  }
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [runsBattedIn, setRunsBattedIn] = useState(0);
   const [existingRunsBattedIn, setExistingRunsBattedIn] = useState(0);
@@ -178,7 +185,6 @@ export default function BattingRecord() {
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
-  const router = useRouter();
   const pathname = usePathname();
 
   const fetchData = async () => {

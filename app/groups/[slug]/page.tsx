@@ -3,6 +3,7 @@ import HeaderBackLink from "@app/components/header/HeaderBackLink";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import GroupBattingRankingTable from "@app/components/table/GroupBattingRankingTable";
 import GroupPitchingRankingTable from "@app/components/table/GroupPitchingRankingTable";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { getGroupDetail } from "@app/services/groupService";
 import { Button, Tab, Tabs } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
@@ -137,6 +138,13 @@ const PitchingResultTitle = [
 ];
 
 export default function GroupDetail({ params }: GroupDetailProps) {
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  if (!isLoggedIn) {
+    return router.push("/signin");
+  }
+  
   const [groupData, setGroupData] = useState<GroupsDetailData | undefined>(
     undefined
   );
@@ -146,7 +154,6 @@ export default function GroupDetail({ params }: GroupDetailProps) {
   const [pitchingAggregate, setPitchingAggregate] =
     useState<PitchingAggregate[]>();
   const [pitchingStats, setPitchingStats] = useState<PitchingStats[]>();
-  const router = useRouter();
 
   useEffect(() => {
     fetchData();

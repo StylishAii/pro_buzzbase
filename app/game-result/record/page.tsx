@@ -2,6 +2,7 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderResult from "@app/components/header/HeaderResult";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { updateGameResult } from "@app/services/gameResultsService";
 import {
   checkExistingMatchResults,
@@ -66,6 +67,13 @@ type userData = {
 };
 
 export default function GameRecord() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  if (!isLoggedIn) {
+    return router.push("/signin");
+  }
+  
   const [userData, setUserData] = useState<userData | null>(null);
   const [existingGameDate, setExistingGameDate] = useState<string>("");
   const [myTeam, setMyTeam] = useState("");
@@ -104,7 +112,6 @@ export default function GameRecord() {
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
-  const router = useRouter();
   const pathname = usePathname();
 
   const fetchData = async () => {
