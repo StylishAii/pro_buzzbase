@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-import { Link, Button } from "@nextui-org/react";
+import { Link, Button, Badge } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
-import Logout from "@app/components/auth/Logout";
+import { NotificationIcon } from "@app/components/icon/NotificationIcon";
 
 export default function Header() {
   const { isLoggedIn } = useAuthContext();
@@ -17,7 +17,18 @@ export default function Header() {
           <Link href="/">LOGO</Link>
           <div className="flex items-center gap-x-4">
             {isLoggedIn ? (
-              <Logout />
+              <>
+                <Badge
+                  color="danger"
+                  content={5}
+                  isInvisible={false}
+                  shape="circle"
+                >
+                  <Link>
+                    <NotificationIcon size={24} />
+                  </Link>
+                </Badge>
+              </>
             ) : (
               <>
                 <Link href="/signin" className="text-sm text-white">
