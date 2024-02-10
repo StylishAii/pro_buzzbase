@@ -15,7 +15,7 @@ import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import { getPrefectures } from "@app/services/prefectureService";
 import { getUserAwards } from "@app/services/awardsService";
 import AvatarComponent from "@app/components/user/AvatarComponent";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import FollowButton from "@app/components/button/FollowButton";
 
@@ -58,6 +58,7 @@ export default function MyPage() {
   const [userId, setUserId] = useState(0);
   const pathName = usePathname();
   const { isLoggedIn } = useAuthContext();
+  const router = useRouter();
 
   useEffect(() => {
     const pathParts = pathName.split("/");
@@ -120,8 +121,12 @@ export default function MyPage() {
       if (awardData) {
         setUserAwards(awardData);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        router.push("/404");
+      } else {
+        console.error(error);
+      }
     }
   };
 
