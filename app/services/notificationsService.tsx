@@ -1,8 +1,10 @@
 import axiosInstance from "@app/utils/axiosInstance";
 
-export const getNotifications = async () => {
+export const getNotifications = async (user_id: string) => {
   try {
-    const response = await axiosInstance.get("/api/v1/notifications");
+    const response = await axiosInstance.get(
+      `/api/v1/notifications?user_id=${user_id}`
+    );
     return response.data;
   } catch (error) {
     console.log(error);

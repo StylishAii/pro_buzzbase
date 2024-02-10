@@ -1,15 +1,27 @@
 "use client";
 import Header from "@app/components/header/Header";
 import { GroupIcon } from "@app/components/icon/GroupIcon";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { getNotifications } from "@app/services/notificationsService";
+import {
+  getCurrentUserId,
+  getCurrentUsersUserId,
+} from "@app/services/userService";
 import { Avatar, Button, Divider } from "@nextui-org/react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState<
     Notifications[] | undefined
   >(undefined);
+  const router = useRouter();
+
+  const { isLoggedIn } = useAuthContext();
+  if (!isLoggedIn) {
+    return router.push("/signin");
+  }
 
   useEffect(() => {
     fetchDate();
@@ -17,12 +29,24 @@ export default function Notifications() {
 
   const fetchDate = async () => {
     try {
-      const response = await getNotifications();
+      const currentUserId = await getCurrentUserId();
+      const currentUserUserId = await getCurrentUsersUserId(currentUserId);
+      const response = await getNotifications(currentUserUserId);
       setNotifications(response);
-    } catch (error) {}
+    } catch (error: any) {
+      if (error.response && error.response.status === 403) {
+        router.push("/404");
+      } else {
+        console.error(error);
+      }
+    }
   };
 
   console.log(notifications);
+
+  if (!notifications) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
