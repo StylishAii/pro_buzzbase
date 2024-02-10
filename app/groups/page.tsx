@@ -47,10 +47,10 @@ export default function Group() {
         <div className="h-full bg-main">
           <main className="h-full pb-16">
             <div className="px-4 py-14">
-              <p className="text-base mt-6">
-                ユーザーを招待してグループを作成しよう！
+              <p className="text-lg mt-6 font-bold">
+                友達とグループを作成しよう！
               </p>
-              <p className="text-sm text-zinc-300 mt-2">
+              <p className="text-sm text-zinc-400 mt-2">
                 グループ機能は、成績をランキング形式で共有することができます。
               </p>
               <div className="flex justify-center mt-4">
@@ -63,6 +63,7 @@ export default function Group() {
                   endContent={
                     <PlusIcon width="22" height="22" fill="#F4F4F4" />
                   }
+                  className="font-medium"
                 >
                   グループ作成
                 </Button>
