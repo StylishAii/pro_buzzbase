@@ -259,23 +259,29 @@ export default function MyPage() {
                 </Link>
               </div>
               <div className="flex items-center gap-x-4 mt-4">
-                {isCurrentUserPage ? (
+                {isLoggedIn ? (
                   <>
-                    <Button
-                      href={`${userData.user.user_id}/edit`}
-                      as={Link}
-                      className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
-                    >
-                      プロフィール編集
-                    </Button>
+                    {isCurrentUserPage ? (
+                      <>
+                        <Button
+                          href={`${userData.user.user_id}/edit`}
+                          as={Link}
+                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
+                        >
+                          プロフィール編集
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <FollowButton
+                          userId={userData.user.id}
+                          isFollowing={userData.isFollowing}
+                        />
+                      </>
+                    )}
                   </>
                 ) : (
-                  <>
-                    <FollowButton
-                      userId={userData.user.id}
-                      isFollowing={userData.isFollowing}
-                    />
-                  </>
+                  <></>
                 )}
 
                 <Button
