@@ -17,7 +17,7 @@ export default function Group() {
   const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (isLoggedIn === false) {
       return router.push("/signin");
     }
   }, [router]);

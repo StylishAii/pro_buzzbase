@@ -92,7 +92,7 @@ export default function PitchingRecord() {
   const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (isLoggedIn === false) {
       return router.push("/signin");
     }
   }, [router]);

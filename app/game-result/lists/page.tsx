@@ -26,7 +26,7 @@ export default function GameResultList() {
   const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (isLoggedIn === false) {
       return router.push("/signin");
     }
   }, [router]);

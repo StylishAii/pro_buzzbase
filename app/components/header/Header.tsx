@@ -15,7 +15,7 @@ export default function Header() {
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
         <div className="flex items-center justify-between h-full">
           <Link href="/">LOGO</Link>
-          <div className="flex items-center gap-x-4">
+          <div className="flex items-center gap-x-4 pt-1">
             {isLoggedIn ? (
               <>
                 <Badge
@@ -24,10 +24,9 @@ export default function Header() {
                   isInvisible={false}
                   shape="circle"
                   size="sm"
-                  
                 >
-                  <Link>
-                    <NotificationIcon size={20} />
+                  <Link href="/mypage/notifications">
+                    <NotificationIcon size={24} />
                   </Link>
                 </Badge>
               </>

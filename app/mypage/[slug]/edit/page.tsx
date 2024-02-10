@@ -70,10 +70,10 @@ export default function ProfileEdit() {
   const router = useRouter();
   const { isLoggedIn } = useAuthContext();
 
-  if (!isLoggedIn) {
+  if (isLoggedIn === false) {
     return router.push("/signin");
   }
-  
+
   const [profile, setProfile] = useState<{
     name: string;
     image: string | null;

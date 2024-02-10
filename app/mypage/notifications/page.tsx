@@ -18,12 +18,11 @@ export default function Notifications() {
   >(undefined);
   const router = useRouter();
   const { isLoggedIn } = useAuthContext();
-
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (isLoggedIn === false) {
       return router.push("/signin");
     }
-  }, [router]);
+  }, [isLoggedIn, router]);
 
   useEffect(() => {
     fetchDate();
@@ -63,8 +62,8 @@ export default function Notifications() {
                   <div key={notice.id}>
                     {notice.event_type === "group_invitation" ? (
                       <>
-                        <div className="grid grid-cols-[32px_1fr] gap-x-3">
-                          <GroupIcon fill="#e08e0a" width="32" height="32" />
+                        <div className="grid grid-cols-[28px_1fr] gap-x-3">
+                          <GroupIcon fill="#e08e0a" width="28" height="28" />
                           <div className="flex flex-col items-start gap-y-1 pt-1.5">
                             <Avatar
                               src={`${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`}
