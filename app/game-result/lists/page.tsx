@@ -19,16 +19,17 @@ type GameResult = {
 };
 
 export default function GameResultList() {
-  const router = useRouter();
-  const { isLoggedIn } = useAuthContext();
-
-  if (!isLoggedIn) {
-    return router.push("/signin");
-  }
-
   const [gameResultIndex, setGameResultIndex] = useState<GameResult[]>([]);
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
   const [currentUserId, setCurrentUserId] = useState(0);
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   const fetchData = async () => {
     try {

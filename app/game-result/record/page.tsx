@@ -67,13 +67,6 @@ type userData = {
 };
 
 export default function GameRecord() {
-  const router = useRouter();
-  const { isLoggedIn } = useAuthContext();
-
-  if (!isLoggedIn) {
-    return router.push("/signin");
-  }
-  
   const [userData, setUserData] = useState<userData | null>(null);
   const [existingGameDate, setExistingGameDate] = useState<string>("");
   const [myTeam, setMyTeam] = useState("");
@@ -113,6 +106,14 @@ export default function GameRecord() {
     number | null
   >(null);
   const pathname = usePathname();
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   const fetchData = async () => {
     try {

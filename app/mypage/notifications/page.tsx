@@ -17,11 +17,13 @@ export default function Notifications() {
     Notifications[] | undefined
   >(undefined);
   const router = useRouter();
-
   const { isLoggedIn } = useAuthContext();
-  if (!isLoggedIn) {
-    return router.push("/signin");
-  }
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchDate();

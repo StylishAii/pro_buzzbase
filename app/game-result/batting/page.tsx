@@ -135,12 +135,6 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
 };
 
 export default function BattingRecord() {
-  const router = useRouter();
-  const { isLoggedIn } = useAuthContext();
-
-  if (!isLoggedIn) {
-    return router.push("/signin");
-  }
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [runsBattedIn, setRunsBattedIn] = useState(0);
   const [existingRunsBattedIn, setExistingRunsBattedIn] = useState(0);
@@ -186,6 +180,14 @@ export default function BattingRecord() {
     number | null
   >(null);
   const pathname = usePathname();
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   const fetchData = async () => {
     try {

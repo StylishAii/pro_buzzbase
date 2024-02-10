@@ -50,13 +50,6 @@ const fractions = [
 ];
 
 export default function PitchingRecord() {
-  const router = useRouter();
-  const { isLoggedIn } = useAuthContext();
-
-  if (!isLoggedIn) {
-    return router.push("/signin");
-  }
-
   const [win, setWin] = useState(0);
   const [existingWin, setExistingWin] = useState(0);
   const [loss, setLoss] = useState(0);
@@ -95,6 +88,14 @@ export default function PitchingRecord() {
   >(null);
   const [errors, setErrors] = useState<string[]>([]);
   const pathname = usePathname();
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   const fetchData = async () => {
     try {

@@ -9,17 +9,18 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Group() {
-  const router = useRouter();
-  const { isLoggedIn } = useAuthContext();
-
-  if (!isLoggedIn) {
-    return router.push("/signin");
-  }
-
   const [groups, setGroups] = useState<GroupsData[]>([]);
   const [currentUserId, setCurrentUserId] = useState<number | undefined>(
     undefined
   );
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchUserIdData();

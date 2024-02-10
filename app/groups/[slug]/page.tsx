@@ -138,13 +138,6 @@ const PitchingResultTitle = [
 ];
 
 export default function GroupDetail({ params }: GroupDetailProps) {
-  const router = useRouter();
-  const { isLoggedIn } = useAuthContext();
-
-  if (!isLoggedIn) {
-    return router.push("/signin");
-  }
-  
   const [groupData, setGroupData] = useState<GroupsDetailData | undefined>(
     undefined
   );
@@ -154,6 +147,14 @@ export default function GroupDetail({ params }: GroupDetailProps) {
   const [pitchingAggregate, setPitchingAggregate] =
     useState<PitchingAggregate[]>();
   const [pitchingStats, setPitchingStats] = useState<PitchingStats[]>();
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchData();
