@@ -3,6 +3,7 @@
 import HeaderLogo from "@app/components/header/HeaderLogo";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
 import MatchResultList from "@app/components/user/MatchResultList";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import {
   createGameResult,
   getGameResults,
@@ -18,10 +19,16 @@ type GameResult = {
 };
 
 export default function GameResultList() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  if (!isLoggedIn) {
+    return router.push("/signin");
+  }
+
   const [gameResultIndex, setGameResultIndex] = useState<GameResult[]>([]);
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
   const [currentUserId, setCurrentUserId] = useState(0);
-  const router = useRouter();
 
   const fetchData = async () => {
     try {
