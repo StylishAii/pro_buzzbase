@@ -4,6 +4,7 @@ import { Providers } from "@app/providers";
 import NavigationMenu from "@app/components/header/NavigationMenu";
 import { AuthProvider } from "@app/contexts/useAuthContext";
 import { inter, notoSansJP } from "@app/font";
+import Footer from "@app/components/footer/Footer";
 
 export const metadata: Metadata = {
   title: "Buzz Base",
@@ -30,6 +31,7 @@ export default function RootLayout({
           <Providers>
             {children}
             <NavigationMenu />
+            <Footer />
           </Providers>
         </AuthProvider>
       </body>
