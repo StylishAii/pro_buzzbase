@@ -353,6 +353,7 @@ interface GroupsData {
 
 interface Notifications {
   id: number;
+  actor_user_id: number;
   actor_name: string;
   event_type: string;
   event_id: number;
