@@ -8,7 +8,7 @@ export default function SignInLayout({
   return (
     <>
       <Header />
-      <div className="h-full buzz-dark">
+      <div className="h-full buzz-dark flex flex-col w-full min-h-screen">
         <main className="h-full">{children}</main>
       </div>
     </>

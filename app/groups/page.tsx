@@ -1,9 +1,11 @@
 "use client";
 import Header from "@app/components/header/Header";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { getGroups } from "@app/services/groupService";
 import { getCurrentUserId } from "@app/services/userService";
 import { Avatar, Button, Divider, Link } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Group() {
@@ -11,6 +13,14 @@ export default function Group() {
   const [currentUserId, setCurrentUserId] = useState<number | undefined>(
     undefined
   );
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchUserIdData();
@@ -42,15 +52,15 @@ export default function Group() {
 
   return (
     <>
-      <div className="buzz-dark">
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
         <Header />
         <div className="h-full bg-main">
           <main className="h-full pb-16">
             <div className="px-4 py-14">
-              <p className="text-base mt-6">
-                ユーザーを招待してグループを作成しよう！
+              <p className="text-lg mt-6 font-bold">
+                友達とグループを作成しよう！
               </p>
-              <p className="text-sm text-zinc-300 mt-2">
+              <p className="text-sm text-zinc-400 mt-2">
                 グループ機能は、成績をランキング形式で共有することができます。
               </p>
               <div className="flex justify-center mt-4">
@@ -63,6 +73,7 @@ export default function Group() {
                   endContent={
                     <PlusIcon width="22" height="22" fill="#F4F4F4" />
                   }
+                  className="font-medium"
                 >
                   グループ作成
                 </Button>

@@ -61,7 +61,7 @@ export default function Followers() {
 
   return (
     <>
-      <div className="buzz-dark">
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
         <HeaderBack />
         <div className="h-full">
           <main className="h-full">

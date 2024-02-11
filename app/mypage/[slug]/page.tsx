@@ -15,7 +15,7 @@ import { getBaseballCategory } from "@app/services/baseballCategoryService";
 import { getPrefectures } from "@app/services/prefectureService";
 import { getUserAwards } from "@app/services/awardsService";
 import AvatarComponent from "@app/components/user/AvatarComponent";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import FollowButton from "@app/components/button/FollowButton";
 
@@ -58,6 +58,7 @@ export default function MyPage() {
   const [userId, setUserId] = useState(0);
   const pathName = usePathname();
   const { isLoggedIn } = useAuthContext();
+  const router = useRouter();
 
   useEffect(() => {
     const pathParts = pathName.split("/");
@@ -120,8 +121,12 @@ export default function MyPage() {
       if (awardData) {
         setUserAwards(awardData);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response && error.response.status === 404) {
+        router.push("/404");
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -134,11 +139,11 @@ export default function MyPage() {
   }
 
   return (
-    <div className="buzz-dark">
+    <div className="buzz-dark flex flex-col w-full min-h-screen">
       <Header />
       <div className="h-full">
         <main className="h-full">
-          <div className="pt-16 pb-36 bg-main">
+          <div className="pt-16 pb-20 bg-main">
             <div className="px-4">
               <AvatarComponent userData={userData} />
               {userData.user.introduction?.length > 0 ? (
@@ -254,23 +259,29 @@ export default function MyPage() {
                 </Link>
               </div>
               <div className="flex items-center gap-x-4 mt-4">
-                {isCurrentUserPage ? (
+                {isLoggedIn ? (
                   <>
-                    <Button
-                      href={`${userData.user.user_id}/edit`}
-                      as={Link}
-                      className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
-                    >
-                      プロフィール編集
-                    </Button>
+                    {isCurrentUserPage ? (
+                      <>
+                        <Button
+                          href={`${userData.user.user_id}/edit`}
+                          as={Link}
+                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
+                        >
+                          プロフィール編集
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <FollowButton
+                          userId={userData.user.id}
+                          isFollowing={userData.isFollowing}
+                        />
+                      </>
+                    )}
                   </>
                 ) : (
-                  <>
-                    <FollowButton
-                      userId={userData.user.id}
-                      isFollowing={userData.isFollowing}
-                    />
-                  </>
+                  <></>
                 )}
 
                 <Button

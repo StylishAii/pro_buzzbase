@@ -1,23 +1,62 @@
 "use client";
-import React, { useEffect } from "react";
-import { Link, Button } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import { Link, Button, Badge } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
-import Logout from "@app/components/auth/Logout";
+import { NotificationIcon } from "@app/components/icon/NotificationIcon";
+import { getNotificationCount } from "@app/services/notificationsService";
+
+type NotificationCount = {
+  count: number;
+};
 
 export default function Header() {
+  const [notificationCount, setNotificationCount] =
+    useState<NotificationCount | null>(null);
   const { isLoggedIn } = useAuthContext();
   useEffect(() => {
     localStorage.removeItem("gameResultId");
+    fetchDate();
   }, []);
+  const fetchDate = async () => {
+    try {
+      const responseNotificationCount = await getNotificationCount();
+      setNotificationCount(responseNotificationCount);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
         <div className="flex items-center justify-between h-full">
           <Link href="/">LOGO</Link>
-          <div className="flex items-center gap-x-4">
+          <div className="flex items-center gap-x-4 pt-1">
             {isLoggedIn ? (
-              <Logout />
+              <>
+                {notificationCount?.count ? (
+                  <>
+                    <Badge
+                      color="danger"
+                      content={notificationCount?.count}
+                      isInvisible={false}
+                      shape="circle"
+                      size="sm"
+                    >
+                      <Link href="/mypage/notifications">
+                        <NotificationIcon size={24} />
+                      </Link>
+                    </Badge>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/mypage/notifications">
+                      <NotificationIcon size={24} />
+                    </Link>
+                  </>
+                )}
+              </>
             ) : (
               <>
                 <Link href="/signin" className="text-sm text-white">
