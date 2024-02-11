@@ -1,10 +1,10 @@
 "use client";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { ShareIcon } from "@app/components/icon/ShareIcon";
-import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
-import { getCurrentMatchResult } from "@app/services/matchResultsService";
-import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
-import { getCurrentPlateAppearance } from "@app/services/plateAppearanceService";
+import { getUserBattingAverage } from "@app/services/battingAveragesService";
+import { getUserMatchResult } from "@app/services/matchResultsService";
+import { getUserPitchingResult } from "@app/services/pitchingResultsService";
+import { getUserPlateAppearance } from "@app/services/plateAppearanceService";
 import { getPositionName } from "@app/services/positionService";
 import { getTeamName } from "@app/services/teamsService";
 import { getTournamentName } from "@app/services/tournamentsService";
@@ -87,16 +87,16 @@ export default function ResultsSummary() {
   // 試合データ取得
   const fetchCurrentResultData = async (localStorageGameResultId: number) => {
     try {
-      const matchResultData = await getCurrentMatchResult(
+      const matchResultData = await getUserMatchResult(
         localStorageGameResultId
       );
-      const battingAverageData = await getCurrentBattingAverage(
+      const battingAverageData = await getUserBattingAverage(
         localStorageGameResultId
       );
-      const pitchingResultData = await getCurrentPitchingResult(
+      const pitchingResultData = await getUserPitchingResult(
         localStorageGameResultId
       );
-      const plateAppearanceData = await getCurrentPlateAppearance(
+      const plateAppearanceData = await getUserPlateAppearance(
         localStorageGameResultId
       );
       const currentUserIdData = await getCurrentUserId();
@@ -108,8 +108,8 @@ export default function ResultsSummary() {
       setPitchingResult(pitchingResultData);
       setPlateAppearance(plateAppearanceData);
       setCurrentUserId(currentUserIdData);
-    } catch (error) {
-      console.log(`fetch error: ${error}`);
+    } catch (error: any) {
+      console.error(error);
     }
   };
 

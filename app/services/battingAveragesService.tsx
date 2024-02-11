@@ -63,6 +63,18 @@ export const getCurrentBattingAverage = async (gameResultId: number | null) => {
   }
 };
 
+export const getUserBattingAverage = async (gameResultId: number | null) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/user_batting_average_search?game_result_id=${gameResultId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const getPersonalBattingAverage = async (userId: number) => {
   try {
     const response = await axiosInstance.get(
