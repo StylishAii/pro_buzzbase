@@ -4,6 +4,7 @@ import PlusButton from "@app/components/button/PlusButton";
 import HeaderSave from "@app/components/header/HeaderSave";
 import { DeleteIcon } from "@app/components/icon/DeleteIcon";
 import SaveSpinner from "@app/components/spinner/SavingSpinner";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import {
   createAward,
   deleteAward,
@@ -66,6 +67,13 @@ type Teams = {
 };
 
 export default function ProfileEdit() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  if (isLoggedIn === false) {
+    return router.push("/signin");
+  }
+
   const [profile, setProfile] = useState<{
     name: string;
     image: string | null;
@@ -104,7 +112,6 @@ export default function ProfileEdit() {
   const [deletedAwards, setDeletedAwards] = useState<number[]>([]);
   const [awards, setAwards] = useState<UserAwards[]>([]);
   const [updatedAwards, setUpdatedAwards] = useState<UserAwards[]>([]);
-  const router = useRouter();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -411,7 +418,7 @@ export default function ProfileEdit() {
   };
 
   return (
-    <div className="buzz-dark bg-main pb-24">
+    <div className="buzz-dark bg-main pb-24 flex flex-col w-full min-h-screen">
       <HeaderSave onProfileUpdate={handleSubmit} />
       <div className="h-full buzz-dark">
         <main className="h-full">

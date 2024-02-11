@@ -3,6 +3,7 @@
 import HeaderLogo from "@app/components/header/HeaderLogo";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
 import MatchResultList from "@app/components/user/MatchResultList";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import {
   createGameResult,
   getGameResults,
@@ -22,6 +23,13 @@ export default function GameResultList() {
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
   const [currentUserId, setCurrentUserId] = useState(0);
   const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      return router.push("/signin");
+    }
+  }, [router]);
 
   const fetchData = async () => {
     try {
@@ -66,7 +74,7 @@ export default function GameResultList() {
               variant="solid"
               radius="full"
               endContent={<PlusIcon width="22" height="22" fill="#F4F4F4" />}
-              className="fixed top-14 right-4 z-100"
+              className="fixed top-14 right-4 z-100 font-medium"
               onClick={handleNewRecord}
             >
               新規追加

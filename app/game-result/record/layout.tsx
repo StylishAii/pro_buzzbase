@@ -20,7 +20,7 @@ export default function RecordLayout({
   }, [pathname]);
   return (
     <>
-      <div className="buzz-dark bg-main">{children}</div>
+      <div className="buzz-dark bg-main flex flex-col w-full min-h-screen">{children}</div>
     </>
   );
 }
