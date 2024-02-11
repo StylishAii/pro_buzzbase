@@ -363,4 +363,5 @@ interface Notifications {
     url: string;
   };
   group_name: string;
+  group_invitation: string;
 }

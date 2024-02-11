@@ -3,13 +3,25 @@ import Header from "@app/components/header/Header";
 import { GroupIcon } from "@app/components/icon/GroupIcon";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { useAuthContext } from "@app/contexts/useAuthContext";
-import { acceptGroupInvitation } from "@app/services/groupInvitationsService";
+import {
+  acceptGroupInvitation,
+  declinedGroupInvitation,
+} from "@app/services/groupInvitationsService";
 import { getNotifications } from "@app/services/notificationsService";
 import {
   getCurrentUserId,
   getCurrentUsersUserId,
 } from "@app/services/userService";
-import { Avatar, Button, Divider } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,6 +30,7 @@ export default function Notifications() {
   const [notifications, setNotifications] = useState<
     Notifications[] | undefined
   >(undefined);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const { isLoggedIn } = useAuthContext();
   useEffect(() => {
@@ -45,11 +58,22 @@ export default function Notifications() {
     }
   };
 
-  const handleAcceptGroupInvitation = async (invitationId: number) => {
+  const handleAcceptGroupInvitation = async (groupId: number) => {
     try {
-      await acceptGroupInvitation(invitationId);
-      router.push(`/groups/${invitationId}`);
+      await acceptGroupInvitation(groupId);
+      router.push(`/groups/${groupId}`);
     } catch (error) {}
+  };
+
+  const handleDeclinedGroupInvitation = async (groupId: number) => {
+    try {
+      await declinedGroupInvitation(groupId);
+      onClose();
+    } catch (error) {}
+  };
+
+  const handleOpen = () => {
+    onOpen();
   };
 
   console.log(notifications);
@@ -69,11 +93,11 @@ export default function Notifications() {
               <div className="py-5 pb-24 grid gap-y-5 bg-main">
                 {notifications?.map((notice) => (
                   <div key={notice.id}>
-                    {notice.event_type === "group_invitation" ? (
+                    {notice.event_type === "group_invitation" && notice.group_invitation === "pending" ? (
                       <>
                         <div className="grid grid-cols-[28px_1fr] gap-x-3">
-                          <GroupIcon fill="#e08e0a" width="28" height="28" />
-                          <div className="flex flex-col items-start gap-y-1 pt-1.5">
+                          <GroupIcon fill="#f4f4f4" width="28" height="28" />
+                          <div className="flex flex-col items-start gap-y-1 pt-1">
                             <Link href={`/mypage/${notice.actor_user_id}`}>
                               <Avatar
                                 src={`${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`}
@@ -105,9 +129,50 @@ export default function Notifications() {
                               >
                                 参加する
                               </Button>
-                              <Button size="sm" color="danger">
+                              <Button
+                                size="sm"
+                                color="danger"
+                                onPress={() => handleOpen()}
+                              >
                                 拒否する
                               </Button>
+                              <Modal
+                                size="sm"
+                                isOpen={isOpen}
+                                onClose={onClose}
+                                placement="center"
+                                className="w-11/12"
+                              >
+                                <ModalContent>
+                                  {(onClose) => (
+                                    <>
+                                      <ModalHeader className="flex gap-1 text-base text-white pb-0">
+                                        本当に 「{notice.group_name}」
+                                        への招待を拒否してもよろしいですか？
+                                      </ModalHeader>
+                                      <ModalFooter>
+                                        <Button
+                                          variant="light"
+                                          onPress={onClose}
+                                          className="text-white"
+                                        >
+                                          キャンセル
+                                        </Button>
+                                        <Button
+                                          color="danger"
+                                          onPress={() =>
+                                            handleDeclinedGroupInvitation(
+                                              notice.event_id
+                                            )
+                                          }
+                                        >
+                                          拒否する
+                                        </Button>
+                                      </ModalFooter>
+                                    </>
+                                  )}
+                                </ModalContent>
+                              </Modal>
                             </div>
                           </div>
                         </div>
