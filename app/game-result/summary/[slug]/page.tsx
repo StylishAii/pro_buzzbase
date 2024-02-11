@@ -1,4 +1,5 @@
 "use client";
+import HeaderGameDetail from "@app/components/header/HeaderGameDetail";;
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { ShareIcon } from "@app/components/icon/ShareIcon";
 import { getUserBattingAverage } from "@app/services/battingAveragesService";
@@ -39,6 +40,7 @@ export default function ResultsSummary() {
   const [currentUsersUserId, setCurrentUsersUserId] = useState("");
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [memo, setMemo] = useState();
+  const [currentUserPage, setCurrentUserPage] = useState(false);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
@@ -81,6 +83,8 @@ export default function ResultsSummary() {
     if (matchResult.length > 0 && !isDetailDataFetched) {
       fetchMatchResultDetailData();
       currentUsersUserIdData(currentUserId);
+      const isCurrentUserPage = currentUserId === battingAverage[0].user_id;
+      setCurrentUserPage(isCurrentUserPage);
     }
   }, [matchResult, isDetailDataFetched]);
 
@@ -228,7 +232,19 @@ export default function ResultsSummary() {
 
   return (
     <>
-      <SummaryResultHeader onSummaryResult={handleResultComplete} text="編集" />
+      {currentUserPage ? (
+        <>
+          <SummaryResultHeader
+            onSummaryResult={handleResultComplete}
+            text="編集"
+          />
+        </>
+      ) : (
+        <>
+          <HeaderGameDetail />
+        </>
+      )}
+
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-20 px-4">
@@ -446,7 +462,7 @@ export default function ResultsSummary() {
                 )}
               </div>
             </div>
-            {memo !== undefined ? (
+            {memo != undefined ? (
               <>
                 <p className="mt-4 text-sm text-zinc-500">MEMO</p>
                 <div className="mt-2 border-1 border-zinc-500 rounded-lg p-3">

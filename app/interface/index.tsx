@@ -300,6 +300,7 @@ interface BattingAverage {
   total_bases: number | null;
   two_base_hit: number | null;
   at_bats: number | null;
+  user_id: number;
 }
 
 interface PlateAppearanceSummary {
