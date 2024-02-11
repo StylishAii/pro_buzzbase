@@ -235,7 +235,6 @@ export default function MyPage() {
               ) : (
                 ""
               )}
-
               <div className="flex items-center gap-x-4 mt-2">
                 <Link href={`/mypage/${userData.user.user_id}/following/`}>
                   <div className="flex gap-x-1">
