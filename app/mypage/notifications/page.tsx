@@ -188,6 +188,35 @@ export default function Notifications() {
                         </div>
                         <Divider className="mt-3" />
                       </>
+                    ) : notice.event_type === "followed" ? (
+                      <>
+                        <div className="grid grid-cols-[28px_1fr] gap-x-3">
+                          <Link href={`/mypage/${notice.actor_user_id}`}>
+                            <Avatar
+                              src={`${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`}
+                              size="sm"
+                              isBordered
+                              className="min-w-[28px] max-w-[28px] min-h-[28px] max-h-[28px]"
+                            />
+                          </Link>
+                          <div className="flex flex-col items-start gap-y-1">
+                            <p className="text-sm text-zinc-400">
+                              <Link
+                                href={`/mypage/${notice.actor_user_id}`}
+                                className="text-base text-white font-bold"
+                              >
+                                {notice.actor_name}
+                              </Link>
+                              さんから
+                              <span className="text-base text-white font-bold">
+                                {notice.group_name}
+                              </span>
+                              フォローされました
+                            </p>
+                          </div>
+                        </div>
+                        <Divider className="mt-3" />
+                      </>
                     ) : (
                       <></>
                     )}
