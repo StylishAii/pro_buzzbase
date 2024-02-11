@@ -21,3 +21,15 @@ export const deleteNotification = async (id: number) => {
     throw error;
   }
 };
+
+export const readNotification = async (id: number) => {
+  try {
+    const response = await axiosInstance.patch(
+      `/api/v1/notifications/${id}/read`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

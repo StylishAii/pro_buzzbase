@@ -10,6 +10,7 @@ import {
 import {
   deleteNotification,
   getNotifications,
+  readNotification,
 } from "@app/services/notificationsService";
 import {
   getCurrentUserId,
@@ -77,11 +78,15 @@ export default function Notifications() {
     } catch (error) {}
   };
 
+  const handleRead = async (id: number) => {
+    try {
+      await readNotification(id);
+    } catch (error) {}
+  };
+
   const handleOpen = () => {
     onOpen();
   };
-
-  console.log(notifications);
 
   if (!notifications) {
     return <LoadingSpinner />;
@@ -190,8 +195,15 @@ export default function Notifications() {
                       </>
                     ) : notice.event_type === "followed" ? (
                       <>
-                        <div className="grid grid-cols-[28px_1fr] gap-x-3">
-                          <Link href={`/mypage/${notice.actor_user_id}`}>
+                        <div
+                          className={`grid grid-cols-[28px_1fr] gap-x-3 ${
+                            notice.read_at ? "opacity-30" : ""
+                          }`}
+                        >
+                          <Link
+                            href={`/mypage/${notice.actor_user_id}`}
+                            onClick={() => handleRead(notice.id)}
+                          >
                             <Avatar
                               src={`${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`}
                               size="sm"
@@ -204,6 +216,7 @@ export default function Notifications() {
                               <Link
                                 href={`/mypage/${notice.actor_user_id}`}
                                 className="text-base text-white font-bold"
+                                onClick={() => handleRead(notice.id)}
                               >
                                 {notice.actor_name}
                               </Link>
