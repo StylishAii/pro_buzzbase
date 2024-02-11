@@ -11,3 +11,13 @@ export const getNotifications = async (user_id: number) => {
     throw error;
   }
 };
+
+export const deleteNotification = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/api/v1/notifications/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

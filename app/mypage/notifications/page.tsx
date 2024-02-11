@@ -7,7 +7,10 @@ import {
   acceptGroupInvitation,
   declinedGroupInvitation,
 } from "@app/services/groupInvitationsService";
-import { getNotifications } from "@app/services/notificationsService";
+import {
+  deleteNotification,
+  getNotifications,
+} from "@app/services/notificationsService";
 import {
   getCurrentUserId,
   getCurrentUsersUserId,
@@ -58,16 +61,18 @@ export default function Notifications() {
     }
   };
 
-  const handleAcceptGroupInvitation = async (groupId: number) => {
+  const handleAcceptGroupInvitation = async (groupId: number, id: number) => {
     try {
       await acceptGroupInvitation(groupId);
+      await deleteNotification(id);
       router.push(`/groups/${groupId}`);
     } catch (error) {}
   };
 
-  const handleDeclinedGroupInvitation = async (groupId: number) => {
+  const handleDeclinedGroupInvitation = async (groupId: number, id: number) => {
     try {
       await declinedGroupInvitation(groupId);
+      await deleteNotification(id);
       onClose();
     } catch (error) {}
   };
@@ -93,7 +98,8 @@ export default function Notifications() {
               <div className="py-5 pb-24 grid gap-y-5 bg-main">
                 {notifications?.map((notice) => (
                   <div key={notice.id}>
-                    {notice.event_type === "group_invitation" && notice.group_invitation === "pending" ? (
+                    {notice.event_type === "group_invitation" &&
+                    notice.group_invitation === "pending" ? (
                       <>
                         <div className="grid grid-cols-[28px_1fr] gap-x-3">
                           <GroupIcon fill="#f4f4f4" width="28" height="28" />
@@ -124,7 +130,10 @@ export default function Notifications() {
                                 size="sm"
                                 color="primary"
                                 onClick={() =>
-                                  handleAcceptGroupInvitation(notice.event_id)
+                                  handleAcceptGroupInvitation(
+                                    notice.event_id,
+                                    notice.id
+                                  )
                                 }
                               >
                                 参加する
@@ -162,7 +171,8 @@ export default function Notifications() {
                                           color="danger"
                                           onPress={() =>
                                             handleDeclinedGroupInvitation(
-                                              notice.event_id
+                                              notice.event_id,
+                                              notice.id
                                             )
                                           }
                                         >
