@@ -33,3 +33,13 @@ export const readNotification = async (id: number) => {
     throw error;
   }
 };
+
+export const getNotificationCount = async () => {
+  try {
+    const response = await axiosInstance.get(`/api/v1/notifications/count`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
