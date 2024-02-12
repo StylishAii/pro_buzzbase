@@ -18,6 +18,7 @@ import AvatarComponent from "@app/components/user/AvatarComponent";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import FollowButton from "@app/components/button/FollowButton";
+import { XIcon } from "@app/components/icon/XIcon";
 
 type Position = {
   id: string;
@@ -284,9 +285,12 @@ export default function MyPage() {
                 )}
 
                 <Button
-                  href="/share"
-                  as={Link}
                   className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 font-bold"
+                  endContent={<XIcon fill="#F4F4F4" width="14" height="14" />}
+                  as={Link}
+                  href={`https://twitter.com/intent/tweet?text=${userData.user.name}さんのプロフィール%0A【ポジション】${userData.user.positions[0]?.name}%0A【チーム】${teamData[0]?.name}（${teamPrefectureName})｜${teamCategoryName}%0A&url=http://localhost:8000/mypage/${userData.user.user_id}%0A&hashtags=BuzzBase`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   シェアする
                 </Button>
