@@ -1,10 +1,11 @@
 "use client";
+import HeaderGameDetail from "@app/components/header/HeaderGameDetail";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
-import { ShareIcon } from "@app/components/icon/ShareIcon";
-import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
-import { getCurrentMatchResult } from "@app/services/matchResultsService";
-import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
-import { getCurrentPlateAppearance } from "@app/services/plateAppearanceService";
+import { XIcon } from "@app/components/icon/XIcon";
+import { getUserBattingAverage } from "@app/services/battingAveragesService";
+import { getUserMatchResult } from "@app/services/matchResultsService";
+import { getUserPitchingResult } from "@app/services/pitchingResultsService";
+import { getUserPlateAppearance } from "@app/services/plateAppearanceService";
 import { getPositionName } from "@app/services/positionService";
 import { getTeamName } from "@app/services/teamsService";
 import { getTournamentName } from "@app/services/tournamentsService";
@@ -13,6 +14,7 @@ import {
   getCurrentUsersUserId,
 } from "@app/services/userService";
 import { Button, Chip, Divider } from "@nextui-org/react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -39,11 +41,15 @@ export default function ResultsSummary() {
   const [currentUsersUserId, setCurrentUsersUserId] = useState("");
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
   const [memo, setMemo] = useState();
+  const [currentUserPage, setCurrentUserPage] = useState(false);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  const parts = pathname.split("/");
+  const id = Number(parts[parts.length - 1]);
 
   const fetchMatchResultDetailData = async () => {
     const updateMatchResults = await Promise.all(
@@ -75,28 +81,33 @@ export default function ResultsSummary() {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
       fetchCurrentResultData(JSON.parse(savedGameResultId));
     }
+    if (!savedGameResultId) {
+      localStorage.setItem("gameResultId", JSON.stringify(id));
+    }
   }, [pathname]);
 
   useEffect(() => {
     if (matchResult.length > 0 && !isDetailDataFetched) {
       fetchMatchResultDetailData();
       currentUsersUserIdData(currentUserId);
+      const isCurrentUserPage = currentUserId === battingAverage[0]?.user_id;
+      setCurrentUserPage(isCurrentUserPage);
     }
   }, [matchResult, isDetailDataFetched]);
 
   // 試合データ取得
   const fetchCurrentResultData = async (localStorageGameResultId: number) => {
     try {
-      const matchResultData = await getCurrentMatchResult(
+      const matchResultData = await getUserMatchResult(
         localStorageGameResultId
       );
-      const battingAverageData = await getCurrentBattingAverage(
+      const battingAverageData = await getUserBattingAverage(
         localStorageGameResultId
       );
-      const pitchingResultData = await getCurrentPitchingResult(
+      const pitchingResultData = await getUserPitchingResult(
         localStorageGameResultId
       );
-      const plateAppearanceData = await getCurrentPlateAppearance(
+      const plateAppearanceData = await getUserPlateAppearance(
         localStorageGameResultId
       );
       const currentUserIdData = await getCurrentUserId();
@@ -108,8 +119,8 @@ export default function ResultsSummary() {
       setPitchingResult(pitchingResultData);
       setPlateAppearance(plateAppearanceData);
       setCurrentUserId(currentUserIdData);
-    } catch (error) {
-      console.log(`fetch error: ${error}`);
+    } catch (error: any) {
+      console.error(error);
     }
   };
 
@@ -221,14 +232,24 @@ export default function ResultsSummary() {
     return `${wholePart}回${fractionalString ? `${fractionalString}` : ""}`;
   };
 
-  const handleShare = () => {};
   const handleResultComplete = () => {
     router.push("/game-result/record");
   };
 
   return (
     <>
-      <SummaryResultHeader onSummaryResult={handleResultComplete} text="編集" />
+      {currentUserPage ? (
+        <>
+          <SummaryResultHeader
+            onSummaryResult={handleResultComplete}
+            text="編集"
+          />
+        </>
+      ) : (
+        <>
+          <HeaderGameDetail />
+        </>
+      )}
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-20 px-4">
@@ -446,7 +467,7 @@ export default function ResultsSummary() {
                 )}
               </div>
             </div>
-            {memo !== undefined ? (
+            {memo != undefined ? (
               <>
                 <p className="mt-4 text-sm text-zinc-500">MEMO</p>
                 <div className="mt-2 border-1 border-zinc-500 rounded-lg p-3">
@@ -463,9 +484,12 @@ export default function ResultsSummary() {
               <Button
                 color="primary"
                 size="sm"
-                endContent={<ShareIcon stroke="#F4F4F4" />}
+                endContent={<XIcon fill="#F4F4F4" />}
                 className="mt-4"
-                onChange={handleShare}
+                as={Link}
+                href={`https://twitter.com/intent/tweet?text=${matchResult[0]?.my_team_score}対${matchResult[0]?.opponent_team_score} vs${matchResult[0]?.opponent_team_name}%0A&url=http://localhost:8000/game-result/summary/${id}%0A&hashtags=BuzzBase`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 成績をシェア
               </Button>

@@ -278,6 +278,10 @@ interface MatchResult {
   opponent_team_id: number;
   defensive_position: string;
   user_id: string;
+  game_result_id: number;
+  opponent_team_name: string;
+  my_team_score: number;
+  opponent_team_score: number;
 }
 
 interface BattingAverage {
@@ -300,6 +304,7 @@ interface BattingAverage {
   total_bases: number | null;
   two_base_hit: number | null;
   at_bats: number | null;
+  user_id: number;
 }
 
 interface PlateAppearanceSummary {
