@@ -22,7 +22,11 @@ import {
   getTeams,
   updateTeam,
 } from "@app/services/teamsService";
-import { getUserData, updateProfile } from "@app/services/userService";
+import {
+  getCurrentUserId,
+  getUserData,
+  updateProfile,
+} from "@app/services/userService";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -67,13 +71,6 @@ type Teams = {
 };
 
 export default function ProfileEdit() {
-  const router = useRouter();
-  const { isLoggedIn } = useAuthContext();
-
-  if (isLoggedIn === false) {
-    return router.push("/signin");
-  }
-
   const [profile, setProfile] = useState<{
     name: string;
     image: string | null;
@@ -112,6 +109,20 @@ export default function ProfileEdit() {
   const [deletedAwards, setDeletedAwards] = useState<number[]>([]);
   const [awards, setAwards] = useState<UserAwards[]>([]);
   const [updatedAwards, setUpdatedAwards] = useState<UserAwards[]>([]);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+  const isCurrentUserPage = currentUserId === profile?.user_id;
+
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      return router.push("/signin");
+    }
+    if (!isCurrentUserPage) {
+      return router.push(`/404`); 
+    }
+  }, []);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -120,6 +131,10 @@ export default function ProfileEdit() {
   // ユーザーデータ取得
   const fetchData = async () => {
     try {
+      if (isLoggedIn) {
+        const currentUserIdData = await getCurrentUserId();
+        setCurrentUserId(currentUserIdData);
+      }
       const data = await getUserData();
       setProfile({
         name: data.name,

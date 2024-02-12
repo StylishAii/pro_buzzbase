@@ -1,6 +1,6 @@
 "use client";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
-import { ShareIcon } from "@app/components/icon/ShareIcon";
+import { XIcon } from "@app/components/icon/XIcon";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
@@ -244,9 +244,12 @@ export default function ResultsSummary() {
               <Button
                 color="primary"
                 size="sm"
-                endContent={<ShareIcon stroke="#F4F4F4" />}
+                endContent={<XIcon fill="#F4F4F4" />}
                 className="mt-4"
-                onChange={handleShare}
+                as={Link}
+                href={`https://twitter.com/intent/tweet?text=${matchResult[0]?.my_team_score}対${matchResult[0]?.opponent_team_score} vs${matchResult[0]?.opponent_team_name}%0A&url=http://localhost:8000/game-result/summary/${localStorageGameResultId}%0A&hashtags=BuzzBase`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 成績をシェア
               </Button>

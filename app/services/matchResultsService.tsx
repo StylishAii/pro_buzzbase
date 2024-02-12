@@ -100,11 +100,14 @@ export const getCurrentMatchResult = async (gameResultId: number | null) => {
   }
 };
 
-export const getCurrentUserMatchResult = async () => {
+export const getUserMatchResult = async (gameResultId: number | null) => {
   try {
     const response = await axiosInstance.get(
-      "/api/v1/match_results/current_user_match_index"
+      `/api/v1/user_game_result_search?game_result_id=${gameResultId}`
     );
     return response.data;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
