@@ -1,5 +1,5 @@
 "use client";
-import HeaderGameDetail from "@app/components/header/HeaderGameDetail";;
+import HeaderGameDetail from "@app/components/header/HeaderGameDetail";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { ShareIcon } from "@app/components/icon/ShareIcon";
 import { getUserBattingAverage } from "@app/services/battingAveragesService";
@@ -47,6 +47,9 @@ export default function ResultsSummary() {
   const router = useRouter();
   const pathname = usePathname();
 
+  const parts = pathname.split("/");
+  const id = Number(parts[parts.length - 1]);
+
   const fetchMatchResultDetailData = async () => {
     const updateMatchResults = await Promise.all(
       matchResult.map(async (match) => {
@@ -77,13 +80,16 @@ export default function ResultsSummary() {
       setLocalStorageGameResultId(JSON.parse(savedGameResultId));
       fetchCurrentResultData(JSON.parse(savedGameResultId));
     }
+    if (!savedGameResultId) {
+      localStorage.setItem("gameResultId", JSON.stringify(id));
+    }
   }, [pathname]);
 
   useEffect(() => {
     if (matchResult.length > 0 && !isDetailDataFetched) {
       fetchMatchResultDetailData();
       currentUsersUserIdData(currentUserId);
-      const isCurrentUserPage = currentUserId === battingAverage[0].user_id;
+      const isCurrentUserPage = currentUserId === battingAverage[0]?.user_id;
       setCurrentUserPage(isCurrentUserPage);
     }
   }, [matchResult, isDetailDataFetched]);
