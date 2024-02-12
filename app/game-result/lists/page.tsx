@@ -1,6 +1,6 @@
 "use client";
 
-import HeaderLogo from "@app/components/header/HeaderLogo";
+import Header from "@app/components/header/Header";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
 import MatchResultList from "@app/components/user/MatchResultList";
 import { useAuthContext } from "@app/contexts/useAuthContext";
@@ -64,7 +64,7 @@ export default function GameResultList() {
   };
   return (
     <>
-      <HeaderLogo />
+      <Header />
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-16 px-4">
