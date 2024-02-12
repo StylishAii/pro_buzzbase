@@ -2,7 +2,9 @@
 import HeaderGameDetail from "@app/components/header/HeaderGameDetail";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
 import { XIcon } from "@app/components/icon/XIcon";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { getUserBattingAverage } from "@app/services/battingAveragesService";
+import { deleteGameResult } from "@app/services/gameResultsService";
 import { getUserMatchResult } from "@app/services/matchResultsService";
 import { getUserPitchingResult } from "@app/services/pitchingResultsService";
 import { getUserPlateAppearance } from "@app/services/plateAppearanceService";
@@ -13,7 +15,17 @@ import {
   getCurrentUserId,
   getCurrentUsersUserId,
 } from "@app/services/userService";
-import { Button, Chip, Divider } from "@nextui-org/react";
+import {
+  Button,
+  Chip,
+  Divider,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -45,6 +57,8 @@ export default function ResultsSummary() {
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -236,6 +250,20 @@ export default function ResultsSummary() {
     router.push("/game-result/record");
   };
 
+  const handleDeleteGameResult = async (id: number | null) => {
+    setIsLoading(true);
+    try {
+      await deleteGameResult(id);
+      setTimeout(() => {
+        router.push(`/mypage/${currentUsersUserId}`);
+        setIsLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       {currentUserPage ? (
@@ -251,7 +279,8 @@ export default function ResultsSummary() {
         </>
       )}
       <main className="h-full">
-        <div className="pb-32 relative">
+        <div className="pb-20 relative">
+          {isLoading && <LoadingSpinner />}
           <div className="pt-20 px-4">
             {/* 試合情報 */}
             <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
@@ -495,6 +524,61 @@ export default function ResultsSummary() {
               </Button>
             </div>
           </div>
+          {currentUserPage === true ? (
+            <>
+              <Button
+                onPress={onOpen}
+                color="danger"
+                size="sm"
+                radius="sm"
+                className="max-w-fit text-xs mt-14 ml-auto mr-4 block"
+              >
+                試合結果を削除する
+              </Button>
+              <Modal
+                isOpen={isOpen}
+                placement="center"
+                onOpenChange={onOpenChange}
+                className="w-11/12 ml-auto mr-auto"
+              >
+                <ModalContent>
+                  {(onClose) => (
+                    <>
+                      <ModalHeader></ModalHeader>
+                      <ModalBody className="gap-y-2">
+                        <p className="text-base font-medium">
+                          現在の試合結果を削除してもよろしいですか？
+                        </p>
+                        <p className="text-sm text-zinc-400">
+                          この試合結果に紐づく「打撃成績」と「投手成績」も削除されます。
+                        </p>
+                      </ModalBody>
+                      <ModalFooter className="pt-3">
+                        <Button
+                          className="text-white"
+                          variant="light"
+                          onPress={onClose}
+                        >
+                          キャンセル
+                        </Button>
+                        <Button
+                          color="danger"
+                          radius="sm"
+                          onClick={() =>
+                            handleDeleteGameResult(localStorageGameResultId)
+                          }
+                        >
+                          削除する
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  )}
+                </ModalContent>
+              </Modal>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </main>
     </>

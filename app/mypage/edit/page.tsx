@@ -115,7 +115,6 @@ export default function ProfileEdit() {
   const { isLoggedIn } = useAuthContext();
 
   useEffect(() => {
-    console.log(isLoggedIn);
     if (isLoggedIn === false) {
       return router.push("/signin");
     }
