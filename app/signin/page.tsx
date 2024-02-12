@@ -1,7 +1,9 @@
 "use client";
 import SignIn from "@app/components/auth/SignIn";
 import ToastSuccess from "@app/components/toast/ToastSuccess";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function Page() {
@@ -10,6 +12,15 @@ export default function Page() {
   const [logoutSuccess, setLogoutSuccess] = useState(false);
 
   const logoutParams = searchParams.get("logout");
+
+  const router = useRouter();
+  const { isLoggedIn } = useAuthContext();
+
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      return router.push("/");
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (logoutParams === "success") {

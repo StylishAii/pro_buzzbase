@@ -264,7 +264,7 @@ export default function MyPage() {
                     {isCurrentUserPage ? (
                       <>
                         <Button
-                          href={`${userData.user.user_id}/edit`}
+                          href={`/mypage/edit`}
                           as={Link}
                           className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
                         >

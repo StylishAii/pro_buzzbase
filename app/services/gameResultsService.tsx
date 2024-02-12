@@ -109,3 +109,13 @@ export const getFilterGameResultsUserId = async (
     throw error;
   }
 };
+
+export const deleteGameResult = async (id: number | null) => {
+  try {
+    const response = await axiosInstance.delete(`/api/v1/game_results/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
