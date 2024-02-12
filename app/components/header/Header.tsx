@@ -20,8 +20,10 @@ export default function Header() {
   }, []);
   const fetchDate = async () => {
     try {
-      const responseNotificationCount = await getNotificationCount();
-      setNotificationCount(responseNotificationCount);
+      if (!isLoggedIn == false) {
+        const responseNotificationCount = await getNotificationCount();
+        setNotificationCount(responseNotificationCount);
+      }
     } catch (error) {
       console.log(error);
     }
