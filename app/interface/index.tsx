@@ -279,6 +279,9 @@ interface MatchResult {
   defensive_position: string;
   user_id: string;
   game_result_id: number;
+  opponent_team_name: string;
+  my_team_score: number;
+  opponent_team_score: number;
 }
 
 interface BattingAverage {

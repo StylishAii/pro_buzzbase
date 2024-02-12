@@ -1,7 +1,7 @@
 "use client";
 import HeaderGameDetail from "@app/components/header/HeaderGameDetail";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
-import { ShareIcon } from "@app/components/icon/ShareIcon";
+import { XIcon } from "@app/components/icon/XIcon";
 import { getUserBattingAverage } from "@app/services/battingAveragesService";
 import { getUserMatchResult } from "@app/services/matchResultsService";
 import { getUserPitchingResult } from "@app/services/pitchingResultsService";
@@ -14,6 +14,7 @@ import {
   getCurrentUsersUserId,
 } from "@app/services/userService";
 import { Button, Chip, Divider } from "@nextui-org/react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -231,7 +232,6 @@ export default function ResultsSummary() {
     return `${wholePart}回${fractionalString ? `${fractionalString}` : ""}`;
   };
 
-  const handleShare = () => {};
   const handleResultComplete = () => {
     router.push("/game-result/record");
   };
@@ -250,7 +250,6 @@ export default function ResultsSummary() {
           <HeaderGameDetail />
         </>
       )}
-
       <main className="h-full">
         <div className="pb-32 relative">
           <div className="pt-20 px-4">
@@ -485,9 +484,12 @@ export default function ResultsSummary() {
               <Button
                 color="primary"
                 size="sm"
-                endContent={<ShareIcon stroke="#F4F4F4" />}
+                endContent={<XIcon fill="#F4F4F4" />}
                 className="mt-4"
-                onChange={handleShare}
+                as={Link}
+                href={`https://twitter.com/intent/tweet?text=${matchResult[0]?.my_team_score}対${matchResult[0]?.opponent_team_score} vs${matchResult[0]?.opponent_team_name}%0A&url=http://localhost:8000/game-result/summary/${id}%0A&hashtags=BuzzBase`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 成績をシェア
               </Button>
