@@ -188,7 +188,7 @@ export default function MatchResultList(props: UserId) {
   };
   return (
     <>
-      <div className="bg-bg_sub p-4 rounded-xl">
+      <div className="bg-bg_sub p-4 rounded-xl lg:p-6">
         <div className="flex gap-x-4 mb-5 justify-center">
           <ResultsSelectBox
             radius="full"

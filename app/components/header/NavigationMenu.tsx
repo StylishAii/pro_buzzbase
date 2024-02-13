@@ -40,8 +40,8 @@ export default function NavigationMenu() {
 
   return (
     <>
-      <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500 z-100">
-        <ul className="flex items-center justify-around max-w-[720px] mx-auto">
+      <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500 z-100 lg:w-56 lg:bottom-0 lg:left-0 lg:top-0 lg:h-full lg:border-t-0 lg:pl-6 lg:pt-16 lg:border-r-1 lg:border-r-zinc-500">
+        <ul className="flex items-center justify-around max-w-[720px] mx-auto lg:grid-cols-1 lg:ml-0 lg:h-full lg:items-start lg:gap-y-5 lg:flex-col lg:justify-start">
           {navigationItems.map((item, index) => (
             <li key={index}>
               <Button
@@ -63,7 +63,7 @@ export default function NavigationMenu() {
                   isActive(pathName, item.href)
                     ? `text-yellow-500`
                     : `text-white`
-                }`}
+                } lg:flex-row lg:text-base lg:w-fit lg:font-bold lg:gap-x-5 [&>svg]:lg:w-6 [&>svg]:lg:h-6 [&>svg]:lg:mr-4`}
               >
                 {item.label}
               </Button>
@@ -76,7 +76,7 @@ export default function NavigationMenu() {
               as={Link}
               className={`flex items-center flex-col gap-y-1 px-0 bg-transparent isIconOnly overflow-visible fontSize10 ${
                 pathName.includes("/mypage") ? `text-yellow-500` : `text-white`
-              } `}
+              } lg:flex-row lg:text-base lg:w-fit lg:font-bold lg:gap-x-5`}
             >
               <UserImage
                 src={
@@ -88,6 +88,7 @@ export default function NavigationMenu() {
                 height={22}
                 alt=""
                 active={pathName.includes("/mypage") ? true : false}
+                className={"lg:w-6 lg:h-6 lg:mr-4"}
               />
               マイページ
             </Button>

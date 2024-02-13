@@ -143,8 +143,8 @@ export default function MyPage() {
     <div className="buzz-dark flex flex-col w-full min-h-screen">
       <Header />
       <div className="h-full bg-main">
-        <main className="h-full max-w-[720px] mx-auto">
-          <div className="pt-16 pb-20 bg-main">
+        <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
+          <div className="pt-16 pb-20 bg-main lg:pt-20">
             <div className="px-4">
               <AvatarComponent userData={userData} />
               {userData.user.introduction?.length > 0 ? (

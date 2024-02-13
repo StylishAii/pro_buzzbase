@@ -8,8 +8,8 @@ export default function Footer() {
   const { isLoggedIn } = useAuthContext();
   return (
     <>
-      <footer className="border-t border-t-zinc-500 pt-12 px-4 pb-24 bg-main">
-        <ul className="grid grid-cols-1 gap-y-4 max-w-[692px] mx-auto">
+      <footer className="border-t border-t-zinc-500 pt-12 px-4 pb-24 bg-main lg:pt-18 lg:pb-12">
+        <ul className="grid grid-cols-1 gap-y-4 max-w-[692px] mx-auto lg:m-[0_auto_0_30%] lg:flex items-baseline lg:gap-x-10">
           <li>
             {isLoggedIn ? (
               <>

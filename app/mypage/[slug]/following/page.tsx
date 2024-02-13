@@ -64,22 +64,22 @@ export default function Following() {
       <div className="buzz-dark flex flex-col w-full min-h-screen">
         <HeaderBack />
         <div className="h-full bg-main">
-          <main className="h-full">
-            <div className="pt-10 grid grid-cols-2 text-center">
+          <main className="h-full lg:pb-16">
+            <div className="pt-10 grid grid-cols-2 text-center lg:border-x-1 lg:border-x-zinc-500 lg:pt-11 lg:flex lg:justify-around lg:max-w-[720px] lg:m-[0_auto_0_28%]">
               <Link
                 href={`/mypage/${userIdName}/following`}
-                className="font-bold text-base py-3 border-b-2 border-yellow-500"
+                className="font-bold text-base py-3 border-b-2 border-yellow-500 lg:w-full"
               >
                 フォロー中
               </Link>
               <Link
                 href={`/mypage/${userIdName}/followers`}
-                className="font-bold text-base py-3 border-b-2 border-zinc-600"
+                className="font-bold text-base py-3 border-b-2 border-zinc-600 lg:w-full"
               >
                 フォロワー
               </Link>
             </div>
-            <div className="px-4 py-5 pb-24 grid gap-y-5 bg-main max-w-[720px] mx-auto">
+            <div className="px-4 py-5 pb-24 grid gap-y-5 bg-main max-w-[720px] mx-auto lg:px-6 lg:pb-10 lg:m-[0_auto_0_28%] lg:border-x-1 lg:border-zinc-500 lg:border-b-1">
               {following.map((follow) => (
                 <div
                   key={follow.id}
