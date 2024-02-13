@@ -65,7 +65,7 @@ export default function GameResultList() {
   return (
     <>
       <Header />
-      <main className="h-full">
+      <main className="h-full max-w-[720px] mx-auto w-full">
         <div className="pb-32 relative">
           <div className="pt-16 px-4">
             <h2 className="text-xl font-bold mt-10">試合一覧</h2>

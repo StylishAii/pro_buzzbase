@@ -63,7 +63,7 @@ export default function Followers() {
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen">
         <HeaderBack />
-        <div className="h-full">
+        <div className="h-full bg-main">
           <main className="h-full">
             <div className="pt-10 grid grid-cols-2 text-center">
               <Link
@@ -79,7 +79,7 @@ export default function Followers() {
                 フォロワー
               </Link>
             </div>
-            <div className="px-4 py-5 pb-24 grid gap-y-5 bg-main">
+            <div className="px-4 py-5 pb-24 grid gap-y-5 bg-main max-w-[720px] mx-auto">
               {followers.map((follow) => (
                 <div
                   key={follow.id}

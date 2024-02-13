@@ -142,8 +142,8 @@ export default function MyPage() {
   return (
     <div className="buzz-dark flex flex-col w-full min-h-screen">
       <Header />
-      <div className="h-full">
-        <main className="h-full">
+      <div className="h-full bg-main">
+        <main className="h-full max-w-[720px] mx-auto">
           <div className="pt-16 pb-20 bg-main">
             <div className="px-4">
               <AvatarComponent userData={userData} />

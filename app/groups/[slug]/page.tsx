@@ -259,8 +259,8 @@ export default function GroupDetail({ params }: GroupDetailProps) {
           groupName={groupData?.group.name}
           groupIconLink={`${process.env.NEXT_PUBLIC_API_URL}${groupData?.group.icon.url}`}
         />
-        <div className="h-full">
-          <main className="h-full">
+        <div className="h-full bg-main">
+          <main className="h-full max-w-[720px] mx-auto">
             <div className="pt-16 pb-36 px-4 bg-main">
               <h2 className="text-xl font-bold mt-4">個人成績ランキング</h2>
               <div>

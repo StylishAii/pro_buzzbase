@@ -55,7 +55,7 @@ export default function Group() {
       <div className="buzz-dark flex flex-col w-full min-h-screen">
         <Header />
         <div className="h-full bg-main">
-          <main className="h-full pb-16">
+          <main className="h-full pb-16 max-w-[720px] mx-auto">
             <div className="px-4 py-14">
               <p className="text-lg mt-6 font-bold">
                 友達とグループを作成しよう！

@@ -135,7 +135,7 @@ export default function GroupNew() {
       <div className="buzz-dark">
         <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"作成"} />
         <div className="h-full bg-main">
-          <main className="h-full">
+          <main className="h-full max-w-[720px] mx-auto">
             <div className="px-4 py-14 relative">
               <ErrorMessages errors={errors} />
               <h2 className="text-2xl font-bold mt-5">グループ設定</h2>

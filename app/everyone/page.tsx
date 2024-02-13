@@ -41,7 +41,7 @@ export default function EveryoneGameResultList() {
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen bg-main">
         <Header />
-        <main className="h-full">
+        <main className="h-full w-full max-w-[720px] mx-auto">
           <div className="pb-32 relative">
             <div className="pt-16 px-4">
               <h2 className="text-xl font-bold">みんなの成績</h2>
@@ -50,7 +50,7 @@ export default function EveryoneGameResultList() {
                   <div key={index}>
                     <div className="grid grid-cols-[1fr_auto] items-center ">
                       <Link
-                        href={`/mypage/${gameResult.user_id}/`}
+                        href={`/mypage/${gameResult.user_user_id}/`}
                         className="block mb-2"
                       >
                         <User

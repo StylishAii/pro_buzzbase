@@ -279,7 +279,7 @@ export default function ResultsSummary() {
         </>
       )}
       <main className="h-full">
-        <div className="pb-20 relative">
+        <div className="pb-20 relative w-full max-w-[720px] mx-auto">
           {isLoading && <LoadingSpinner />}
           <div className="pt-20 px-4">
             {/* 試合情報 */}

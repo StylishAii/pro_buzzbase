@@ -4,10 +4,10 @@ import Link from "next/link";
 export default function PrivacyPolicy() {
   return (
     <>
-      <div className="buzz-dark flex flex-col w-full min-h-screen">
+      <div className="buzz-dark flex flex-col w-full min-h-screen bg-main">
         <div className="h-full bg-main">
           <Header />
-          <main className="h-full pb-16">
+          <main className="h-full pb-16 w-full max-w-[720px] mx-auto">
             <div className="px-4 pt-24">
               <h2 className="text-2xl font-bold">プライバシーポリシー</h2>
               <h3 className="text-xl font-bold mt-8">はじめに</h3>

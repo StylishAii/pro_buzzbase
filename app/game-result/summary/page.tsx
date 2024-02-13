@@ -234,7 +234,7 @@ export default function ResultsSummary() {
         text="試合一覧へ"
       />
       <main className="h-full">
-        <div className="pb-32 relative">
+        <div className="pb-32 relative w-full max-w-[720px] mx-auto">
           <div className="pt-20 px-4">
             <h2 className="text-xl font-bold text-center">試合結果まとめ</h2>
             <p className="text-sm text-center mt-6">

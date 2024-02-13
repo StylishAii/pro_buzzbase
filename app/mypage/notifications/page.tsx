@@ -96,8 +96,8 @@ export default function Notifications() {
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen">
         <Header />
-        <div className="h-full">
-          <main className="h-full">
+        <div className="h-full bg-main">
+          <main className="h-full max-w-[720px] mx-auto w-full">
             <div className="px-4 py-16">
               <h2 className="text-xl font-bold">通知</h2>
               <div className="py-5 pb-24 grid gap-y-5 bg-main">

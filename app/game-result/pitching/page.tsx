@@ -339,7 +339,7 @@ export default function PitchingRecord() {
     <>
       <HeaderResult />
       <main className="h-full">
-        <div className="pb-32 relative">
+        <div className="pb-32 relative w-full max-w-[720px] mx-auto">
           <ErrorMessages errors={errors} />
           <div className="pt-12 px-4">
             <div className="flex items-center justify-center gap-x-2">

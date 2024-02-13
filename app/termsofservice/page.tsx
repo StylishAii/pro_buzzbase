@@ -3,10 +3,10 @@ import Header from "@app/components/header/Header";
 export default function TermOfService() {
   return (
     <>
-      <div className="buzz-dark flex flex-col w-full min-h-screen">
+      <div className="buzz-dark flex flex-col w-full min-h-screen bg-main">
         <div className="h-full bg-main">
           <Header />
-          <main className="h-full pb-16">
+          <main className="h-full pb-16 w-full  max-w-[720px] mx-auto">
             <div className="px-4 pt-24">
               <h2 className="text-2xl font-bold">利用規約</h2>
               <p className="text-sm mt-6">この利用規約（以下，「本規約」といいます。）は，ウェブサイト上で提供するサービス（以下，「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下，「ユーザー」といいます。）には，本規約に従って，本サービスをご利用いただきます。</p>

@@ -443,7 +443,7 @@ export default function ProfileEdit() {
     <div className="buzz-dark bg-main pb-24 flex flex-col w-full min-h-screen">
       <HeaderSave onProfileUpdate={handleSubmit} />
       <div className="h-full buzz-dark">
-        <main className="h-full">
+        <main className="h-full max-w-[720px] mx-auto">
           <div className="pt-12 relative">
             <ErrorMessages errors={errors} />
             <SaveSpinner saved={save} />

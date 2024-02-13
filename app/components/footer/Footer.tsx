@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <>
       <footer className="border-t border-t-zinc-500 pt-12 px-4 pb-24 bg-main">
-        <ul className="grid grid-cols-1 gap-y-4">
+        <ul className="grid grid-cols-1 gap-y-4 max-w-[692px] mx-auto">
           <li>
             {isLoggedIn ? (
               <>
