@@ -1,15 +1,15 @@
 import { HomeIcon } from "@app/components/icon/HomeIcon";
-import { RankingIcon } from "@app/components/icon/RankingIcon";
 import { RecordIcon } from "@app/components/icon/RecordIcon";
 import { GroupIcon } from "@app/components/icon/GroupIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
+import { UserRecordIcon } from "@app/components/icon/UserRecordIcon";
 
 const NavigationItems = () => {
   const { isLoggedIn } = useAuthContext();
 
   return [
     { href: "", label: "新着", icon: HomeIcon },
-    { href: "/ranking", label: "ランキング", icon: RankingIcon },
+    { href: "/everyone", label: "みんなの", icon: UserRecordIcon },
     {
       href: isLoggedIn ? "/game-result/lists" : "/signin",
       label: "記録",
