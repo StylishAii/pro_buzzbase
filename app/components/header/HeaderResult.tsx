@@ -8,7 +8,7 @@ export default function HeaderResult() {
   return (
     <>
       <header className="py-2 px-3 fixed top-0 w-fit bg-transparent z-50">
-        <div>
+        <div className="max-w-[692px] mx-auto">
           <button onClick={handleBackClick}>
             <BackIcon width="24" height="24" fill="" stroke="white" />
           </button>

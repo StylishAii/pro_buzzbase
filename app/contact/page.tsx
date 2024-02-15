@@ -9,7 +9,7 @@ export default function Contact() {
           <Header />
           <main className="h-full pb-16">
             <div className="px-4 pt-24">
-              <div className="bg-main">
+              <div className="bg-main lg:m-[0_auto_0_6%]">
                 <iframe
                   src="https://docs.google.com/forms/d/e/1FAIpQLSfbVKEQcaWWG6b5bAL429RVHO3dkCvvhOcuvHhNA3vY3ZKdIg/viewform?embedded=true"
                   className="w-full h-[1000px] bg-main"

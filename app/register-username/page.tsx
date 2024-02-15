@@ -93,7 +93,7 @@ export default function RegisterUserName() {
   return (
     <>
       {isLoginSuccess && <ToastSuccess text="ログイン成功！" />}
-      <div className="px-4 w-full h-full flex flex-col items-center justify-center">
+      <div className="px-4 w-full h-full flex flex-col items-center justify-center max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
         <p className="text-base leading-7">
           ご登録ありがとうございます！<br></br>
           <span className="text-lg font-bold">ユーザー名</span>と
