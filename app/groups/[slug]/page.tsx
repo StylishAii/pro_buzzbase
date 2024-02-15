@@ -259,10 +259,10 @@ export default function GroupDetail({ params }: GroupDetailProps) {
           groupName={groupData?.group.name}
           groupIconLink={`${process.env.NEXT_PUBLIC_API_URL}${groupData?.group.icon.url}`}
         />
-        <div className="h-full">
-          <main className="h-full">
-            <div className="pt-16 pb-36 px-4 bg-main">
-              <h2 className="text-xl font-bold mt-4">個人成績ランキング</h2>
+        <div className="h-full bg-main">
+          <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
+            <div className="pt-16 pb-36 px-4 bg-main lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6 lg:mb-10">
+              <h2 className="text-xl font-bold mt-4 lg:text-2xl">個人成績ランキング</h2>
               <div>
                 <Tabs
                   color="primary"

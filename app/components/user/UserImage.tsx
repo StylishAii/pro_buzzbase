@@ -7,6 +7,7 @@ type UserImageProps = {
   height: number;
   alt: string;
   active: boolean;
+  className: any;
 };
 
 export const UserImage = ({
@@ -15,6 +16,7 @@ export const UserImage = ({
   height,
   alt,
   active,
+  className,
 }: UserImageProps) => {
   return (
     <div>
@@ -25,7 +27,7 @@ export const UserImage = ({
         alt={alt}
         className={`rounded-full border-1.5 block aspect-square ${
           active ? "border-yellow-500" : "border-zinc-600"
-        }`}
+        } ${className}`}
         loader={myLoader}
       />
     </div>

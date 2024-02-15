@@ -188,7 +188,7 @@ export default function GameRecord() {
   useEffect(() => {
     // 守備位置設定
     if (userData && positionData.length > 0) {
-      const userPositionFirstId = userData.positions[0].id;
+      const userPositionFirstId = userData.positions[0]?.id;
       const userPosition = positionData.find(
         (position) => position.id === userPositionFirstId
       );
@@ -478,17 +478,23 @@ export default function GameRecord() {
     <>
       <HeaderResult />
       <main className="h-full">
-        <div className="pb-40 relative">
+        <div className="pb-40 relative w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <ErrorMessages errors={errors} />
-          <div className="pt-12 px-4">
+          <div className="pt-12 px-4 lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6">
             <div className="flex items-center justify-center gap-x-2">
-              <p className="text-xl font-medium text-yellow-500">試合結果</p>
-              <span className="opacity-40">→</span>
-              <p className="text-xl font-medium opacity-40">打撃結果</p>
-              <span className="opacity-40">→</span>
-              <p className="text-xl font-medium opacity-40">投手結果</p>
+              <p className="text-xl font-medium text-yellow-500 lg:text-2xl">
+                試合結果
+              </p>
+              <span className="opacity-40 lg:text-lg">→</span>
+              <p className="text-xl font-medium opacity-40 lg:text-2xl">
+                打撃結果
+              </p>
+              <span className="opacity-40 lg:text-lg">→</span>
+              <p className="text-xl font-medium opacity-40 lg:text-2xl">
+                投手結果
+              </p>
             </div>
-            <h2 className="text-base text-center mt-5">
+            <h2 className="text-base text-center mt-5 lg:text-lg">
               試合結果を入力しよう！
             </h2>
             <form>

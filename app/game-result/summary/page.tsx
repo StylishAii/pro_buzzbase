@@ -234,10 +234,12 @@ export default function ResultsSummary() {
         text="試合一覧へ"
       />
       <main className="h-full">
-        <div className="pb-32 relative">
-          <div className="pt-20 px-4">
-            <h2 className="text-xl font-bold text-center">試合結果まとめ</h2>
-            <p className="text-sm text-center mt-6">
+        <div className="pb-32 relative w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
+          <div className="pt-20 px-4 lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6">
+            <h2 className="text-xl font-bold text-center lg:text-2xl">
+              試合結果まとめ
+            </h2>
+            <p className="text-sm text-center mt-6 lg:text-base">
               成績を友達にシェアしよう！
             </p>
             <div className="flex justify-center">

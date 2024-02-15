@@ -440,14 +440,14 @@ export default function ProfileEdit() {
   };
 
   return (
-    <div className="buzz-dark bg-main pb-24 flex flex-col w-full min-h-screen">
+    <div className="buzz-dark bg-main pb-24 flex flex-col w-full min-h-screen ">
       <HeaderSave onProfileUpdate={handleSubmit} />
       <div className="h-full buzz-dark">
-        <main className="h-full">
-          <div className="pt-12 relative">
+        <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
+          <div className="pt-12 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 ">
             <ErrorMessages errors={errors} />
             <SaveSpinner saved={save} />
-            <div className="px-4 py-10">
+            <div className="px-4 py-10 lg:px-6">
               <h2 className="text-xl font-bold text-center">
                 プロフィール編集
               </h2>

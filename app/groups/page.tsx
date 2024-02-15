@@ -55,8 +55,8 @@ export default function Group() {
       <div className="buzz-dark flex flex-col w-full min-h-screen">
         <Header />
         <div className="h-full bg-main">
-          <main className="h-full pb-16">
-            <div className="px-4 py-14">
+          <main className="h-full pb-16 max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
+            <div className="px-4 py-14 lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6">
               <p className="text-lg mt-6 font-bold">
                 友達とグループを作成しよう！
               </p>
@@ -82,20 +82,26 @@ export default function Group() {
               <div className="mt-7">
                 <h2 className="text-2xl font-bold">グループ</h2>
                 <div className="mt-5 grid gap-y-5">
-                  {groups.map((group) => (
-                    <Link key={group.id} href={`/groups/${group.id}`}>
-                      <div className="grid grid-cols-[56px_1fr] items-center gap-x-4">
-                        <Avatar
-                          size="lg"
-                          isBordered
-                          src={`${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`}
-                        />
-                        <p className="text-lg font-bold text-white">
-                          {group.name}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
+                  {groups.length > 0 ? (
+                    groups.map((group) => (
+                      <Link key={group.id} href={`/groups/${group.id}`}>
+                        <div className="grid grid-cols-[56px_1fr] items-center gap-x-4">
+                          <Avatar
+                            size="lg"
+                            isBordered
+                            src={`${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`}
+                          />
+                          <p className="text-lg font-bold text-white">
+                            {group.name}
+                          </p>
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    <>
+                      <p className="text-zinc-400 text-center text-sm">所属しているグループはありません</p>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

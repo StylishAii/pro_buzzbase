@@ -41,7 +41,7 @@ export default function Page() {
     <>
       {logoutSuccess && <ToastSuccess text={message} />}
       <div className="h-full flex flex-col items-center justify-center px-4">
-        <div className="w-11/12">
+        <div className="w-11/12 max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <h2 className="text-2xl font-bold mb-9">ログイン</h2>
           <SignIn />
         </div>

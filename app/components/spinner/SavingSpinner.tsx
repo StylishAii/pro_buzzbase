@@ -16,7 +16,7 @@ export default function SaveSpinner({ saved }: { saved: boolean }) {
     <>
       {showSpinner ? (
         <>
-          <div className="fixed top-0 left-0 w-full h-full bg-zinc-800 z-60 opacity-70"></div>
+          <div className="fixed top-0 left-0 w-full h-full bg-zinc-800 z-60 opacity-70 lg:z-100"></div>
           <Spinner
             label="保存中..."
             labelColor="primary"
