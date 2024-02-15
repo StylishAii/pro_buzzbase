@@ -5,6 +5,7 @@ import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { NotificationIcon } from "@app/components/icon/NotificationIcon";
 import { getNotificationCount } from "@app/services/notificationsService";
+import Image from "next/image";
 
 type NotificationCount = {
   count: number;
@@ -33,7 +34,14 @@ export default function Header() {
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
         <div className="flex items-center justify-between h-full max-w-[692px] mx-auto lg:m-[0_auto_0_29%]">
-          <Link href="/">LOGO</Link>
+          <Link href="/">
+            <Image
+              src="/images/buzz-logo-v2.png"
+              width="128"
+              height="50"
+              alt="BUZZ BASE"
+            />
+          </Link>
           <div className="flex items-center gap-x-4 pt-1">
             {isLoggedIn ? (
               <>

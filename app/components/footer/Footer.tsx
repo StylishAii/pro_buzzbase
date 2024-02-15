@@ -2,14 +2,24 @@
 import Logout from "@app/components/auth/Logout";
 import { XIcon } from "@app/components/icon/XIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
   const { isLoggedIn } = useAuthContext();
   return (
     <>
-      <footer className="border-t border-t-zinc-500 pt-12 px-4 pb-24 bg-main lg:pt-28 lg:pb-12">
-        <ul className="grid grid-cols-1 gap-y-4 max-w-[692px] mx-auto lg:m-[0_auto_0_30%] lg:flex items-baseline lg:gap-x-10">
+      <footer className="border-t border-t-zinc-500 pt-12 px-4 pb-24 bg-main lg:pb-12 lg:flex lg:items-center lg:pl-[20%] lg:gap-x-3">
+        <Link href="/">
+          <Image
+            src="/images/buzz-logo-v2.png"
+            width="184"
+            height="50"
+            alt="BUZZ BASE"
+            className="block mb-3 lg:m-[0_auto_0_32%] "
+          />
+        </Link>
+        <ul className="grid grid-cols-1 gap-y-4 max-w-[692px] mx-auto lg:flex items-baseline lg:gap-x-10 lg:max-w-full">
           <li>
             {isLoggedIn ? (
               <>
