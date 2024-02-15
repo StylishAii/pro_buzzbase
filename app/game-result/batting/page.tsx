@@ -519,18 +519,18 @@ export default function BattingRecord() {
   return (
     <>
       <HeaderResult />
-      <main className="h-full">
-        <div className="pb-32 relative w-full max-w-[720px] mx-auto">
+      <main className="h-full ">
+        <div className="pb-32 relative w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <ErrorMessages errors={errors} />
-          <div className="pt-12 px-4">
+          <div className="pt-12 px-4 lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6">
             <div className="flex items-center justify-center gap-x-2">
-              <p className="text-xl font-medium opacity-40">試合結果</p>
-              <span className="opacity-40">→</span>
-              <p className="text-xl font-medium text-yellow-500">打撃結果</p>
-              <span className="opacity-40">→</span>
-              <p className="text-xl font-medium opacity-40">投手結果</p>
+              <p className="text-xl font-medium opacity-40 lg:text-2xl">試合結果</p>
+              <span className="opacity-40 lg:text-lg">→</span>
+              <p className="text-xl font-medium text-yellow-500 lg:text-2xl">打撃結果</p>
+              <span className="opacity-40 lg:text-lg">→</span>
+              <p className="text-xl font-medium opacity-40 lg:text-2xl">投手結果</p>
             </div>
-            <h2 className="text-base text-center mt-5">
+            <h2 className="text-base text-center mt-5 lg:text-lg">
               打撃結果を入力しよう！
             </h2>
 

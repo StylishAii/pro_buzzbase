@@ -135,8 +135,8 @@ export default function GroupNew() {
       <div className="buzz-dark">
         <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"作成"} />
         <div className="h-full bg-main">
-          <main className="h-full max-w-[720px] mx-auto">
-            <div className="px-4 py-14 relative">
+          <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
+            <div className="px-4 py-14 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6 lg:mb-10">
               <ErrorMessages errors={errors} />
               <h2 className="text-2xl font-bold mt-5">グループ設定</h2>
               <form>
@@ -179,7 +179,7 @@ export default function GroupNew() {
                   </div>
                 </div>
                 <p className="pt-12 text-lg font-bold">メンバーを選択</p>
-                <div className="pt-4 pb-24 grid gap-y-5 bg-main">
+                <div className="pt-4 pb-24 grid gap-y-5 bg-main lg:pb-4">
                   {following.map((follow) => (
                     <div
                       key={follow.id}

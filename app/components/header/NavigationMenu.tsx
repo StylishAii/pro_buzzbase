@@ -40,7 +40,7 @@ export default function NavigationMenu() {
 
   return (
     <>
-      <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500 z-100 lg:w-56 lg:bottom-0 lg:left-0 lg:top-0 lg:h-full lg:border-t-0 lg:pl-6 lg:pt-16 lg:border-r-1 lg:border-r-zinc-500">
+      <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500 z-100 lg:w-56 lg:bottom-0 lg:left-0 lg:top-0 lg:h-full lg:border-t-0 lg:pl-6 lg:pt-16 lg:border-r-1 lg:border-r-zinc-500 lg:z-50">
         <ul className="flex items-center justify-around max-w-[720px] mx-auto lg:grid-cols-1 lg:ml-0 lg:h-full lg:items-start lg:gap-y-5 lg:flex-col lg:justify-start">
           {navigationItems.map((item, index) => (
             <li key={index}>

@@ -65,16 +65,16 @@ export default function GameResultList() {
   return (
     <>
       <Header />
-      <main className="h-full max-w-[720px] mx-auto w-full">
-        <div className="pb-32 relative">
-          <div className="pt-16 px-4">
-            <h2 className="text-xl font-bold mt-10">試合一覧</h2>
+      <main className="h-full max-w-[720px] mx-auto w-full lg:m-[0_auto_0_28%]">
+        <div className="pb-32 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:pb-0 lg:mb-14">
+          <div className="pt-16 px-4 lg:px-6 lg:pb-6">
+            <h2 className="text-2xl font-bold mt-10">試合一覧</h2>
             <Button
               color="primary"
               variant="solid"
               radius="full"
               endContent={<PlusIcon width="22" height="22" fill="#F4F4F4" />}
-              className="fixed top-14 right-4 z-100 font-medium"
+              className="fixed top-14 right-4 z-100 font-medium lg:absolute lg:top-16 lg:z-10"
               onClick={handleNewRecord}
             >
               新規追加

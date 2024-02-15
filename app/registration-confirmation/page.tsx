@@ -3,7 +3,7 @@ import React from "react";
 export default function RegistrationConfirmation() {
   return (
     <>
-      <div className="px-4 pt-32 max-w-[720px] mx-auto">
+      <div className="px-4 pt-32 max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
         <h2 className="text-lg bold mb-8">
           BuzzBaseへご登録ありがとうございます！
         </h2>

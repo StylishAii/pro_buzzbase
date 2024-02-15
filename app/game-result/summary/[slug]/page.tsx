@@ -279,9 +279,9 @@ export default function ResultsSummary() {
         </>
       )}
       <main className="h-full">
-        <div className="pb-20 relative w-full max-w-[720px] mx-auto">
+        <div className="pb-20 relative w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           {isLoading && <LoadingSpinner />}
-          <div className="pt-20 px-4">
+          <div className="pt-20 px-4 lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6">
             {/* 試合情報 */}
             <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
               {matchResult ? (
