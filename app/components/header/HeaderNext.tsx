@@ -11,7 +11,7 @@ export default function HeaderNext({ onMatchResultSave }: HeaderNextProps) {
         <Link href="/">
             <Image
               src="/images/buzz-logo-v2.png"
-              width="128"
+              width="120"
               height="50"
               alt="BUZZ BASE"
             />
