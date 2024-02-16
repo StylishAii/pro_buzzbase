@@ -38,7 +38,7 @@ const mockdata = [
   {
     title: "ランキング形式で共有",
     description:
-      "グループ内のメンバーの成績が、各タイトルごとのランキングで表示されます。",
+      "グループ内のユーザーの成績が、各タイトルごとのランキングで表示されます。",
     icon: RankingIcon,
   },
 ];
@@ -214,7 +214,7 @@ export default function Home() {
                   <Text fz="sm" className="!text-zinc-400">
                     「グループ名・グループアイコン・招待するユーザー選択」を行い、成績を共有するグループを作成します。
                     <br />
-                    招待されたユーザーは、通知画面より、そのグループに参加するかしないかを選択することができます。
+                    招待されたユーザーは、「通知画面」から詳細されたグループに参加するかしないかを選択することができます。
                   </Text>
                 </div>
                 <video
@@ -230,6 +230,67 @@ export default function Home() {
                 </video>
               </div>
             </Container>
+            <Container size="lg" className="pt-16">
+              <div className={classes.wrapper}>
+                <div className={classes.body}>
+                  <p className="py-1 px-4 bg-yellow-500 rounded-full text-sm font-medium w-fit">
+                    つかいかた
+                  </p>
+                  <Title className={`${classes.title} pt-3`}>
+                    ランキング形式で共有
+                  </Title>
+                  <Text fw={500} fz="lg" mt={12} mb={8}>
+                    グループ内で各ユーザーの成績を比較
+                  </Text>
+                  <Text fz="sm" className="!text-zinc-400">
+                    グループに参加しているユーザー同士の成績をランキング形式で表示します。
+                    <br />
+                    チーム内外の友達とお互いの成績を共有・比較することができます。
+                  </Text>
+                </div>
+                <video
+                  width="284"
+                  height="160"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="mx-auto rounded-xl"
+                >
+                  <source src="/video/ranking.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </Container>
+            <div className="mt-56 mb-40 px-6">
+              <div>
+                <h3 className="text-5xl font-bold text-center">
+                  BUZZ BASE で野球をもっと楽しく
+                </h3>
+                <p className="text-lg text-zinc-500 text-center mt-10 font-medium">BUZZ BASEをはじめる</p>
+                <div className="flex gap-x-8 justify-center mt-4">
+                  <Button
+                    color="default"
+                    size="lg"
+                    radius="sm"
+                    as={Link}
+                    href="/signin"
+                    className="bg-white text-zinc-800 font-medium py-3 px-16"
+                  >
+                    ログイン
+                  </Button>
+                  <Button
+                    color="primary"
+                    size="lg"
+                    radius="sm"
+                    as={Link}
+                    href="/signup"
+                    className="font-medium py-2 px-16"
+                  >
+                    新規登録
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </MantineProvider>
       </div>
