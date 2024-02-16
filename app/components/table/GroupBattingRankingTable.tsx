@@ -36,6 +36,13 @@ type Props = {
 export default function GroupBattingRankingTable(props: Props) {
   const { battingAverage, battingStats } = props;
 
+  function formatNumber(value: number): string {
+    if (value < 1 && value > -1) {
+      return value.toFixed(3).replace("0", "");
+    }
+    return value.toFixed(3);
+  }
+
   const sortedBattingAverage =
     battingStats?.sort((a, b) => b.batting_average - a.batting_average) || [];
 
@@ -85,7 +92,7 @@ export default function GroupBattingRankingTable(props: Props) {
                         className="justify-start"
                       />
                       <span className="text-base block font-bold">
-                        {stats.batting_average}
+                        {formatNumber(stats.batting_average)}
                       </span>
                     </div>
                   </Link>
@@ -255,7 +262,7 @@ export default function GroupBattingRankingTable(props: Props) {
                         className="justify-start"
                       />
                       <span className="text-base block font-bold">
-                        {stats.on_base_percentage}
+                        {formatNumber(stats.on_base_percentage)}
                       </span>
                     </div>
                   </Link>
