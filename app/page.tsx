@@ -77,13 +77,9 @@ export default function Home() {
             <Container size="lg">
               <div className={classes.inner}>
                 <div className={classes.content}>
-                  <Image
-                    src="/images/buzz-logo-v2.png"
-                    alt=""
-                    width="82"
-                    height="40"
-                    className={classes.logo}
-                  />
+                  <p className="text-sm text-yellow-500 mb-2">
+                    個人成績の管理・共有アプリ
+                  </p>
                   <Title className={classes.title}>
                     野球の成績を記録、
                     <br />
@@ -275,7 +271,7 @@ export default function Home() {
                 </h3>
                 {isLoggedIn ? (
                   <>
-                    <div className="w-60 mt-12 mx-auto">
+                    <div className="w-40 mt-6 mx-auto lg:w-60 lg:mt-12">
                       <Image
                         src="/images/buzz-logo-v2.png"
                         alt=""
