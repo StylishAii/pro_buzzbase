@@ -36,6 +36,9 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
   const [tournamentNames, setTournamentNames] = useState<TournamentNames>({});
   const router = useRouter();
 
+  // console.log(gameResult);
+  // console.log(plateAppearance);
+
   useEffect(() => {
     const fetchTeamNames = async () => {
       const names: TeamNames = {};
@@ -226,16 +229,22 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
             <CardBody className="p-0">
               <p className="text-sm font-normal text-zinc-400">打撃</p>
               <ul className="flex flex-wrap gap-2 ">
-                {plateAppearance[index].map((plate: PlateAppearance) => (
-                  <li
-                    key={plate.id}
-                    className={`font-bold ${getBattingResultClassName(
-                      plate.batting_result
-                    )}`}
-                  >
-                    {plate.batting_result}
-                  </li>
-                ))}
+                {plateAppearance
+                  .flat()
+                  .filter(
+                    (plate: PlateAppearance) =>
+                      plate.game_result_id == game.game_result_id
+                  )
+                  .map((plate: PlateAppearance) => (
+                    <li
+                      key={plate.id}
+                      className={`font-bold ${getBattingResultClassName(
+                        plate.batting_result
+                      )}`}
+                    >
+                      {plate.batting_result}
+                    </li>
+                  ))}
               </ul>
               <p className="text-sm font-normal text-zinc-400 mt-2">投手</p>
               <ul className="flex flex-wrap gap-2 ">
