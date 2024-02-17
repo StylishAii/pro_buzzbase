@@ -40,7 +40,7 @@ const mockdata = [
     title: "ランキング形式で共有",
     description:
       "グループ内のユーザーの成績が、各タイトルごとのランキングで表示されます。",
-    icon: RankingIcon, 
+    icon: RankingIcon,
   },
 ];
 
@@ -80,13 +80,16 @@ export default function Home() {
                   <p className="text-sm text-yellow-500 mb-2">
                     個人成績の管理・共有アプリ
                   </p>
-                  <Title className={classes.title}>
+                  <Title className={`${classes.title}`}>
                     野球の成績を記録、
                     <br />
                     友達と<span className={classes.highlight}>ランキング</span>
                     で共有
                   </Title>
-                  <Text mt="md" className="!text-zinc-400">
+                  <Text
+                    mt="md"
+                    className="!text-zinc-400 !text-sm !lg:text-base"
+                  >
                     BUZZ
                     BASEは、個人の打撃・投手成績を記録することができます。そして、友達とグループを作成し「ランキング形式」で個人成績を共有・比較することができます。
                   </Text>
