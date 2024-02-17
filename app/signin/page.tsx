@@ -1,13 +1,12 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
 import SignIn from "@app/components/auth/SignIn";
 import ToastSuccess from "@app/components/toast/ToastSuccess";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
+import React, { useEffect, useState } from "react";
 
-function SignInComponent() {
+export default function Page() {
   const searchParams = useSearchParams();
   const [message, setMessage] = useState("");
   const [logoutSuccess, setLogoutSuccess] = useState(false);
@@ -19,9 +18,9 @@ function SignInComponent() {
 
   useEffect(() => {
     if (isLoggedIn === true) {
-      router.push("/");
+      return router.push("/");
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (logoutParams === "success") {
@@ -48,13 +47,5 @@ function SignInComponent() {
         </div>
       </div>
     </>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <SignInComponent />
-    </Suspense>
   );
 }

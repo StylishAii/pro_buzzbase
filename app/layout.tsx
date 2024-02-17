@@ -5,7 +5,6 @@ import NavigationMenu from "@app/components/header/NavigationMenu";
 import { AuthProvider } from "@app/contexts/useAuthContext";
 import { notoSansJP } from "@app/font";
 import Footer from "@app/components/footer/Footer";
-import { GoogleAnalytics } from "@next/third-parties/google";
 
 const siteName = "BUZZ BASE 野球の個人記録をランキング形式で共有";
 const description =
@@ -13,6 +12,7 @@ const description =
 const url = "https://buzzbase.jp";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(`${process.env.NEXT_PUBLIC_METADATA_BASE_URL}`),
   title: {
     default: "BUZZ BASE | 野球の個人記録をランキング形式で共有",
     template: `%s - ${siteName}`,
@@ -44,7 +44,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className="h-full">
-      <GoogleAnalytics gaId="G-47TWJXXWMF" />
       <body className={`${notoSansJP.className} bg-main text-white h-full`}>
         <AuthProvider>
           <Providers>

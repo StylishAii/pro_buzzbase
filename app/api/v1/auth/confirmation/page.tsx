@@ -1,16 +1,16 @@
 "use client";
 
-import React, { Suspense, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import LoadingSpinnerText from "@app/components/spinner/LoadingSpinnerText";
-import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 
-const EmailConfirmationComponent = () => {
+const EmailConfirmation = () => {
   const router = useRouter();
   const { confirmationMessage, confirmationError, confirmAccount } =
     useAuthContext();
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = useSearchParams();
   const confirmationToken = searchParams.get("confirmation_token");
 
   useEffect(() => {
@@ -33,6 +33,7 @@ const EmailConfirmationComponent = () => {
             <p className="text-red-500">
               エラーが発生しました: {confirmationError}
             </p>
+            {/* <p className="pt-6">メールアドレスを再送してください。</p> */}
           </div>
         </>
       )}
@@ -43,10 +44,4 @@ const EmailConfirmationComponent = () => {
   );
 };
 
-export default function EmailConfirmation() {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <EmailConfirmationComponent />
-    </Suspense>
-  );
-}
+export default EmailConfirmation;
