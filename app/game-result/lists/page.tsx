@@ -74,7 +74,7 @@ export default function GameResultList() {
               variant="solid"
               radius="full"
               endContent={<PlusIcon width="22" height="22" fill="#F4F4F4" />}
-              className="fixed top-14 right-4 z-100 font-medium lg:absolute lg:top-16 lg:z-10"
+              className="fixed top-16 right-4 z-100 font-medium lg:absolute lg:z-10"
               onClick={handleNewRecord}
             >
               新規追加

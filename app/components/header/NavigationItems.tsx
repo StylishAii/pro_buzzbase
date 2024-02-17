@@ -8,7 +8,7 @@ const NavigationItems = () => {
   const { isLoggedIn } = useAuthContext();
 
   return [
-    { href: "", label: "新着", icon: HomeIcon },
+    { href: "/", label: "トップ", icon: HomeIcon },
     { href: "/everyone", label: "みんなの", icon: UserRecordIcon },
     {
       href: isLoggedIn ? "/game-result/lists" : "/signin",

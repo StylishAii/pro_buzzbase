@@ -40,16 +40,17 @@ export default function PitchingRecordTable(props: Props) {
     ? personalPitchingStatus
     : undefined;
 
-  const displayValue = (value: number | undefined) => {
-    if (value === undefined) {
-      return "-";
-    } else {
-      const formattedValue = value.toString();
-      return formattedValue.startsWith("0.")
-        ? formattedValue.substring(1)
-        : formattedValue;
+  function formatNumber(value: number): string {
+    if (value < 1 && value > -1) {
+      return value.toFixed(3).replace("0", "");
     }
-  };
+    return value.toFixed(2);
+  }
+
+  const displayValue = (value: number | undefined) =>
+    value === undefined ? "-" : value.toString();
+  const displayFormattedValue = (value: number | undefined) =>
+    value === undefined ? "-" : formatNumber(value);
 
   const styleTableBox = "grid grid-cols-2 text-center";
   const styleTableTitle =
@@ -65,7 +66,7 @@ export default function PitchingRecordTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>防御率</p>
               <span className={styleTableData}>
-                {displayValue(pitchingStats?.era)}
+                {displayFormattedValue(pitchingStats?.era)}
               </span>
             </div>
             <div className={styleTableBox}>
@@ -89,7 +90,7 @@ export default function PitchingRecordTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>勝率</p>
               <span className={styleTableData}>
-                {displayValue(pitchingStats?.win_percentage)}
+                {displayFormattedValue(pitchingStats?.win_percentage)}
               </span>
             </div>
             <div className={styleTableBox}>
@@ -119,13 +120,13 @@ export default function PitchingRecordTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>BB/9</p>
               <span className={styleTableData}>
-                {displayValue(pitchingStats?.bb_per_nine)}
+                {displayFormattedValue(pitchingStats?.bb_per_nine)}
               </span>
             </div>
             <div className={styleTableBox}>
               <p className={`${styleTableTitle} rounded-bl-md`}>WHIP</p>
               <span className={styleTableData}>
-                {displayValue(pitchingStats?.whip)}
+                {displayFormattedValue(pitchingStats?.whip)}
               </span>
             </div>
           </div>
@@ -183,7 +184,7 @@ export default function PitchingRecordTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>K/9</p>
               <span className={styleTableData}>
-                {displayValue(pitchingStats?.k_per_nine)}
+                {displayFormattedValue(pitchingStats?.k_per_nine)}
               </span>
             </div>
             <div className={styleTableBox}>

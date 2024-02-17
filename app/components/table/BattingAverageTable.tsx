@@ -41,16 +41,17 @@ export default function BattingAverageTable(props: Props) {
     ? personalBattingStatus
     : undefined;
 
-  const displayValue = (value: number | undefined) => {
-    if (value === undefined || value === 0) {
-      return "-";
-    } else {
-      const formattedValue = value.toString();
-      return formattedValue.startsWith("0.")
-        ? formattedValue.substring(1)
-        : formattedValue;
+  function formatNumber(value: number): string {
+    if (value < 1 && value > -1) {
+      return value.toFixed(3).replace("0", "");
     }
-  };
+    return value.toFixed(3);
+  }
+
+  const displayValue = (value: number | undefined) =>
+    value === undefined ? "-" : value.toString();
+  const displayFormattedValue = (value: number | undefined) =>
+    value === undefined ? "-" : formatNumber(value);
 
   const styleTableBox = "grid grid-cols-2 text-center";
   const styleTableTitle =
@@ -65,7 +66,7 @@ export default function BattingAverageTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>打率</p>
               <span className={styleTableData}>
-                {displayValue(battingStatus?.batting_average)}
+                {displayFormattedValue(battingStatus?.batting_average)}
               </span>
             </div>
             <div className={styleTableBox}>
@@ -113,19 +114,19 @@ export default function BattingAverageTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>出塁率</p>
               <span className={styleTableData}>
-                {displayValue(battingStatus?.on_base_percentage)}
+                {displayFormattedValue(battingStatus?.on_base_percentage)}
               </span>
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>OPS</p>
               <span className={styleTableData}>
-                {displayValue(battingStatus?.ops)}
+                {displayFormattedValue(battingStatus?.ops)}
               </span>
             </div>
             <div className={styleTableBox}>
               <p className={`${styleTableTitle} rounded-bl-md`}>ISOD</p>
               <span className={styleTableData}>
-                {displayValue(battingStatus?.isod)}
+                {displayFormattedValue(battingStatus?.isod)}
               </span>
             </div>
           </div>
@@ -182,13 +183,13 @@ export default function BattingAverageTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>ISO</p>
               <span className={styleTableData}>
-                {displayValue(battingStatus?.iso)}
+                {displayFormattedValue(battingStatus?.iso)}
               </span>
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>BB/K</p>
               <span className={styleTableData}>
-                {displayValue(battingStatus?.bb_per_k)}
+                {displayFormattedValue(battingStatus?.bb_per_k)}
               </span>
             </div>
             <div className={styleTableBox}>
