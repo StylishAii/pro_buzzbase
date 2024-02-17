@@ -16,7 +16,7 @@ export default function Footer() {
               <Image
                 src="/images/buzz-logo-v2.png"
                 width="184"
-                height="50"
+                height="45"
                 alt="BUZZ BASE"
                 className="block mb-3 lg:mb-0"
               />
