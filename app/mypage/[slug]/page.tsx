@@ -217,7 +217,7 @@ export default function MyPage() {
                         width="20"
                         height="20"
                         fill="#e08e0ad0"
-                        className="min-w-min"
+                        className="min-w-[20px]"
                       />
                       <ul className="flex flex-wrap items-center gap-x-1">
                         {userAwards
