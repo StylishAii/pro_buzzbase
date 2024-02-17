@@ -38,7 +38,7 @@ export default function HeaderTop() {
             <Image
               src="/images/buzz-logo-v2.png"
               width="120"
-              height="50"
+              height="30"
               alt="BUZZ BASE"
             />
           </Link>

@@ -46,7 +46,7 @@ export default function NavigationMenu() {
           <Image
             src="/images/buzz-logo-v2.png"
             width="164"
-            height="50"
+            height="40"
             alt="BUZZ BASE"
             className="lg:block lg:mb-8"
           />
