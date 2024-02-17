@@ -42,6 +42,7 @@ const battingOrder = [
   { id: 7, turn: "7番" },
   { id: 8, turn: "8番" },
   { id: 9, turn: "9番" },
+  { id: 10, turn: "-" },
 ];
 
 type Team = {
