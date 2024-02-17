@@ -21,6 +21,7 @@ import Link from "next/link";
 import { RecordIcon } from "@app/components/icon/RecordIcon";
 import { GroupIcon } from "@app/components/icon/GroupIcon";
 import { RankingIcon } from "@app/components/icon/RankingIcon";
+import { useAuthContext } from "@app/contexts/useAuthContext";
 
 const mockdata = [
   {
@@ -44,6 +45,7 @@ const mockdata = [
 ];
 
 export default function Home() {
+  const { isLoggedIn } = useAuthContext();
   const features = mockdata.map((feature) => (
     <Card
       key={feature.title}
@@ -114,29 +116,34 @@ export default function Home() {
                       <b>マイページ機能</b> – 自分の試合結果や個人成績を管理。
                     </List.Item>
                   </List>
-
-                  <Group mt={30}>
-                    <Button
-                      color="default"
-                      size="lg"
-                      radius="sm"
-                      as={Link}
-                      href="/signin"
-                      className="bg-white text-zinc-800 font-medium py-3"
-                    >
-                      ログイン
-                    </Button>
-                    <Button
-                      color="primary"
-                      size="lg"
-                      radius="sm"
-                      as={Link}
-                      href="/signup"
-                      className="font-medium py-2"
-                    >
-                      新規登録
-                    </Button>
-                  </Group>
+                  {isLoggedIn ? (
+                    <></>
+                  ) : (
+                    <>
+                      <Group mt={30}>
+                        <Button
+                          color="default"
+                          size="lg"
+                          radius="sm"
+                          as={Link}
+                          href="/signin"
+                          className="bg-white text-zinc-800 font-medium py-3"
+                        >
+                          ログイン
+                        </Button>
+                        <Button
+                          color="primary"
+                          size="lg"
+                          radius="sm"
+                          as={Link}
+                          href="/signup"
+                          className="font-medium py-2"
+                        >
+                          新規登録
+                        </Button>
+                      </Group>
+                    </>
+                  )}
                 </div>
                 <Image src="/images/top-kv.png" className={classes.image} />
               </div>
@@ -154,7 +161,7 @@ export default function Home() {
               </Title>
 
               <Text
-                className={`${classes.description} !text-zinc-400`}
+                className={`${classes.description} !text-zinc-400 !text-sm !lg:text-base`}
                 ta="center"
                 mt="md"
               >
@@ -168,13 +175,13 @@ export default function Home() {
               </SimpleGrid>
             </Container>
 
-            <Container size="lg" className="pt-36">
+            <Container size="lg" className="pt-24 lg:pt-36">
               <div className={classes.wrapper}>
                 <div className={classes.body}>
                   <p className="py-1 px-4 bg-yellow-500 rounded-full text-sm font-medium w-fit">
                     つかいかた
                   </p>
-                  <Title className={`${classes.title} pt-3`}>
+                  <Title className={`${classes.sectionTitle} pt-3`}>
                     個人成績を記録
                   </Title>
                   <Text fw={500} fz="lg" mt={12} mb={8}>
@@ -193,19 +200,19 @@ export default function Home() {
                   muted
                   loop
                   playsInline
-                  className="mx-auto rounded-xl"
+                  className="w-full mx-auto rounded-xl lg:w-auto"
                 >
                   <source src="/video/record.mp4" type="video/mp4" />
                 </video>
               </div>
             </Container>
-            <Container size="lg" className="pt-16">
+            <Container size="lg" className="pt-10 lg:pt-16">
               <div className={classes.wrapper}>
                 <div className={classes.body}>
                   <p className="py-1 px-4 bg-yellow-500 rounded-full text-sm font-medium w-fit">
                     つかいかた
                   </p>
-                  <Title className={`${classes.title} pt-3`}>
+                  <Title className={`${classes.sectionTitle} pt-3`}>
                     グループを作成
                   </Title>
                   <Text fw={500} fz="lg" mt={12} mb={8}>
@@ -224,19 +231,19 @@ export default function Home() {
                   muted
                   loop
                   playsInline
-                  className="mx-auto rounded-xl"
+                  className="w-full mx-auto rounded-xl lg:w-auto"
                 >
                   <source src="/video/group.mp4" type="video/mp4" />
                 </video>
               </div>
             </Container>
-            <Container size="lg" className="pt-16">
+            <Container size="lg" className="pt-10 lg:pt-16">
               <div className={classes.wrapper}>
                 <div className={classes.body}>
                   <p className="py-1 px-4 bg-yellow-500 rounded-full text-sm font-medium w-fit">
                     つかいかた
                   </p>
-                  <Title className={`${classes.title} pt-3`}>
+                  <Title className={`${classes.sectionTitle} pt-3`}>
                     ランキング形式で共有
                   </Title>
                   <Text fw={500} fz="lg" mt={12} mb={8}>
@@ -255,40 +262,57 @@ export default function Home() {
                   muted
                   loop
                   playsInline
-                  className="mx-auto rounded-xl"
+                  className="w-full mx-auto rounded-xl lg:w-auto"
                 >
                   <source src="/video/ranking.mp4" type="video/mp4" />
                 </video>
               </div>
             </Container>
-            <div className="mt-56 mb-40 px-6">
+            <div className="mt-56 mb-20 px-6 lg:mb-40">
               <div>
-                <h3 className="text-5xl font-bold text-center">
+                <h3 className="text-2xl font-bold text-center lg:text-5xl">
                   BUZZ BASE で野球をもっと楽しく
                 </h3>
-                <p className="text-lg text-zinc-500 text-center mt-10 font-medium">BUZZ BASEをはじめる</p>
-                <div className="flex gap-x-8 justify-center mt-4">
-                  <Button
-                    color="default"
-                    size="lg"
-                    radius="sm"
-                    as={Link}
-                    href="/signin"
-                    className="bg-white text-zinc-800 font-medium py-3 px-16"
-                  >
-                    ログイン
-                  </Button>
-                  <Button
-                    color="primary"
-                    size="lg"
-                    radius="sm"
-                    as={Link}
-                    href="/signup"
-                    className="font-medium py-2 px-16"
-                  >
-                    新規登録
-                  </Button>
-                </div>
+                {isLoggedIn ? (
+                  <>
+                    <div className="w-60 mt-12 mx-auto">
+                      <Image
+                        src="/images/buzz-logo-v2.png"
+                        alt=""
+                        width="340"
+                        height="50"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-base mt-4 text-zinc-500 text-center font-medium lg:text-lg lg:mt-10">
+                      BUZZ BASEをはじめる
+                    </p>
+                    <div className="flex gap-x-8 justify-center mt-4">
+                      <Button
+                        color="default"
+                        size="lg"
+                        radius="sm"
+                        as={Link}
+                        href="/signin"
+                        className="py-2 px-10 bg-white text-zinc-800 font-medium lg:py-3 lg:px-16"
+                      >
+                        ログイン
+                      </Button>
+                      <Button
+                        color="primary"
+                        size="lg"
+                        radius="sm"
+                        as={Link}
+                        href="/signup"
+                        className="py-2 px-10 font-medium lg:py-3 lg:px-16"
+                      >
+                        新規登録
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
