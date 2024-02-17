@@ -40,7 +40,7 @@ const mockdata = [
     title: "ランキング形式で共有",
     description:
       "グループ内のユーザーの成績が、各タイトルごとのランキングで表示されます。",
-    icon: RankingIcon,
+    icon: RankingIcon, 
   },
 ];
 
