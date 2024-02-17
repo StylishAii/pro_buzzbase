@@ -11,7 +11,7 @@ type NotificationCount = {
   count: number;
 };
 
-export default function Header() {
+export default function HeaderTop() {
   const [notificationCount, setNotificationCount] =
     useState<NotificationCount | null>(null);
   const { isLoggedIn } = useAuthContext();
@@ -32,8 +32,8 @@ export default function Header() {
 
   return (
     <>
-      <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
-        <div className="flex items-center justify-between h-full max-w-[692px] mx-auto lg:m-[0_auto_0_28%]">
+      <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50 lg:pl-[22%]">
+        <div className="flex items-center justify-between h-full lg:max-w-[1108px] mx-auto lg:mr-auto lg:ml-[14px]">
           <Link href="/">
             <Image
               src="/images/buzz-logo-v2.png"
@@ -69,7 +69,7 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Link href="/signin" className="text-sm text-white">
+                <Link href="/signin" className="text-sm text-white font-medium">
                   ログイン
                 </Link>
                 <Button
@@ -84,7 +84,7 @@ export default function Header() {
                       label=""
                     />
                   }
-                  className="gap-x-1 bg-yellow-500 text-white text-sm py-1.5 px-3 h-auto rounded-lg font-normal"
+                  className="gap-x-1 bg-yellow-500 text-white text-sm py-1.5 px-3 h-auto rounded-lg font-medium"
                 >
                   新規登録
                 </Button>

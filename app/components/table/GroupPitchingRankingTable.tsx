@@ -35,6 +35,13 @@ type Props = {
 export default function GroupPitchingRankingTable(props: Props) {
   const { pitchingAggregate, pitchingStats } = props;
 
+  function formatNumber(value: number): string {
+    if (value < 1 && value > -1) {
+      return value.toFixed(3).replace("0", "");
+    }
+    return value.toFixed(2);
+  }
+
   const sortedPitchingEra = pitchingStats?.sort((a, b) => b.era - a.era) || [];
 
   const sortedWin =
@@ -80,7 +87,7 @@ export default function GroupPitchingRankingTable(props: Props) {
                         className="justify-start"
                       />
                       <span className="text-base block font-bold">
-                        {stats.era}
+                        {formatNumber(stats.era)}
                       </span>
                     </div>
                   </Link>
@@ -250,7 +257,7 @@ export default function GroupPitchingRankingTable(props: Props) {
                         className="justify-start"
                       />
                       <span className="text-base block font-bold">
-                        {stats.win_percentage}
+                        {formatNumber(stats.win_percentage)}
                       </span>
                     </div>
                   </Link>

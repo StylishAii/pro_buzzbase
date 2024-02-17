@@ -1,0 +1,121 @@
+.inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: space-between;
+  padding-top: calc(var(--mantine-spacing-xl) * 4);
+  padding-bottom: calc(var(--mantine-spacing-xl) * 4);
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+    padding-top: calc(var(--mantine-spacing-xl) * 3);
+    padding-bottom: calc(var(--mantine-spacing-xl) * 3);
+  }
+}
+
+.content {
+  max-width: rem(480px);
+  margin-right: calc(var(--mantine-spacing-xl) * 2);
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin-right: 16px;
+  }
+}
+
+.title {
+  font-family: "Noto Sans JP", var(--mantine-font-family);
+  font-size: rem(44px);
+  line-height: 1.3;
+  font-weight: 900;
+}
+
+.sectionTitle {
+  font-family: "Noto Sans JP", var(--mantine-font-family);
+  font-size: 36px;
+  line-height: 1.3;
+  font-weight: 900;
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+}
+
+.control {
+  @media (max-width: $mantine-breakpoint-xs) {
+    flex: 1;
+  }
+}
+
+.image {
+  width: 100%;
+  height: auto;
+
+  @media (max-width: $mantine-breakpoint-md) {
+    display: none;
+  }
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.highlight {
+  position: relative;
+  background-color: #e08e0a52;
+  border-radius: var(--mantine-radius-sm);
+  padding: rem(4px) rem(12px);
+}
+
+.description {
+  max-width: rem(600px);
+  margin: auto;
+}
+
+.description::after {
+  content: "";
+  display: block;
+  background-color: #e08e0a;
+  width: rem(45px);
+  height: rem(2px);
+  margin-top: var(--mantine-spacing-sm);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  border: 1px solid #71717a;
+  background-color: #424242;
+}
+
+.cardTitle {
+  color: #f4f4f4;
+  font-weight: 900;
+}
+
+.cardTitle::after {
+  content: "";
+  display: block;
+  background-color: #e08e0a;
+  width: 45px;
+  height: 2px;
+  margin-top: var(--mantine-spacing-sm);
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 40%;
+  column-gap: 40px;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--mantine-spacing-xl) * 2);
+  border-radius: var(--mantine-radius-md);
+  background-color: #424242;
+  border: 1px solid #71717a;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    row-gap: 24px;
+    padding: calc(var(--mantine-spacing-xl) * 1);
+  }
+}
