@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "プライバシーポリシー",
+};
+
 import Header from "@app/components/header/Header";
 import Link from "next/link";
 

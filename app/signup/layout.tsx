@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "新規会員登録",
+};
+
 import Header from "@app/components/header/Header";
 
 export default function SignUpLayout({

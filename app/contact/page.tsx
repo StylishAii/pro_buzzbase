@@ -1,5 +1,9 @@
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "お問い合わせ",
+};
+
 import Header from "@app/components/header/Header";
-import styles from "./styles.module.css";
 
 export default function Contact() {
   return (

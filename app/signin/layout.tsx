@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "ログイン",
+};
+
 import Header from "@app/components/header/Header";
 
 export default function SignInLayout({

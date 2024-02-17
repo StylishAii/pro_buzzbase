@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "成績記録",
+};
+
 export default function GameResultsListLayout({
   children,
 }: {

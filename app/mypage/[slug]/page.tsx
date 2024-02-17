@@ -1,5 +1,4 @@
 "use client";
-
 import { BallIcon } from "@app/components/icon/BallIcon";
 import { CrownIcon } from "@app/components/icon/CrownIcon";
 import { GloveIcon } from "@app/components/icon/GloveIcon";
