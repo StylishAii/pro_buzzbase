@@ -534,7 +534,7 @@ export default function GameRecord() {
                   variant="bordered"
                   placeholder="大会名を入力"
                   labelPlacement="outside-left"
-                  className="[&>div]:justify-between"
+                  className="[&>div]:justify-between [&>div&>label]:whitespace-nowrap"
                   size="md"
                   onInputChange={handleTournamentInputChange}
                   onSelectionChange={handleTournamentSelectionChange}
