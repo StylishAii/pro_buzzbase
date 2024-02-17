@@ -234,17 +234,28 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
                   .filter(
                     (plate: PlateAppearance) =>
                       plate.game_result_id == game.game_result_id
-                  )
-                  .map((plate: PlateAppearance) => (
-                    <li
-                      key={plate.id}
-                      className={`font-bold ${getBattingResultClassName(
-                        plate.batting_result
-                      )}`}
-                    >
-                      {plate.batting_result}
-                    </li>
-                  ))}
+                  ).length > 0 ? (
+                  plateAppearance
+                    .flat()
+                    .filter(
+                      (plate: PlateAppearance) =>
+                        plate.game_result_id == game.game_result_id
+                    )
+                    .map((plate: PlateAppearance) => (
+                      <li
+                        key={plate.id}
+                        className={`font-bold ${getBattingResultClassName(
+                          plate.batting_result
+                        )}`}
+                      >
+                        {plate.batting_result}
+                      </li>
+                    ))
+                ) : (
+                  <>
+                    <span>-</span>
+                  </>
+                )}
               </ul>
               <p className="text-sm font-normal text-zinc-400 mt-2">投手</p>
               <ul className="flex flex-wrap gap-2 ">
