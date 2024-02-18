@@ -98,7 +98,7 @@ export default function Following() {
                   <Link href={`/mypage/${follow.user_id}/`} className="block">
                     <User
                       name={follow.name}
-                      description={follow.user_id}
+                      description={`@${follow.user_id}`}
                       avatarProps={{
                         src: `${process.env.NEXT_PUBLIC_API_URL}${follow.image.url}`,
                       }}
