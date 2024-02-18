@@ -18,6 +18,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import FollowButton from "@app/components/button/FollowButton";
 import { XIcon } from "@app/components/icon/XIcon";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 
 type Position = {
   id: string;
@@ -59,6 +60,14 @@ export default function MyPage() {
   const pathName = usePathname();
   const { isLoggedIn } = useAuthContext();
   const router = useRouter();
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 2000);
+  };
 
   useEffect(() => {
     const pathParts = pathName.split("/");
@@ -142,6 +151,7 @@ export default function MyPage() {
     <div className="buzz-dark flex flex-col w-full min-h-screen">
       <Header />
       <div className="h-full bg-main">
+        <ErrorMessages errors={errors} />
         <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <div className="pt-20 pb-20 bg-main lg:pt-14 lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:pb-0 lg:mb-14">
             <div className="px-4 lg:p-6">
@@ -275,6 +285,7 @@ export default function MyPage() {
                         <FollowButton
                           userId={userData.user.id}
                           isFollowing={userData.isFollowing}
+                          setErrorsWithTimeout={setErrorsWithTimeout}
                         />
                       </>
                     )}

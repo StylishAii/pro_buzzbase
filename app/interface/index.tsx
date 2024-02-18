@@ -336,6 +336,7 @@ interface PitchingResult {
 interface FollowButtonProps {
   userId: number;
   isFollowing: boolean;
+  setErrorsWithTimeout: (errors: string[]) => void;
 }
 
 interface FollowingUser {

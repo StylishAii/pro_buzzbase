@@ -1,4 +1,5 @@
 "use client";
+import ErrorMessages from "@app/components/auth/ErrorMessages";
 import FollowButton from "@app/components/button/FollowButton";
 import HeaderBack from "@app/components/header/HeaderBack";
 import {
@@ -21,6 +22,14 @@ export default function Followers() {
   const [userId, setUserId] = useState<UserId>();
   const [currentUserId, setCurrentUserId] = useState(null);
   const pathName = usePathname();
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
+    setErrors(newErrors);
+    setTimeout(() => {
+      setErrors([]);
+    }, 2000);
+  };
 
   useEffect(() => {
     const pathParts = pathName.split("/");
@@ -63,6 +72,7 @@ export default function Followers() {
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen">
         <HeaderBack />
+        <ErrorMessages errors={errors} />
         <div className="h-full bg-main">
           <main className="h-full lg:pb-16">
             <div className="pt-10 grid grid-cols-2 text-center lg:border-x-1 lg:border-x-zinc-500 lg:pt-11 lg:flex lg:justify-around lg:max-w-[720px] lg:m-[0_auto_0_28%]">
@@ -102,6 +112,7 @@ export default function Followers() {
                         <FollowButton
                           userId={follow.id}
                           isFollowing={follow.isFollowing}
+                          setErrorsWithTimeout={setErrorsWithTimeout}
                         />
                       </>
                     )}
