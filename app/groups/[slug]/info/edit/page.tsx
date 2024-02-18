@@ -1,45 +1,57 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
-import { createGroup } from "@app/services/groupService";
-import { getCurrentUserId, getFollowingUser } from "@app/services/userService";
-import { Avatar, Checkbox, Input, User } from "@nextui-org/react";
+import {
+  getGroupDetailUsers,
+  updateGroupInfo,
+} from "@app/services/groupService";
+import { getCurrentUserId } from "@app/services/userService";
+import { Avatar, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-export default function GroupNew() {
+export default function GroupEdit({ params }: { params: { slug: string } }) {
+  const groupId = Number(params.slug);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [following, setFollowing] = useState<FollowingUser[]>([]);
-  const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [isGroupName, setIsGroupName] = useState(true);
-  const [isGroupUsers, setIsGroupUsers] = useState(true);
-  const [group, setGroup] = useState<{ name: string; icon: string | null }>({
+  const [group, setGroup] = useState<{
+    name: string;
+    icon: { url: string | null };
+  }>({
     name: "",
-    icon: null,
+    icon: { url: null },
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
-    fetchData();
-    if (currentUserId) {
-      fetchFollowingUser(currentUserId);
+    if (groupId) {
+      fetchGroupDetails(groupId);
     }
+    fetchData();
   }, [currentUserId]);
+
+  const fetchGroupDetails = async (groupId: number) => {
+    try {
+      const data = await getGroupDetailUsers(groupId);
+      setGroup({
+        name: data.group.name,
+        icon:
+          data.group.icon && data.group.icon.url
+            ? {
+                url: `${process.env.NEXT_PUBLIC_API_URL}${data.group.icon.url}`,
+              }
+            : { url: null },
+      });
+    } catch (error) {
+      console.error("グループの詳細を取得できませんでした。", error);
+    }
+  };
 
   const fetchData = async () => {
     const responseCurrentUserId = await getCurrentUserId();
     setCurrentUserId(responseCurrentUserId);
-  };
-
-  const fetchFollowingUser = async (userId: number) => {
-    try {
-      const response = await getFollowingUser(userId);
-      setFollowing(response);
-    } catch (error) {
-      console.log("フォロー中のユーザーはいません", error);
-    }
   };
 
   const handleImageClick = () => {
@@ -53,7 +65,7 @@ export default function GroupNew() {
         const previewFileUrl = URL.createObjectURL(file);
         setGroup((prevState) => ({
           ...prevState,
-          icon: previewFileUrl,
+          icon: { url: previewFileUrl },
         }));
       }
     } else {
@@ -62,16 +74,6 @@ export default function GroupNew() {
         name: event.target.value,
       }));
     }
-  };
-
-  const handleCheckboxChange = (userId: number, isChecked: boolean) => {
-    setSelectedUserIds((prevSelectedUserIds) => {
-      if (isChecked) {
-        return [...prevSelectedUserIds, userId];
-      } else {
-        return prevSelectedUserIds.filter((id) => id !== userId);
-      }
-    });
   };
 
   const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
@@ -93,14 +95,6 @@ export default function GroupNew() {
       setIsGroupName(true);
     }
 
-    if (selectedUserIds.length === 0) {
-      setIsGroupUsers(false);
-      isValid = false;
-      newErrors.push("メンバーを選択してください");
-    } else {
-      setIsGroupUsers(true);
-    }
-
     if (!isValid) {
       setErrorsWithTimeout(newErrors);
     }
@@ -119,11 +113,8 @@ export default function GroupNew() {
     if (fileInputRef.current?.files && fileInputRef.current.files.length > 0) {
       formData.append("group[icon]", fileInputRef.current.files[0]);
     }
-    selectedUserIds.forEach((userId) => {
-      formData.append("invite_user_ids[]", userId.toString());
-    });
     try {
-      const response = await createGroup(formData);
+      const response = await updateGroupInfo(groupId, formData);
       router.push(`/groups/${response.id}/`);
     } catch (error) {
       console.log(error);
@@ -132,19 +123,19 @@ export default function GroupNew() {
 
   return (
     <>
-      <div className="buzz-dark">
-        <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"作成"} />
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
+        <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"更新"} />
         <div className="h-full bg-main">
           <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
             <div className="px-4 py-14 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6 lg:mb-10">
               <ErrorMessages errors={errors} />
-              <h2 className="text-2xl font-bold mt-5">グループ設定</h2>
+              <h2 className="text-2xl font-bold mt-5">グループ情報編集</h2>
               <form>
                 <div className="grid grid-cols-[72px_1fr] gap-x-6 items-start mt-6">
                   <div className="flex justify-center flex-col items-center">
                     <Avatar
                       src={
-                        group.icon ||
+                        group.icon.url ||
                         `${process.env.NEXT_PUBLIC_API_URL}/images/group/group-default-yellow.svg`
                       }
                       size="lg"
@@ -175,35 +166,9 @@ export default function GroupNew() {
                       color={isGroupName ? "primary" : "danger"}
                       size="lg"
                       onChange={handleChange}
+                      value={group.name}
                     />
                   </div>
-                </div>
-                <p className="pt-12 text-lg font-bold">メンバーを選択</p>
-                <span className="text-xs text-zinc-400">
-                  フォローしているユーザーのみ招待可能
-                </span>
-                <div className="pt-4 pb-24 grid gap-y-5 bg-main lg:pb-4">
-                  {following.map((follow) => (
-                    <div
-                      key={follow.id}
-                      className="flex justify-between items-center"
-                    >
-                      <User
-                        name={follow.name}
-                        description={follow.user_id}
-                        avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${follow.image.url}`,
-                        }}
-                      />
-                      <Checkbox
-                        size="lg"
-                        className="p-0"
-                        onChange={(e) =>
-                          handleCheckboxChange(follow.id, e.target.checked)
-                        }
-                      ></Checkbox>
-                    </div>
-                  ))}
                 </div>
               </form>
             </div>

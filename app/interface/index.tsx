@@ -371,3 +371,14 @@ interface Notifications {
   group_name: string;
   group_invitation: string;
 }
+
+
+interface AcceptedUsers {
+    id: number;
+    name: string;
+    user_id: string;
+    image: {
+      url: string;
+    };
+  };
+

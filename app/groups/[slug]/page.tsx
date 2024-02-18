@@ -1,11 +1,20 @@
 "use client";
 import HeaderBackLink from "@app/components/header/HeaderBackLink";
+import { MenuIcon } from "@app/components/icon/MenuIcon";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import GroupBattingRankingTable from "@app/components/table/GroupBattingRankingTable";
 import GroupPitchingRankingTable from "@app/components/table/GroupPitchingRankingTable";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { getGroupDetail } from "@app/services/groupService";
-import { Button, Tab, Tabs } from "@nextui-org/react";
+import {
+  Button,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Tab,
+  Tabs,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from "react";
@@ -262,7 +271,38 @@ export default function GroupDetail({ params }: GroupDetailProps) {
         <div className="h-full bg-main">
           <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
             <div className="pt-16 pb-36 px-4 bg-main lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6 lg:mb-10">
-              <h2 className="text-xl font-bold mt-4 lg:text-2xl">個人成績ランキング</h2>
+              <div className="w-fit ml-auto mr-0">
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button isIconOnly variant="faded">
+                      <MenuIcon width="24" height="24" fill="#fff" />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Static Actions">
+                    <DropdownItem
+                      key="memberIndex"
+                      href={`/groups/${params.slug}/member/edit`}
+                    >
+                      メンバー一覧
+                    </DropdownItem>
+                    <DropdownItem
+                      key="memberAdd"
+                      href={`/groups/${params.slug}/new-member/edit`}
+                    >
+                      メンバー招待
+                    </DropdownItem>
+                    <DropdownItem
+                      key="edit"
+                      href={`/groups/${params.slug}/info/edit`}
+                    >
+                      グループ編集
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              <h2 className="text-xl font-bold mt-2 lg:text-2xl">
+                個人成績ランキング
+              </h2>
               <div>
                 <Tabs
                   color="primary"
