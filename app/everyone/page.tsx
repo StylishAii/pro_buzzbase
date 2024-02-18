@@ -55,7 +55,7 @@ export default function EveryoneGameResultList() {
                       >
                         <User
                           name={gameResult.user_name}
-                          description={gameResult.user_user_id}
+                          description={`@${gameResult.user_user_id}`}
                           avatarProps={{
                             src: `${process.env.NEXT_PUBLIC_API_URL}${gameResult.user_image.url}`,
                           }}
