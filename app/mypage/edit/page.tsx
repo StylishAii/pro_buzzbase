@@ -196,17 +196,6 @@ export default function ProfileEdit() {
     fetchData();
   }, [isLoggedIn]);
 
-  // useEffect(() => {
-  //   console.log(profile);
-  //   if (currentUserId && profile.id) {
-  //     const isCurrentUserPage = currentUserId === profile?.id;
-  //     console.log(isCurrentUserPage);
-  //     if (isCurrentUserPage === false) {
-  //       return router.push(`/404`);
-  //     }
-  //   }
-  // }, [currentUserId, profile]);
-
   // disabled制御
   useEffect(() => {
     setIsDisabled(!teamName || teamName.length === 0);
