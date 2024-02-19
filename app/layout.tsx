@@ -6,7 +6,7 @@ import { AuthProvider } from "@app/contexts/useAuthContext";
 import { notoSansJP } from "@app/font";
 import Footer from "@app/components/footer/Footer";
 
-const siteName = "BUZZ BASE 野球の個人記録をランキング形式で共有";
+const siteName = "BUZZ BASE 野球の個人成績を記録してランキングで共有";
 const description =
   "野球の個人成績を記録して、チーム内外の友達とランキング形式で成績を共有することができるアプリです。";
 const url = "https://buzzbase.jp";
