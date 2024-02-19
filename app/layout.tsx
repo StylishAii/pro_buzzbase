@@ -6,6 +6,7 @@ import { AuthProvider } from "@app/contexts/useAuthContext";
 import { notoSansJP } from "@app/font";
 import Footer from "@app/components/footer/Footer";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react";
 
 const siteName = "BUZZ BASE 野球の個人成績を記録してランキングで共有";
 const description =
@@ -74,6 +75,7 @@ export default function RootLayout({
             <Footer />
           </Providers>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -12,6 +12,7 @@
     "@mantine/core": "^7.5.2",
     "@mantine/hooks": "^7.5.2",
     "@nextui-org/react": "^2.2.9",
+    "@vercel/analytics": "^1.2.1",
     "axios": "^1.6.2",
     "framer-motion": "^10.16.12",
     "js-cookie": "^3.0.5",
