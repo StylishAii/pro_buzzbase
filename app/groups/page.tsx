@@ -89,7 +89,11 @@ export default function Group() {
                           <Avatar
                             size="lg"
                             isBordered
-                            src={`${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`}
+                            src={
+                              process.env.NODE_ENV === "production"
+                                ? group.icon.url
+                                : `${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`
+                            }
                           />
                           <p className="text-lg font-bold text-white">
                             {group.name}
@@ -99,7 +103,9 @@ export default function Group() {
                     ))
                   ) : (
                     <>
-                      <p className="text-zinc-400 text-center text-sm">所属しているグループはありません</p>
+                      <p className="text-zinc-400 text-center text-sm">
+                        所属しているグループはありません
+                      </p>
                     </>
                   )}
                 </div>

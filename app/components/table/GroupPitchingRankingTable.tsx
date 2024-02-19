@@ -82,7 +82,10 @@ export default function GroupPitchingRankingTable(props: Props) {
                         name={stats.name}
                         description={stats.user_id}
                         avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
+                          src:
+                            process.env.NODE_ENV === "production"
+                              ? stats.image_url
+                              : `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
                         }}
                         className="justify-start"
                       />
@@ -116,7 +119,10 @@ export default function GroupPitchingRankingTable(props: Props) {
                         name={stats.name}
                         description={stats.user_id}
                         avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
+                          src:
+                            process.env.NODE_ENV === "production"
+                              ? stats.image_url
+                              : `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
                         }}
                         className="justify-start"
                       />
@@ -150,7 +156,10 @@ export default function GroupPitchingRankingTable(props: Props) {
                         name={stats.name}
                         description={stats.user_id}
                         avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
+                          src:
+                            process.env.NODE_ENV === "production"
+                              ? stats.image_url
+                              : `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
                         }}
                         className="justify-start"
                       />
@@ -184,7 +193,10 @@ export default function GroupPitchingRankingTable(props: Props) {
                         name={stats.name}
                         description={stats.user_id}
                         avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
+                          src:
+                            process.env.NODE_ENV === "production"
+                              ? stats.image_url
+                              : `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
                         }}
                         className="justify-start"
                       />
@@ -218,7 +230,10 @@ export default function GroupPitchingRankingTable(props: Props) {
                         name={stats.name}
                         description={stats.user_id}
                         avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
+                          src:
+                            process.env.NODE_ENV === "production"
+                              ? stats.image_url
+                              : `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
                         }}
                         className="justify-start"
                       />
@@ -252,7 +267,10 @@ export default function GroupPitchingRankingTable(props: Props) {
                         name={stats.name}
                         description={stats.user_id}
                         avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
+                          src:
+                            process.env.NODE_ENV === "production"
+                              ? stats.image_url
+                              : `${process.env.NEXT_PUBLIC_API_URL}${stats.image_url}`,
                         }}
                         className="justify-start"
                       />

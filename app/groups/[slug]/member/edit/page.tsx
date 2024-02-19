@@ -111,7 +111,10 @@ export default function GroupMember({ params }: { params: { slug: string } }) {
                         name={member.name}
                         description={member.user_id}
                         avatarProps={{
-                          src: `${process.env.NEXT_PUBLIC_API_URL}${member.image.url}`,
+                          src:
+                            process.env.NODE_ENV === "production"
+                              ? member.image.url
+                              : `${process.env.NEXT_PUBLIC_API_URL}${member.image.url}`,
                         }}
                       />
                       <Checkbox

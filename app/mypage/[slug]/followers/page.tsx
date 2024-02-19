@@ -100,7 +100,10 @@ export default function Followers() {
                       name={follow.name}
                       description={`@${follow.user_id}`}
                       avatarProps={{
-                        src: `${process.env.NEXT_PUBLIC_API_URL}${follow.image.url}`,
+                        src:
+                          process.env.NODE_ENV === "production"
+                            ? follow.image.url
+                            : `${process.env.NEXT_PUBLIC_API_URL}${follow.image.url}`,
                       }}
                     />
                   </Link>

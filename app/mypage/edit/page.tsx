@@ -448,6 +448,8 @@ export default function ProfileEdit() {
                     src={
                       profile.image.startsWith("blob:")
                         ? profile.image
+                        : process.env.NODE_ENV === "production"
+                        ? profile.image
                         : `${process.env.NEXT_PUBLIC_API_URL}${profile.image}`
                     }
                     onClick={handleImageClick}
