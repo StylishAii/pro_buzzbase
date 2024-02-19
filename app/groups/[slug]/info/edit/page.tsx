@@ -17,10 +17,10 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
   const [isGroupName, setIsGroupName] = useState(true);
   const [group, setGroup] = useState<{
     name: string;
-    icon: { url: string | null };
+    icon: { url: string };
   }>({
     name: "",
-    icon: { url: null },
+    icon: { url: "" },
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
             ? {
                 url: `${process.env.NEXT_PUBLIC_API_URL}${data.group.icon.url}`,
               }
-            : { url: null },
+            : { url: "" },
       });
     } catch (error) {
       console.error("グループの詳細を取得できませんでした。", error);
@@ -134,10 +134,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                 <div className="grid grid-cols-[72px_1fr] gap-x-6 items-start mt-6">
                   <div className="flex justify-center flex-col items-center">
                     <Avatar
-                      src={
-                        group.icon.url ||
-                        `${process.env.NEXT_PUBLIC_API_URL}/images/group/group-default-yellow.svg`
-                      }
+                      src={group.icon.url}
                       size="lg"
                       isBordered
                       onClick={handleImageClick}
