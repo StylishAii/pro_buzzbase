@@ -5,6 +5,7 @@ import NavigationMenu from "@app/components/header/NavigationMenu";
 import { AuthProvider } from "@app/contexts/useAuthContext";
 import { notoSansJP } from "@app/font";
 import Footer from "@app/components/footer/Footer";
+import Script from "next/script";
 
 const siteName = "BUZZ BASE 野球の個人成績を記録してランキングで共有";
 const description =
@@ -47,6 +48,24 @@ export default function RootLayout({
       <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
       <meta name="apple-mobile-web-app-title" content="BUZZ BASE" />
       <meta name="application-name" content="BUZZ BASE" />
+      <Script
+        async
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-47TWJXXWMF"
+      />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+           window.dataLayer = window.dataLayer || [];
+           function gtag(){dataLayer.push(arguments);}
+           gtag('js', new Date());
+ 
+           gtag('config', 'G-47TWJXXWMF');
+           `,
+        }}
+      />
       <body className={`${notoSansJP.className} bg-main text-white h-full`}>
         <AuthProvider>
           <Providers>
