@@ -17,10 +17,12 @@ export const signIn = async (data: SignInData) => {
     email: data.email,
     password: data.password,
   });
-
-  Cookies.set("access-token", response.headers["access-token"]);
-  Cookies.set("client", response.headers["client"]);
-  Cookies.set("uid", response.headers["uid"]);
+  const sixMonths = 30 * 6;
+  Cookies.set("access-token", response.headers["access-token"], {
+    expires: sixMonths,
+  });
+  Cookies.set("client", response.headers["client"], { expires: sixMonths });
+  Cookies.set("uid", response.headers["uid"], { expires: sixMonths });
 
   return response;
 };
@@ -36,7 +38,5 @@ export const signOut = async () => {
 };
 
 export const confirmAccountApi = (token: string) => {
-  return axiosInstance.get(
-    `/users/confirmation?confirmation_token=${token}`
-  );
+  return axiosInstance.get(`/users/confirmation?confirmation_token=${token}`);
 };
