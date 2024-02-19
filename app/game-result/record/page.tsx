@@ -421,7 +421,7 @@ export default function GameRecord() {
         match_result: {
           game_result_id: localStorageGameResultId,
           user_id: Number(userId),
-          date_and_time: gameDate,
+          date_and_time: existingGameDate ? existingGameDate : gameDate,
           match_type: matchType,
           my_team_id: Number(existingMyTeam)
             ? Number(existingMyTeam)
