@@ -39,6 +39,11 @@ export default function NavigationMenu() {
     return path === itemHref && activePaths.includes(path);
   };
 
+  const imageUrl =
+    process.env.NODE_ENV === "production"
+      ? userData?.image.url
+      : `${process.env.NEXT_PUBLIC_S3_API_URL}${userData?.image.url}`;
+
   return (
     <>
       <nav className="fixed bottom-0 w-full bg-main pt-2.5 pb-1.5 border-t border-t-zinc-500 z-100 lg:w-56 lg:bottom-0 lg:left-0 lg:top-0 lg:h-full lg:border-t-0 lg:pl-6 lg:pt-16 lg:border-r-1 lg:border-r-zinc-500 lg:z-50">
@@ -91,14 +96,14 @@ export default function NavigationMenu() {
               <UserImage
                 src={
                   userData?.image.url
-                    ? `${process.env.NEXT_PUBLIC_API_URL}${userData.image.url}`
+                    ? `${imageUrl}`
                     : "/images/user-default-yellow.svg"
                 }
                 width={22}
                 height={22}
                 alt=""
                 active={pathName.includes("/mypage") ? true : false}
-                className={"lg:w-6 lg:h-6 lg:mr-4"}
+                className={"object-cover lg:w-6 lg:h-6 lg:mr-4"}
               />
               マイページ
             </Button>
