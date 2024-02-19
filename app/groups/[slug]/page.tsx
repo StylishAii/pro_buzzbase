@@ -266,7 +266,7 @@ export default function GroupDetail({ params }: GroupDetailProps) {
         <HeaderBackLink
           backLink={"/groups"}
           groupName={groupData?.group.name}
-          groupIconLink={`${process.env.NEXT_PUBLIC_API_URL}${groupData?.group.icon.url}`}
+          groupIconLink={`${groupData?.group.icon.url}`}
         />
         <div className="h-full bg-main">
           <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
