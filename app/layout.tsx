@@ -44,7 +44,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className="h-full">
-      <link rel="manifest" href="/manifest.ts" />
       <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
       <meta name="apple-mobile-web-app-title" content="BUZZ BASE" />
       <meta name="application-name" content="BUZZ BASE" />
