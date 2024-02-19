@@ -40,7 +40,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
         icon:
           data.group.icon && data.group.icon.url
             ? {
-                url: `${process.env.NEXT_PUBLIC_API_URL}${data.group.icon.url}`,
+                url: `${data.group.icon.url}`,
               }
             : { url: "" },
       });
@@ -134,7 +134,11 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                 <div className="grid grid-cols-[72px_1fr] gap-x-6 items-start mt-6">
                   <div className="flex justify-center flex-col items-center">
                     <Avatar
-                      src={group.icon.url}
+                      src={
+                        process.env.NODE_ENV === "production"
+                          ? group.icon.url
+                          : `${process.env.NEXT_PUBLIC_API_URL}${group.icon.url}`
+                      }
                       size="lg"
                       isBordered
                       onClick={handleImageClick}
