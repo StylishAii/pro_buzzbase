@@ -35,7 +35,7 @@ export default function RegisterUserName() {
 
   const validateUserName = useCallback(
     (userName: string) =>
-      /^[0-9A-Za-z\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]+$/.test(
+      /^[0-9A-Za-z\u3040-\u309F\u30A0-\u30FF\u3400-\u4DBF\u4E00-\u9FFF ]+$/.test(
         userName
       ),
     []
