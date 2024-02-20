@@ -536,6 +536,7 @@ export default function ResultsSummary() {
                 試合結果を削除する
               </Button>
               <Modal
+                size="lg"
                 isOpen={isOpen}
                 placement="center"
                 onOpenChange={onOpenChange}

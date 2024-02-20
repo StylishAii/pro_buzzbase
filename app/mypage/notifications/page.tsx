@@ -152,7 +152,7 @@ export default function Notifications() {
                                   拒否する
                                 </Button>
                                 <Modal
-                                  size="sm"
+                                  size="lg"
                                   isOpen={isOpen}
                                   onClose={onClose}
                                   placement="center"
