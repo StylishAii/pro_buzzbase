@@ -98,7 +98,7 @@ export default function GroupMember({ params }: { params: { slug: string } }) {
               <ErrorMessages errors={errors} />
               <h2 className="text-2xl font-bold mt-5">メンバー一覧</h2>
               <span className="text-xs text-red-500">
-                チェックを外すと、そのユーザーは退会されます。
+                メンバー退会は、チェックを解除し「メンバー退会ボタン」をクリックすると退会されます。
               </span>
               <form>
                 <div className="pt-4 pb-24 grid gap-y-5 bg-main lg:pb-4">
