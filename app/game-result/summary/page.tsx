@@ -39,7 +39,7 @@ export default function ResultsSummary() {
   const [isDetailDataFetched, setIsDetailDataFetched] = useState(false);
   const [currentUsersUserId, setCurrentUsersUserId] = useState("");
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const [memo, setMemo] = useState();
+  const [memo, setMemo] = useState<string>("");
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
@@ -474,7 +474,12 @@ export default function ResultsSummary() {
               <>
                 <p className="mt-4 text-sm text-zinc-500">MEMO</p>
                 <div className="mt-2 border-1 border-zinc-500 rounded-lg p-3">
-                  <p className="text-sm text-zinc-200">{memo}</p>
+                  {memo.split("\n").map((line: any, index: any, array: any) => (
+                    <p key={index} className="text-sm text-zinc-200">
+                      {line}
+                      {index < array.length - 1 && <br />}
+                    </p>
+                  ))}
                 </div>
               </>
             ) : (

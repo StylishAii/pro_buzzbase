@@ -223,8 +223,8 @@ interface MatchResultsData {
     match_type: string;
     my_team_id: number;
     opponent_team_id: number;
-    my_team_score: number;
-    opponent_team_score: number;
+    my_team_score: number | null;
+    opponent_team_score: number | null;
     batting_order: string;
     defensive_position: string;
     tournament_id: number | null;
@@ -372,13 +372,11 @@ interface Notifications {
   group_invitation: string;
 }
 
-
 interface AcceptedUsers {
-    id: number;
-    name: string;
-    user_id: string;
-    image: {
-      url: string;
-    };
+  id: number;
+  name: string;
+  user_id: string;
+  image: {
+    url: string;
   };
-
+}

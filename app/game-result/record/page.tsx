@@ -81,8 +81,10 @@ export default function GameRecord() {
   const [existingOpponentTeam, setExistingOpponentTeam] = useState<
     number | undefined
   >(undefined);
-  const [myTeamScore, setMyTeamScore] = useState(0);
-  const [opponentTeamScore, setOpponentTeamScore] = useState(0);
+  const [myTeamScore, setMyTeamScore] = useState<number | null>(null);
+  const [opponentTeamScore, setOpponentTeamScore] = useState<number | null>(
+    null
+  );
   const [matchBattingOrder, setMatchBattingOrder] = useState("");
   const [existingMatchBattingOrder, setExistingMatchBattingOrder] =
     useState("");
@@ -342,7 +344,7 @@ export default function GameRecord() {
       setIsBattingOrderValid(true);
     }
 
-    if (!defensivePosition && !myPosition) {
+    if (!defensivePosition && !myPosition && !existingDefensivePosition) {
       setIsDefensivePositionValid(false);
       isValid = false;
       newErrors.push("守備位置が未入力です。");
@@ -593,7 +595,13 @@ export default function GameRecord() {
                 </Autocomplete>
                 <Divider className="my-4" />
                 <div className="flex justify-between items-center">
-                  <p className="text-sm">
+                  <p
+                    className={`text-sm ${
+                      isMyTeamScoreValid && isOpponentTeamScoreValid
+                        ? "text-white"
+                        : "text-red-500"
+                    }`}
+                  >
                     点数<span className="text-red-500 pl-1">*</span>
                   </p>
                   <div className="flex gap-x-2 items-center">
@@ -605,8 +613,8 @@ export default function GameRecord() {
                       labelPlacement="outside"
                       placeholder="自分"
                       className="flex justify-between items-center w-20"
-                      defaultValue={myTeamScore.toString()}
-                      value={myTeamScore.toString()}
+                      defaultValue={myTeamScore?.toString()}
+                      value={myTeamScore?.toString()}
                       color={isMyTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleMyScoreChange}
@@ -620,8 +628,8 @@ export default function GameRecord() {
                       placeholder="相手"
                       labelPlacement="outside"
                       className="flex justify-between items-center w-20"
-                      defaultValue={opponentTeamScore.toString()}
-                      value={opponentTeamScore.toString()}
+                      defaultValue={opponentTeamScore?.toString()}
+                      value={opponentTeamScore?.toString()}
                       color={isOpponentTeamScoreValid ? "default" : "danger"}
                       min={0}
                       onChange={handleOpponentScoreChange}
@@ -668,8 +676,8 @@ export default function GameRecord() {
                   onChange={handleDefensivePositionChange}
                   className="grid justify-between items-center grid-cols-[auto_110px]"
                   selectedKeys={
-                    existingDefensivePosition
-                      ? [existingDefensivePosition]
+                    existingDefensivePosition !== undefined
+                      ? [existingDefensivePosition.toString()]
                       : myPosition
                   }
                 >
