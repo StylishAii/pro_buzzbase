@@ -83,11 +83,27 @@ export default function ProfileShareComponent({
   }`;
 
   const handleShareMobile = () => {
+    let text = `${userData.user.name}さんのプロフィール`;
+
+    if (userData.user.positions && userData.user.positions.length > 0) {
+      text += `【ポジション】${userData.user.positions[0].name}`;
+    }
+
+    if (teamData && teamData.name) {
+      text += `【チーム】${teamData.name}`;
+      if (teamPrefectureName) {
+        text += `（${teamPrefectureName}）`;
+      }
+      if (teamCategoryName) {
+        text += `｜${teamCategoryName}`;
+      }
+    }
+
     if (navigator.share) {
       navigator
         .share({
           title: `${userData.user.name}さんのプロフィール`,
-          text: `ポジション：${userData.user.positions[0]?.name}、チーム：${teamData?.name}（${teamPrefectureName}）｜${teamCategoryName}`,
+          text: text,
           url: `https://buzzbase.jp/mypage/${userData.user.user_id}`,
         })
         .catch((error) => console.error("Error sharing", error));
