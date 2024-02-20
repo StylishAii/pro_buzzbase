@@ -54,7 +54,33 @@ export default function ProfileShareComponent({
   teamCategoryName,
 }: ProfileShareComponentProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isCopied, setIsCopied] = useState(false);
+
+  const shareText = () => {
+    let text = `${userData.user.name}さんのプロフィール`;
+
+    if (userData.user.positions && userData.user.positions.length > 0) {
+      text += `【ポジション】${userData.user.positions[0].name}`;
+    }
+
+    if (teamData && teamData.name) {
+      text += `【チーム】${teamData.name}`;
+      if (teamPrefectureName) {
+        text += `（${teamPrefectureName}）`;
+      }
+      if (teamCategoryName) {
+        text += `｜${teamCategoryName}`;
+      }
+    }
+
+    return encodeURIComponent(text);
+  };
+
+  const twitterShareUrl = `https://twitter.com/intent/tweet?text=${shareText()}&url=https://buzzbase.jp/mypage/${
+    userData.user.user_id
+  }&hashtags=BuzzBase`;
+  const lineShareUrl = `https://line.me/R/msg/text/?${shareText()} https://buzzbase.jp/mypage/${
+    userData.user.user_id
+  }`;
 
   const handleShareMobile = () => {
     if (navigator.share) {
@@ -68,16 +94,6 @@ export default function ProfileShareComponent({
     } else {
       onOpen();
     }
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText(`https://buzzbase.jp/mypage/${userData.user.user_id}`)
-      .then(() => {
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 2000);
-      })
-      .catch((err) => console.error("Could not copy text: ", err));
   };
 
   return (
@@ -106,18 +122,13 @@ export default function ProfileShareComponent({
               variant="bordered"
               symbol=""
               className="text-white"
-              onClick={copyToClipboard}
             >
               {`https://buzzbase.jp/mypage/${userData.user.user_id}`}
             </Snippet>
             <div className="flex justify-center gap-x-6 mt-2">
               <Button
                 as={Link}
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                  `${userData.user.name}さんのプロフィール【ポジション】${userData.user.positions[0]?.name}【チーム】${teamData?.name}（${teamPrefectureName})｜${teamCategoryName}`
-                )}&url=https://buzzbase.jp/mypage/${
-                  userData.user.user_id
-                }&hashtags=BuzzBase`}
+                href={twitterShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mb-4 bg-transparent"
@@ -127,9 +138,7 @@ export default function ProfileShareComponent({
               ></Button>
               <Button
                 as={Link}
-                href={`https://line.me/R/msg/text/?${encodeURIComponent(
-                  `${userData.user.name}さんのプロフィール【ポジション】${userData.user.positions[0]?.name}【チーム】${teamData?.name}（${teamPrefectureName})｜${teamCategoryName} https://buzzbase.jp/mypage/${userData.user.user_id}`
-                )}`}
+                href={lineShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mb-4 bg-transparent"
