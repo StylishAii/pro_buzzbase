@@ -1,7 +1,7 @@
 "use client";
 import HeaderGameDetail from "@app/components/header/HeaderGameDetail";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
-import { XIcon } from "@app/components/icon/XIcon";
+import ResultShareComponent from "@app/components/share/ResultShareComponent";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { getUserBattingAverage } from "@app/services/battingAveragesService";
 import { deleteGameResult } from "@app/services/gameResultsService";
@@ -510,18 +510,7 @@ export default function ResultsSummary() {
               成績を友達にシェアしよう！
             </p>
             <div className="flex justify-center">
-              <Button
-                color="primary"
-                size="sm"
-                endContent={<XIcon fill="#F4F4F4" />}
-                className="mt-4"
-                as={Link}
-                href={`https://twitter.com/intent/tweet?text=${matchResult[0]?.my_team_score}対${matchResult[0]?.opponent_team_score} vs${matchResult[0]?.opponent_team_name}%0A&url=http://localhost:8000/game-result/summary/${id}%0A&hashtags=BuzzBase`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                成績をシェア
-              </Button>
+              <ResultShareComponent matchResult={matchResult} id={id} />
             </div>
           </div>
           {currentUserPage === true ? (

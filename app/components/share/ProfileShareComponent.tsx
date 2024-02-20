@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   Modal,
@@ -7,7 +7,6 @@ import {
   useDisclosure,
   Snippet,
   ModalHeader,
-  ModalFooter,
 } from "@nextui-org/react";
 import Link from "next/link";
 import { XIcon } from "@app/components/icon/XIcon";

@@ -1,6 +1,6 @@
 "use client";
 import SummaryResultHeader from "@app/components/header/SummaryHeader";
-import { XIcon } from "@app/components/icon/XIcon";
+import ResultShareComponent from "@app/components/share/ResultShareComponent";
 import { getCurrentBattingAverage } from "@app/services/battingAveragesService";
 import { getCurrentMatchResult } from "@app/services/matchResultsService";
 import { getCurrentPitchingResult } from "@app/services/pitchingResultsService";
@@ -243,18 +243,10 @@ export default function ResultsSummary() {
               成績を友達にシェアしよう！
             </p>
             <div className="flex justify-center">
-              <Button
-                color="primary"
-                size="sm"
-                endContent={<XIcon fill="#F4F4F4" />}
-                className="mt-4"
-                as={Link}
-                href={`https://twitter.com/intent/tweet?text=${matchResult[0]?.my_team_score}対${matchResult[0]?.opponent_team_score} vs${matchResult[0]?.opponent_team_name}%0A&url=http://localhost:8000/game-result/summary/${localStorageGameResultId}%0A&hashtags=BuzzBase`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                成績をシェア
-              </Button>
+              <ResultShareComponent
+                matchResult={matchResult}
+                id={localStorageGameResultId}
+              />
             </div>
             {/* 試合情報 */}
             <div className="mt-6 py-5 px-6 bg-bg_sub rounded-xl">
@@ -474,12 +466,14 @@ export default function ResultsSummary() {
               <>
                 <p className="mt-4 text-sm text-zinc-500">MEMO</p>
                 <div className="mt-2 border-1 border-zinc-500 rounded-lg p-3">
-                  {memo.split("\n").map((line: any, index: any, array: any) => (
-                    <p key={index} className="text-sm text-zinc-200">
-                      {line}
-                      {index < array.length - 1 && <br />}
-                    </p>
-                  ))}
+                  {memo
+                    ?.split("\n")
+                    .map((line: any, index: any, array: any) => (
+                      <p key={index} className="text-sm text-zinc-200">
+                        {line}
+                        {index < array.length - 1 && <br />}
+                      </p>
+                    ))}
                 </div>
               </>
             ) : (
