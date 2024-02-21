@@ -1,24 +1,19 @@
 import { Link, Badge } from "@nextui-org/react";
-import { getNotificationCount } from "@app/services/notificationsService";
 import { NotificationIcon } from "@app/components/icon/NotificationIcon";
-import { useEffect, useState } from "react";
+import { useNotificationCount } from "@app/hooks/useNotificationCount";
 
 type NotificationCount = {
   count: number;
 };
 
 export default function NotificationBadge() {
-  const [notificationCount, setNotificationCount] =
-    useState<NotificationCount | null>(null);
-
-  const fetchDate = async () => {
-    try {
-      const responseNotificationCount = await getNotificationCount();
-      setNotificationCount(responseNotificationCount);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { notificationCount, isLoading, isError } = useNotificationCount();
+  if (isLoading) {
+    <></>;
+  }
+  if (isError) {
+    <></>;
+  }
   return (
     <>
       {notificationCount?.count ? (
