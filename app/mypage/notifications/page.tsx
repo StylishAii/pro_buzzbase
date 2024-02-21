@@ -210,7 +210,11 @@ export default function Notifications() {
                               onClick={() => handleRead(notice.id)}
                             >
                               <Avatar
-                                src={`${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`}
+                                src={
+                                  process.env.NODE_ENV === "production"
+                                    ? `${notice.actor_icon.url}`
+                                    : `${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`
+                                }
                                 size="sm"
                                 isBordered
                                 className="min-w-[28px] max-w-[28px] min-h-[28px] max-h-[28px]"
