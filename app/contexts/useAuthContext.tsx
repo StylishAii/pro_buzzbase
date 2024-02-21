@@ -7,12 +7,14 @@ import { confirmAccountApi } from "@app/services/authService";
 const AuthContext = createContext<{
   isLoggedIn: boolean | undefined;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  loading: boolean;
   confirmationMessage: string | null;
   confirmationError: string | null;
   confirmAccount: (token: string) => Promise<void>;
 }>({
   isLoggedIn: undefined,
   setIsLoggedIn: () => {},
+  loading: true,
   confirmationMessage: null,
   confirmationError: null,
   confirmAccount: async () => {},
@@ -24,6 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(
     null
   );
@@ -33,6 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const validateToken = async () => {
+      setLoading(true);
       const accessToken = Cookies.get("access-token");
       const client = Cookies.get("client");
       const uid = Cookies.get("uid");
@@ -55,6 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       } else {
         setIsLoggedIn(false);
       }
+      setLoading(false);
     };
     validateToken();
   }, []);
@@ -79,6 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         isLoggedIn,
         setIsLoggedIn,
+        loading,
         confirmationMessage,
         confirmationError,
         confirmAccount,
