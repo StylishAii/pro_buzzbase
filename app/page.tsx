@@ -14,7 +14,7 @@ import {
   Card,
   SimpleGrid,
 } from "@mantine/core";
-import { Badge, Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import classes from "./HeroBullets.module.css";
 import HeaderTop from "@app/components/header/HeaderTop";
 import Link from "next/link";
