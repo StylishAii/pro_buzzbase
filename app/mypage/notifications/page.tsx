@@ -112,7 +112,11 @@ export default function Notifications() {
                             <div className="flex flex-col items-start gap-y-1 pt-1">
                               <Link href={`/mypage/${notice.actor_user_id}`}>
                                 <Avatar
-                                  src={`${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`}
+                                  src={
+                                    process.env.NODE_ENV === "production"
+                                      ? `${notice.actor_icon.url}`
+                                      : `${process.env.NEXT_PUBLIC_API_URL}${notice.actor_icon.url}`
+                                  }
                                   size="sm"
                                   isBordered
                                   className="min-w-[28px] max-w-[28px] min-h-[28px] max-h-[28px]"
@@ -238,7 +242,9 @@ export default function Notifications() {
                   ))
                 ) : (
                   <>
-                    <p className="text-zinc-400 text-center pt-2 text-sm">通知はありません</p>
+                    <p className="text-zinc-400 text-center pt-2 text-sm">
+                      通知はありません
+                    </p>
                   </>
                 )}
               </div>
