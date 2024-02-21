@@ -1,4 +1,4 @@
-import { Link, Button, Badge, Skeleton } from "@nextui-org/react";
+import { Link, Button, Skeleton } from "@nextui-org/react";
 import { UserIcon } from "@app/components/icon/UserIcon";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import NotificationBadge from "@app/components/notification/NotificationBadge";
