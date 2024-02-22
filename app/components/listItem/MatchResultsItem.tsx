@@ -36,9 +36,6 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
   const [tournamentNames, setTournamentNames] = useState<TournamentNames>({});
   const router = useRouter();
 
-  // console.log(gameResult);
-  // console.log(plateAppearance);
-
   useEffect(() => {
     const fetchTeamNames = async () => {
       const names: TeamNames = {};
