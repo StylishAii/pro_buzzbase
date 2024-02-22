@@ -6,7 +6,7 @@ import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import IndividualResultsList from "@app/components/user/IndividualResultsList";
 import MatchResultList from "@app/components/user/MatchResultList";
 import { getCurrentUserId, getUserIdData } from "@app/services/userService";
-import { Button, Link, Tab, Tabs } from "@nextui-org/react";
+import { Button, Tab, Tabs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import Header from "@app/components/header/Header";
 import { getTeams } from "@app/services/teamsService";
@@ -17,9 +17,9 @@ import AvatarComponent from "@app/components/user/AvatarComponent";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import FollowButton from "@app/components/button/FollowButton";
-import { XIcon } from "@app/components/icon/XIcon";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import ProfileShareComponent from "@app/components/share/ProfileShareComponent";
+import Link from "next/link";
 
 type Position = {
   id: string;

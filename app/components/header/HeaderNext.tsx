@@ -1,14 +1,15 @@
 "use client";
-import { Link, Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeaderNext({ onMatchResultSave }: HeaderNextProps) {
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
         <div className="flex items-center justify-between h-full max-w-[692px] mx-auto">
-        <Link href="/">
+          <Link href="/">
             <Image
               src="/images/buzz-logo-v2.png"
               width="120"

@@ -1,10 +1,7 @@
-import { Link, Badge } from "@nextui-org/react";
+import { Badge } from "@nextui-org/react";
 import { NotificationIcon } from "@app/components/icon/NotificationIcon";
 import { useNotificationCount } from "@app/hooks/useNotificationCount";
-
-type NotificationCount = {
-  count: number;
-};
+import Link from "next/link";
 
 export default function NotificationBadge() {
   const { notificationCount, isLoading, isError } = useNotificationCount();

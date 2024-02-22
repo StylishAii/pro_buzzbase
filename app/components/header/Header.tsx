@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Link, Button, Badge } from "@nextui-org/react";
-import { UserIcon } from "@app/components/icon/UserIcon";
+import { Badge } from "@nextui-org/react";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { NotificationIcon } from "@app/components/icon/NotificationIcon";
 import { getNotificationCount } from "@app/services/notificationsService";
 import Image from "next/image";
+import Link from "next/link";
+import HeaderLoginAndSignUp from "@app/components/auth/HeaderLoginAndSignUp";
 
 type NotificationCount = {
   count: number;
@@ -69,25 +70,7 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Link href="/signin" className="text-sm text-white">
-                  ログイン
-                </Link>
-                <Button
-                  href="/signup"
-                  as={Link}
-                  startContent={
-                    <UserIcon
-                      fill="#F4F4F4"
-                      filled="#F4F4F4"
-                      height="18"
-                      width="18"
-                      label=""
-                    />
-                  }
-                  className="gap-x-1 bg-yellow-500 text-white text-sm py-1.5 px-3 h-auto rounded-lg font-normal"
-                >
-                  新規登録
-                </Button>
+                <HeaderLoginAndSignUp />
               </>
             )}
           </div>
