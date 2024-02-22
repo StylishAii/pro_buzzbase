@@ -10,12 +10,18 @@ export default function NotificationItem() {
   const { notifications, isError, isLoading } = getNotifications();
   useRequireAuth();
   if (isLoading) {
-    <>
-      <Spinner color="primary" />
-    </>;
+    return (
+      <div className="flex justify-center">
+        <Spinner color="primary" />
+      </div>
+    );
   }
   if (isError) {
-    <></>;
+    return (
+      <p className="text-sm text-white text-center">
+        通知の読み込みに失敗しました。
+      </p>
+    );
   }
 
   const handleRead = async (id: number) => {
