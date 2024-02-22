@@ -7,6 +7,7 @@ import { notoSansJP } from "@app/font";
 import Footer from "@app/components/footer/Footer";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
+import { UserProvider } from "@app/contexts/userContext";
 
 const siteName = "BUZZ BASE 野球の個人成績を記録してランキングで共有";
 const description =
@@ -69,11 +70,13 @@ export default function RootLayout({
       />
       <body className={`${notoSansJP.className} bg-main text-white h-full`}>
         <AuthProvider>
-          <Providers>
-            {children}
-            <NavigationMenu />
-            <Footer />
-          </Providers>
+          <UserProvider>
+            <Providers>
+              {children}
+              <NavigationMenu />
+              <Footer />
+            </Providers>
+          </UserProvider>
         </AuthProvider>
         <Analytics />
       </body>
