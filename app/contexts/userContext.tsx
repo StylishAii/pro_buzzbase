@@ -40,7 +40,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     userId ? `/api/v1/users/${userId.id}/show_current_user_id` : null,
     fetcher
   );
-  console.log(usersUserId);
 
   React.useEffect(() => {
     if (userId) dispatch({ type: "SET_USER_ID", payload: userId });
