@@ -380,3 +380,11 @@ interface AcceptedUsers {
     url: string;
   };
 }
+
+interface UserContextType {
+  state: {
+    userId: number | null;
+    usersUserId: { user_id: string | null };
+  };
+  dispatch: React.Dispatch<any>;
+}

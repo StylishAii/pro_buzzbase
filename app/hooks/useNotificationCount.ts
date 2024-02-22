@@ -1,7 +1,5 @@
-import axiosInstance from "@app/utils/axiosInstance";
+import { fetcher } from "@app/hooks/swrFetcher";
 import useSWR from "swr";
-
-const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
 export function useNotificationCount() {
   const { data, error } = useSWR(`/api/v1/notifications/count`, fetcher);
