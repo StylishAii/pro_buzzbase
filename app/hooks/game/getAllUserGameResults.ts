@@ -8,7 +8,7 @@ export default function getAllUserGameResults() {
   );
   return {
     allUserGameResults: data,
-    isLoading,
+    isLoading: !error && !data,
     isError: error,
   };
 }

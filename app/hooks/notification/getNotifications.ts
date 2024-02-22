@@ -12,7 +12,7 @@ export function getNotifications() {
   );
   return {
     notifications: data,
-    isLoading,
+    isLoading: !error && !data,
     isError: error,
   };
 }
