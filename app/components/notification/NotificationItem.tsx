@@ -1,7 +1,7 @@
 "use client";
 import NotificationGroup from "@app/components/notification/NotificationGroup";
-import { getNotifications } from "@app/hooks/getNotifications";
-import useRequireAuth from "@app/hooks/useRequireAuth";
+import { getNotifications } from "@app/hooks/notification/getNotifications";
+import useRequireAuth from "@app/hooks/auth/useRequireAuth";
 import { readNotification } from "@app/services/notificationsService";
 import { Avatar, Divider, Spinner } from "@nextui-org/react";
 import Link from "next/link";
