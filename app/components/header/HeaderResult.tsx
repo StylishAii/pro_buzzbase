@@ -1,5 +1,4 @@
 import { BackIcon } from "@app/components/icon/BackIcon";
-import { Button } from "@nextui-org/react";
 
 export default function HeaderResult() {
   const handleBackClick = () => {

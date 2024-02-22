@@ -10,7 +10,6 @@ type Props = {
 
 export default function HeaderBackLink(props: Props) {
   const { backLink, groupName, groupIconLink } = props;
-  console.log(groupIconLink);
   return (
     <>
       <header className="py-2.5 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">

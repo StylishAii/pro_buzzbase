@@ -12,7 +12,7 @@ import {
   getCurrentUserId,
   getCurrentUsersUserId,
 } from "@app/services/userService";
-import { Button, Chip, Divider } from "@nextui-org/react";
+import { Chip, Divider } from "@nextui-org/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
