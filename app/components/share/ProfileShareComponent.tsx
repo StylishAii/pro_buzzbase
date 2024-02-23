@@ -42,15 +42,11 @@ type ProfileShareComponentProps = {
     following_count: number;
   };
   teamData?: Team;
-  teamPrefectureName: string;
-  teamCategoryName: string;
 };
 
 export default function ProfileShareComponent({
   userData,
   teamData,
-  teamPrefectureName,
-  teamCategoryName,
 }: ProfileShareComponentProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -63,11 +59,11 @@ export default function ProfileShareComponent({
 
     if (teamData && teamData.name) {
       text += `【チーム】${teamData.name}`;
-      if (teamPrefectureName) {
-        text += `（${teamPrefectureName}）`;
+      if (teamData.prefecture_name) {
+        text += `（${teamData.prefecture_name}）`;
       }
-      if (teamCategoryName) {
-        text += `｜${teamCategoryName}`;
+      if (teamData.category_name) {
+        text += `｜${teamData.category_name}`;
       }
     }
 
@@ -90,11 +86,11 @@ export default function ProfileShareComponent({
 
     if (teamData && teamData.name) {
       text += `【チーム】${teamData.name}`;
-      if (teamPrefectureName) {
-        text += `（${teamPrefectureName}）`;
+      if (teamData.prefecture_name) {
+        text += `（${teamData.prefecture_name}）`;
       }
-      if (teamCategoryName) {
-        text += `｜${teamCategoryName}`;
+      if (teamData.category_name) {
+        text += `｜${teamData.category_name}`;
       }
     }
 

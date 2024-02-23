@@ -4,7 +4,6 @@ import { CrownIcon } from "@app/components/icon/CrownIcon";
 import { GloveIcon } from "@app/components/icon/GloveIcon";
 import IndividualResultsList from "@app/components/user/IndividualResultsList";
 import MatchResultList from "@app/components/user/MatchResultList";
-import { getCurrentUserId } from "@app/services/userService";
 import { Button, Spinner, Tab, Tabs } from "@nextui-org/react";
 import React, { useState } from "react";
 import Header from "@app/components/header/Header";
@@ -236,7 +235,7 @@ export default function MyPage() {
                 />
               </div>
               <div className="mt-8">
-                {/* <Tabs
+                <Tabs
                   color="primary"
                   size="lg"
                   aria-label="Tabs colors"
@@ -248,23 +247,23 @@ export default function MyPage() {
                     title="成績"
                     className="font-bold tracking-wide"
                   >
-                    <IndividualResultsList userId={userId} />
+                    <IndividualResultsList userId={userData.user.id} />
                   </Tab>
                   <Tab
                     key="game"
                     title="試合"
                     className="font-bold tracking-wide"
                   >
-                    <MatchResultList userId={userId} />
+                    <MatchResultList userId={userData.user.id} />
+                  </Tab>
+                  {/* <Tab
+                    key="message"
+                    title="応援"
+                    className="font-bold tracking-wide"
+                  >
+                    <SupportMessagesList />
                   </Tab> */}
-                {/* <Tab
-                key="message"
-                title="応援"
-                className="font-bold tracking-wide"
-              >
-                <SupportMessagesList />
-              </Tab> */}
-                {/* </Tabs> */}
+                </Tabs>
               </div>
             </div>
           </div>
