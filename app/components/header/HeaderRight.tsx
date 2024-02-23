@@ -2,6 +2,7 @@ import { Skeleton } from "@nextui-org/react";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import NotificationBadge from "@app/components/notification/NotificationBadge";
 import HeaderLoginAndSignUp from "@app/components/auth/HeaderLoginAndSignUp";
+import UserSearch from "@app/components/user/UserSearch";
 
 export default function HeaderRight() {
   const { isLoggedIn, loading } = useAuthContext();
@@ -21,11 +22,17 @@ export default function HeaderRight() {
       <div className="flex items-center gap-x-4 pt-1">
         {isLoggedIn ? (
           <>
-            <NotificationBadge />
+            <div className="flex items-center gap-x-2">
+              <UserSearch />
+              <NotificationBadge />
+            </div>
           </>
         ) : (
           <>
             <HeaderLoginAndSignUp />
+            <div className="absolute top-14 right-2">
+              <UserSearch />
+            </div>
           </>
         )}
       </div>
