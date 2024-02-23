@@ -50,16 +50,9 @@ export default function MyPage() {
 
   const { userData, isLoadingUsers, isErrorUser } = getUserIdData();
   const { teamData, isLoadingTeams } = getMyTeams();
-  const { teamCategoryName, isLoadingBaseballCat } = getBaseballCategory();
-  const { teamPrefectureName, isLoadingPrefecture } = getPrefectures();
   const { userAwards, isLoadingAwards } = getUserAwards();
 
-  const isLoading =
-    isLoadingUsers ||
-    isLoadingTeams ||
-    isLoadingBaseballCat ||
-    isLoadingPrefecture ||
-    isLoadingAwards;
+  const isLoading = isLoadingUsers || isLoadingTeams || isLoadingAwards;
   const isError = isErrorUser;
 
   if (isLoading) {
@@ -230,8 +223,6 @@ export default function MyPage() {
                 <ProfileShareComponent
                   userData={userData}
                   teamData={teamData}
-                  teamPrefectureName={teamPrefectureName}
-                  teamCategoryName={teamCategoryName}
                 />
               </div>
               <div className="mt-8">
