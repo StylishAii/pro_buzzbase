@@ -7,6 +7,7 @@ import { getNotificationCount } from "@app/services/notificationsService";
 import Image from "next/image";
 import Link from "next/link";
 import HeaderLoginAndSignUp from "@app/components/auth/HeaderLoginAndSignUp";
+import UserSearch from "@app/components/user/UserSearch";
 
 type NotificationCount = {
   count: number;
@@ -34,7 +35,7 @@ export default function Header() {
   return (
     <>
       <header className="py-2 px-3 border-b border-b-zinc-500 fixed top-0 w-full bg-main z-50">
-        <div className="flex items-center justify-between h-full max-w-[692px] mx-auto lg:m-[0_auto_0_28%]">
+        <div className="flex items-center justify-between h-full max-w-[692px] mx-auto lg:m-[0_auto_0_28%] relative">
           <Link href="/">
             <Image
               src="/images/buzz-logo-v2.png"
@@ -46,31 +47,37 @@ export default function Header() {
           <div className="flex items-center gap-x-4 pt-1">
             {isLoggedIn ? (
               <>
-                {notificationCount?.count ? (
-                  <>
-                    <Badge
-                      color="danger"
-                      content={notificationCount?.count}
-                      isInvisible={false}
-                      shape="circle"
-                      size="sm"
-                    >
+                <div className="flex items-center gap-x-2">
+                  <UserSearch />
+                  {notificationCount?.count ? (
+                    <>
+                      <Badge
+                        color="danger"
+                        content={notificationCount?.count}
+                        isInvisible={false}
+                        shape="circle"
+                        size="sm"
+                      >
+                        <Link href="/mypage/notifications">
+                          <NotificationIcon size={24} />
+                        </Link>
+                      </Badge>
+                    </>
+                  ) : (
+                    <>
                       <Link href="/mypage/notifications">
                         <NotificationIcon size={24} />
                       </Link>
-                    </Badge>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/mypage/notifications">
-                      <NotificationIcon size={24} />
-                    </Link>
-                  </>
-                )}
+                    </>
+                  )}
+                </div>
               </>
             ) : (
               <>
                 <HeaderLoginAndSignUp />
+                <div className="absolute top-14 right-2">
+                  <UserSearch />
+                </div>
               </>
             )}
           </div>
