@@ -386,6 +386,7 @@ interface UserContextType {
     userId: {
       id: number | null;
       team_id: number | null;
+      user_id: string;
     };
     usersUserId: { user_id: string | null };
   };

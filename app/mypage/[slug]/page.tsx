@@ -16,7 +16,7 @@ import Link from "next/link";
 import getUserIdData from "@app/hooks/user/getUserIdData";
 import getUserAwards from "@app/hooks/user/getUserAwards";
 import getMyTeams from "@app/hooks/team/getTeams";
-import { useUser } from "@app/contexts/userContext";
+import useCurrentUserId from "@app/hooks/user/useCurrentUserId";
 
 type Position = {
   id: string;
@@ -43,14 +43,17 @@ type userData = {
 export default function MyPage() {
   const { isLoggedIn } = useAuthContext();
   const [errors, setErrors] = useState<string[]>([]);
-  const { state } = useUser();
-  const currentUserId = state.userId;
 
   const { userData, isLoadingUsers, isErrorUser } = getUserIdData();
   const { teamData, isLoadingTeams } = getMyTeams();
   const { userAwards, isLoadingAwards } = getUserAwards();
+  const { currentUserId, isLoadingCurrentUserId } = useCurrentUserId();
 
-  const isLoading = isLoadingUsers || isLoadingTeams || isLoadingAwards;
+  const isLoading =
+    isLoadingUsers ||
+    isLoadingTeams ||
+    isLoadingAwards ||
+    isLoadingCurrentUserId;
   const isError = isErrorUser;
 
   if (isLoading) {

@@ -2,47 +2,27 @@
 import "@app/globals.css";
 import { UserImage } from "@app/components/user/UserImage";
 import NavigationItems from "./NavigationItems";
-import { getUserData } from "@app/services/userService";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import Image from "next/image";
 import Link from "next/link";
+import useCurrentUserImageId from "@app/hooks/user/useCurrentUserImageId";
+import HeaderUserMenu from "@app/components/header/HeaderUserMenu";
 
-type userData = {
+type currentUserData = {
   user_id: string;
   image: any;
   url: string;
 };
 
 export default function NavigationMenu() {
-  const [userData, setUserData] = useState<userData | null>(null);
-  const { isLoggedIn } = useAuthContext();
   const pathName = usePathname();
   const navigationItems = NavigationItems();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const data = await getUserData();
-        setUserData(data);
-      } catch (error) {
-        setUserData(null);
-      }
-    };
-    fetchUserData();
-  }, []);
-
-  const myPageLink = isLoggedIn ? `/mypage/${userData?.user_id}` : "/signin";
   const isActive = (path: string, itemHref: string) => {
     const activePaths = ["/", "/game-result/lists", "/everyone", "/groups"];
     return path === itemHref && activePaths.includes(path);
   };
-
-  const imageUrl =
-    process.env.NODE_ENV === "production"
-      ? userData?.image.url
-      : `${process.env.NEXT_PUBLIC_S3_API_URL}${userData?.image.url}`;
 
   return (
     <>
@@ -79,26 +59,7 @@ export default function NavigationMenu() {
             </li>
           ))}
           <li>
-            <Link
-              href={myPageLink}
-              className={`flex items-center flex-col gap-y-1 min-w-[50px] font-medium px-0 bg-transparent isIconOnly overflow-visible fontSize10 ${
-                pathName.includes("/mypage") ? `text-yellow-500` : `text-white`
-              } lg:flex-row lg:text-base lg:w-fit lg:font-bold lg:gap-x-5`}
-            >
-              <UserImage
-                src={
-                  userData?.image.url
-                    ? `${imageUrl}`
-                    : "/images/user-default-yellow.svg"
-                }
-                width={22}
-                height={22}
-                alt=""
-                active={pathName.includes("/mypage") ? true : false}
-                className={"object-cover lg:w-6 lg:h-6 lg:mr-4"}
-              />
-              マイページ
-            </Link>
+            <HeaderUserMenu />
           </li>
         </ul>
       </nav>
