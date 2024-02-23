@@ -199,13 +199,12 @@ export default function MyPage() {
                   <>
                     {isCurrentUserPage ? (
                       <>
-                        <Button
-                          href={`/mypage/edit`}
-                          as={Link}
-                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
+                        <Link
+                          href="/mypage/edit"
+                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 text-center"
                         >
                           プロフィール編集
-                        </Button>
+                        </Link>
                       </>
                     ) : (
                       <>
