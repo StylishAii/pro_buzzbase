@@ -77,9 +77,9 @@ export default function RegisterUserName() {
     event.preventDefault();
     setErrors([]);
     try {
+      setIsLoggedIn(true);
       await updateUser({ name: userName, user_id: userId });
       const userData = await getUserData();
-      setIsLoggedIn(true);
       if (userData && userData.user_id) {
         setIsLoggedIn(true);
         router.push(`/mypage/${userData.user_id}`);
