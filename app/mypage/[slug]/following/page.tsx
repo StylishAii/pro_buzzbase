@@ -6,34 +6,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type UserId = {
-  id: number;
-};
-
 export default function Following() {
   const [userIdName, setUserIdName] = useState("");
-  const [userId, setUserId] = useState<UserId>();
   const pathName = usePathname();
 
   useEffect(() => {
     const pathParts = pathName.split("/");
     const userIdPart = pathParts[pathParts.length - 2];
     if (userIdPart && userIdPart !== "undefined") {
-      fetchUserId(userIdPart);
       setUserIdName(userIdPart);
     }
   }, [pathName]);
-
-  const fetchUserId = async (userId: string) => {
-    try {
-      const response = await getUserId(userId);
-      if (response) {
-        setUserId(response);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
