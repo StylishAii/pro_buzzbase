@@ -2,24 +2,23 @@
 import { BallIcon } from "@app/components/icon/BallIcon";
 import { CrownIcon } from "@app/components/icon/CrownIcon";
 import { GloveIcon } from "@app/components/icon/GloveIcon";
-import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import IndividualResultsList from "@app/components/user/IndividualResultsList";
 import MatchResultList from "@app/components/user/MatchResultList";
-import { getCurrentUserId, getUserIdData } from "@app/services/userService";
-import { Button, Tab, Tabs } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import { Button, Spinner, Tab, Tabs } from "@nextui-org/react";
+import React, { useState } from "react";
 import Header from "@app/components/header/Header";
-import { getTeams } from "@app/services/teamsService";
-import { getBaseballCategory } from "@app/services/baseballCategoryService";
-import { getPrefectures } from "@app/services/prefectureService";
-import { getUserAwards } from "@app/services/awardsService";
 import AvatarComponent from "@app/components/user/AvatarComponent";
-import { usePathname, useRouter } from "next/navigation";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import FollowButton from "@app/components/button/FollowButton";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import ProfileShareComponent from "@app/components/share/ProfileShareComponent";
 import Link from "next/link";
+import getUserIdData from "@app/hooks/user/getUserIdData";
+import getBaseballCategory from "@app/hooks/team/getBaseballCategory";
+import getPrefectures from "@app/hooks/team/getPrefectures";
+import getUserAwards from "@app/hooks/user/getUserAwards";
+import getMyTeams from "@app/hooks/team/getTeams";
+import { useUser } from "@app/contexts/userContext";
 
 type Position = {
   id: string;
@@ -43,25 +42,36 @@ type userData = {
   following_count: number;
 };
 
-type Team = {
-  id: number;
-  name: string;
-  category_id: number;
-  prefecture_id: number;
-};
-
 export default function MyPage() {
-  const [userData, setUserData] = useState<userData | null>(null);
-  const [teamData, setTeamData] = useState<Team[]>([]);
-  const [teamCategoryName, setTeamCategoryName] = useState("");
-  const [teamPrefectureName, setTeamPrefectureName] = useState("");
-  const [userAwards, setUserAwards] = useState<UserAwards[]>([]);
-  const [currentUserId, setCurrentUserId] = useState(null);
-  const [userId, setUserId] = useState(0);
-  const pathName = usePathname();
   const { isLoggedIn } = useAuthContext();
-  const router = useRouter();
   const [errors, setErrors] = useState<string[]>([]);
+  const { state } = useUser();
+  const currentUserId = state.userId;
+
+  const { userData, isLoadingUsers, isErrorUser } = getUserIdData();
+  const { teamData, isLoadingTeams } = getMyTeams();
+  const { userAwards, isLoadingAwards } = getUserAwards();
+
+  const isLoading = isLoadingUsers || isLoadingTeams || isLoadingAwards;
+  const isError = isErrorUser;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center pt-12 pb-12 buzz-dark flex-col w-full min-h-screen">
+        <Spinner color="primary" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <p className="text-sm text-white text-center flex flex-col w-full min-h-screen justify-center">
+        ユーザーデータの読み込みに失敗しました。
+      </p>
+    );
+  }
+
+  const isCurrentUserPage = currentUserId.id === userData?.user.id;
 
   const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
     setErrors(newErrors);
@@ -69,84 +79,6 @@ export default function MyPage() {
       setErrors([]);
     }, 2000);
   };
-
-  useEffect(() => {
-    const pathParts = pathName.split("/");
-    const userIdPart = pathParts[pathParts.length - 1];
-    if (userIdPart && userIdPart !== "undefined") {
-      fetchData(userIdPart);
-    }
-  }, [pathName]);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetchCurrentUserIdData();
-    }
-  }, [isLoggedIn]);
-
-  const fetchCurrentUserIdData = async () => {
-    try {
-      if (isLoggedIn) {
-        const currentUserIdData = await getCurrentUserId();
-        setCurrentUserId(currentUserIdData);
-      }
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const isCurrentUserPage = currentUserId === userData?.user.id;
-
-  const fetchData = async (userId: string) => {
-    try {
-      const data = await getUserIdData(userId);
-      setUserData(data);
-      setUserId(data.user.id);
-      if (data.user.team_id) {
-        const teamsData = await getTeams();
-        const baseballCategoryData = await getBaseballCategory();
-        const prefectureData = await getPrefectures();
-        const userTeam = teamsData.find(
-          (team: { id: any }) => team.id === data.user.team_id
-        );
-        if (userTeam) {
-          setTeamData([userTeam]);
-        }
-        const category = baseballCategoryData.find(
-          (category: { id: number }) => category.id === userTeam.category_id
-        );
-        if (category) {
-          setTeamCategoryName(category.name);
-        }
-        const prefecture = prefectureData.find(
-          (prefecture: { id: number }) =>
-            prefecture.id === userTeam.prefecture_id
-        );
-        if (prefecture) {
-          setTeamPrefectureName(prefecture.name);
-        }
-      }
-
-      const awardData = await getUserAwards(data.user.id);
-      if (awardData) {
-        setUserAwards(awardData);
-      }
-    } catch (error: any) {
-      if (error.response && error.response.status === 404) {
-        router.push("/404");
-      } else {
-        console.error(error);
-      }
-    }
-  };
-
-  if (!userData) {
-    return (
-      <>
-        <LoadingSpinner />
-      </>
-    );
-  }
 
   return (
     <div className="buzz-dark flex flex-col w-full min-h-screen">
@@ -172,22 +104,24 @@ export default function MyPage() {
                     </li>
                     <li>
                       <ul className="flex items-center">
-                        {userData.user.positions.map((position, index) => (
-                          <React.Fragment key={position.id}>
-                            <li>
-                              <p className="text-sm text-zinc-400">
-                                {position.name}
-                              </p>
-                            </li>
-                            {index < userData.user.positions.length - 1 && (
+                        {userData.user.positions.map(
+                          (position: Position, index: number) => (
+                            <React.Fragment key={position.id}>
                               <li>
                                 <p className="text-sm text-zinc-400">
-                                  &nbsp;/&nbsp;
+                                  {position.name}
                                 </p>
                               </li>
-                            )}
-                          </React.Fragment>
-                        ))}
+                              {index < userData.user.positions.length - 1 && (
+                                <li>
+                                  <p className="text-sm text-zinc-400">
+                                    &nbsp;/&nbsp;
+                                  </p>
+                                </li>
+                              )}
+                            </React.Fragment>
+                          )
+                        )}
                       </ul>
                     </li>
                   </ul>
@@ -195,7 +129,7 @@ export default function MyPage() {
               ) : (
                 ""
               )}
-              {userData.user.team_id ? (
+              {teamData && teamData.name && (
                 <>
                   <ul className="flex items-center gap-x-1.5 mt-1.5">
                     <li>
@@ -203,23 +137,17 @@ export default function MyPage() {
                     </li>
                     <li>
                       <ul className="flex items-center gap-x-1">
-                        {teamData?.map((team) => (
-                          <React.Fragment key={team.id}>
-                            <li>
-                              <p className="text-sm text-zinc-400">
-                                {`${team.name}（${teamPrefectureName}）｜ ${teamCategoryName}`}
-                              </p>
-                            </li>
-                          </React.Fragment>
-                        ))}
+                        <li>
+                          <p className="text-sm text-zinc-400">
+                            {`${teamData?.name}（${teamData?.category_name}）｜ ${teamData?.prefecture_name}`}
+                          </p>
+                        </li>
                       </ul>
                     </li>
                   </ul>
                 </>
-              ) : (
-                ""
               )}
-              {userAwards[0] ? (
+              {userAwards && userAwards.length > 0 && (
                 <>
                   <ul className="mt-2 grid gap-y-1">
                     <li className="flex items-start gap-x-1.5">
@@ -243,8 +171,6 @@ export default function MyPage() {
                     </li>
                   </ul>
                 </>
-              ) : (
-                ""
               )}
               <div className="flex items-center gap-x-4 mt-2">
                 <Link href={`/mypage/${userData.user.user_id}/following/`}>
@@ -273,13 +199,12 @@ export default function MyPage() {
                   <>
                     {isCurrentUserPage ? (
                       <>
-                        <Button
-                          href={`/mypage/edit`}
-                          as={Link}
-                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5"
+                        <Link
+                          href="/mypage/edit"
+                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 text-center"
                         >
                           プロフィール編集
-                        </Button>
+                        </Link>
                       </>
                     ) : (
                       <>
@@ -296,9 +221,7 @@ export default function MyPage() {
                 )}
                 <ProfileShareComponent
                   userData={userData}
-                  teamData={teamData[0]}
-                  teamPrefectureName={teamPrefectureName}
-                  teamCategoryName={teamCategoryName}
+                  teamData={teamData}
                 />
               </div>
               <div className="mt-8">
@@ -314,22 +237,22 @@ export default function MyPage() {
                     title="成績"
                     className="font-bold tracking-wide"
                   >
-                    <IndividualResultsList userId={userId} />
+                    <IndividualResultsList userId={userData.user.id} />
                   </Tab>
                   <Tab
                     key="game"
                     title="試合"
                     className="font-bold tracking-wide"
                   >
-                    <MatchResultList userId={userId} />
+                    <MatchResultList userId={userData.user.id} />
                   </Tab>
                   {/* <Tab
-                key="message"
-                title="応援"
-                className="font-bold tracking-wide"
-              >
-                <SupportMessagesList />
-              </Tab> */}
+                    key="message"
+                    title="応援"
+                    className="font-bold tracking-wide"
+                  >
+                    <SupportMessagesList />
+                  </Tab> */}
                 </Tabs>
               </div>
             </div>

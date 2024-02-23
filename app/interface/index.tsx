@@ -383,8 +383,28 @@ interface AcceptedUsers {
 
 interface UserContextType {
   state: {
-    userId: number | null;
+    userId: {
+      id: number | null;
+      team_id: number | null;
+    };
     usersUserId: { user_id: string | null };
   };
   dispatch: React.Dispatch<any>;
+}
+
+interface userData {
+  user: {
+    image: any;
+    name: string;
+    user_id: string;
+    url: string;
+    introduction: string;
+    positions: getUserPositions[];
+    team_id: number;
+    id: number;
+  };
+  isFollowing: boolean;
+
+  followers_count: number;
+  following_count: number;
 }

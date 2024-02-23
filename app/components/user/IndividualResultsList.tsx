@@ -1,16 +1,10 @@
-import ResultsSelectBox from "@app/components/select/ResultsSelectBox";
 import BattingAverageTable from "@app/components/table/BattingAverageTable";
 import PitchingRecordTable from "@app/components/table/PitchingRecordTable";
-import { gameType, years } from "@app/data/TestData";
-import {
-  getPersonalBattingAverage,
-  getPersonalBattingStatus,
-} from "@app/services/battingAveragesService";
-import {
-  getPersonalPitchingResult,
-  getPersonalPitchingResultStats,
-} from "@app/services/pitchingResultsService";
-import { useEffect, useState } from "react";
+import { getPersonalBattingAverage } from "@app/hooks/batting/getPersonalBattingAverage";
+import { getPersonalBattingStatus } from "@app/hooks/batting/getPersonalBattingStatus";
+import { getPersonalPitchingResult } from "@app/hooks/pitching/getPersonalPitchingResult";
+import { getPersonalPitchingResultStats } from "@app/hooks/pitching/getPersonalPitchingResultStats";
+import { Skeleton } from "@nextui-org/react";
 
 type UserId = {
   userId: number;
@@ -75,45 +69,27 @@ type PersonalPitchingStatus = {
 
 export default function IndividualResultsList(props: UserId) {
   const { userId } = props;
-  const [personalBattingAverages, setPersonalBattingAverages] = useState<
-    PersonalBattingAverages[]
-  >([]);
-  const [personalBattingStatus, setPersonalBattingStatus] = useState<
-    PersonalBattingStatus | undefined
-  >(undefined);
-  const [personalPitchingResults, setPersonalPitchingResults] = useState<
-    PersonalPitchingResults[]
-  >([]);
-  const [personalPitchingStatus, setPersonalPitchingStatus] = useState<
-    PersonalPitchingStatus | undefined
-  >(undefined);
+  const { personalBattingAverages, isLoadingBA } =
+    getPersonalBattingAverage(userId);
+  const { personalBattingStatus, isLoadingBS } =
+    getPersonalBattingStatus(userId);
+  const { personalPitchingResults, isLoadingPR } =
+    getPersonalPitchingResult(userId);
+  const { personalPitchingStatus, isLoadingPS } =
+    getPersonalPitchingResultStats(userId);
 
-  useEffect(() => {
-    fetchBattingAverages();
-    fetchPitchingResults();
-  }, [userId]);
+  const isLoading = isLoadingBA || isLoadingBS || isLoadingPR || isLoadingPS;
 
-  const fetchBattingAverages = async () => {
-    try {
-      const response = await getPersonalBattingAverage(userId);
-      setPersonalBattingAverages(response);
-      const responseStatus = await getPersonalBattingStatus(userId);
-      setPersonalBattingStatus(responseStatus);
-    } catch (error) {
-      console.log(`Fetch Personal Batting Averages error:`, error);
-    }
-  };
+  if (isLoading) {
+    return (
+      <div className="my-6">
+        <Skeleton className="rounded-lg">
+          <div className="h-80 w-full rounded-lg bg-default-300"></div>
+        </Skeleton>
+      </div>
+    );
+  }
 
-  const fetchPitchingResults = async () => {
-    try {
-      const response = await getPersonalPitchingResult(userId);
-      setPersonalPitchingResults(response);
-      const responseStats = await getPersonalPitchingResultStats(userId);
-      setPersonalPitchingStatus(responseStats);
-    } catch (error) {
-      console.log(`Fetch Personal Pitching Results error:`, error);
-    }
-  };
   return (
     <>
       <div className="bg-bg_sub p-4 rounded-xl lg:p-6">

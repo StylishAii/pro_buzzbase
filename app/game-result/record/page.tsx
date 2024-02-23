@@ -676,8 +676,8 @@ export default function GameRecord() {
                   onChange={handleDefensivePositionChange}
                   className="grid justify-between items-center grid-cols-[auto_110px]"
                   selectedKeys={
-                    existingDefensivePosition !== undefined
-                      ? [existingDefensivePosition.toString()]
+                    existingDefensivePosition
+                      ? existingDefensivePosition
                       : myPosition
                   }
                 >
