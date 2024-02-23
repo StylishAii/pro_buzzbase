@@ -55,7 +55,7 @@ export default function MyPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center pt-12 pb-12 buzz-dark flex-col w-full min-h-screen">
+      <div className="flex justify-center pb-12 buzz-dark flex-col w-full min-h-screen">
         <Spinner color="primary" />
       </div>
     );
