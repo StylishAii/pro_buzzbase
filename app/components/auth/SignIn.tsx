@@ -39,8 +39,10 @@ export default function SignIn() {
       setIsLoggedIn(true);
       const userData = await getUserData();
       if (userData && userData.user_id) {
+        setIsLoggedIn(true);
         router.push(`/mypage/${userData.user_id}`);
       } else {
+        setIsLoggedIn(true);
         router.push("/register-username");
       }
     } catch (error: any) {

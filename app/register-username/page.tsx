@@ -16,6 +16,7 @@ export default function RegisterUserName() {
   const [userName, setUserName] = useState("");
   const [userId, setUserId] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
+  const { setIsLoggedIn } = useAuthContext();
 
   useEffect(() => {
     if (isLoggedIn === false) {
@@ -78,7 +79,9 @@ export default function RegisterUserName() {
     try {
       await updateUser({ name: userName, user_id: userId });
       const userData = await getUserData();
+      setIsLoggedIn(true);
       if (userData && userData.user_id) {
+        setIsLoggedIn(true);
         router.push(`/mypage/${userData.user_id}`);
       }
     } catch (error: any) {
