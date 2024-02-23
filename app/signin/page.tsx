@@ -10,7 +10,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const [message, setMessage] = useState("");
   const [logoutSuccess, setLogoutSuccess] = useState(false);
-
+  const confirmationUrl = searchParams.get("account_confirmation_success");
   const logoutParams = searchParams.get("logout");
 
   const router = useRouter();
@@ -42,6 +42,13 @@ export default function Page() {
       {logoutSuccess && <ToastSuccess text={message} />}
       <div className="h-full flex flex-col items-center justify-center px-4">
         <div className="w-11/12 max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
+          {confirmationUrl && (
+            <p className="mb-10 text-sm text-yellow-500 lg:text-base">
+              メールアドレスの認証が成功しました！
+              <br />
+              先ほどのメールアドレスとパスワードを入力してください。
+            </p>
+          )}
           <h2 className="text-2xl font-bold mb-9">ログイン</h2>
           <SignIn />
         </div>

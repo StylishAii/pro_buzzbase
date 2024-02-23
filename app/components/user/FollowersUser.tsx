@@ -43,7 +43,7 @@ export default function FollowersUser() {
 
   if (isLoadingFollowers) {
     return (
-      <div className="flex pt-12 pb-12 buzz-dark flex-col w-full min-h-screen">
+      <div className="flex pt-12 pb-12 buzz-dark flex-col w-full min-h-screen lg:max-w-[720px] lg:m-[0_auto_0_28%]">
         <Spinner color="primary" />
       </div>
     );
