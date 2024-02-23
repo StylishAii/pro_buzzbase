@@ -30,8 +30,8 @@ type User = {
 type Team = {
   id: number;
   name: string;
-  category_id: number;
-  prefecture_id: number;
+  category_name: string;
+  prefecture_name: string;
 };
 
 type ProfileShareComponentProps = {
@@ -41,7 +41,7 @@ type ProfileShareComponentProps = {
     followers_count: number;
     following_count: number;
   };
-  teamData: Team;
+  teamData?: Team;
   teamPrefectureName: string;
   teamCategoryName: string;
 };

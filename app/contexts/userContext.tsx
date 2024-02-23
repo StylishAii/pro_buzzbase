@@ -5,7 +5,7 @@ import useSWR from "swr";
 
 const defaultContextValue: UserContextType = {
   state: {
-    userId: null,
+    userId: { id: null, team_id: null },
     usersUserId: { user_id: "" },
   },
   dispatch: () => {},
@@ -14,7 +14,7 @@ const defaultContextValue: UserContextType = {
 export const UserContext = createContext(defaultContextValue);
 
 const initialState = {
-  userId: null,
+  userId: { id: null, team_id: null },
   usersUserId: { user_id: "" },
 };
 
