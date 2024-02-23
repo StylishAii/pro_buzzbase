@@ -47,7 +47,7 @@ export default function Header() {
           <div className="flex items-center gap-x-4 pt-1">
             {isLoggedIn ? (
               <>
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-4">
                   <UserSearch />
                   {notificationCount?.count ? (
                     <>
