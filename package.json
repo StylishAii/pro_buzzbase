@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@mantine/core": "^7.5.2",
@@ -17,6 +18,7 @@
     "framer-motion": "^10.16.12",
     "js-cookie": "^3.0.5",
     "next": "14.0.3",
+    "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-dom": "^18",
