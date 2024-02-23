@@ -21,7 +21,7 @@ export default function AllUserGameResultItem() {
   const { allUserGameResults, isError, isLoading } = getAllUserGameResults();
   if (isLoading) {
     return (
-      <div className="flex justify-center pb-6">
+      <div className="flex justify-center pb-6 pt-14">
         <Spinner color="primary" />
       </div>
     );

@@ -11,7 +11,7 @@ export default function NotificationItem() {
   useRequireAuth();
   if (isLoading) {
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center pt-12">
         <Spinner color="primary" />
       </div>
     );

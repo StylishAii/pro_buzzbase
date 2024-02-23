@@ -37,6 +37,7 @@ export default function NotificationGroup({ notice }: NotificationGroupProps) {
       await declinedGroupInvitation(groupId);
       await deleteNotification(id);
       onClose();
+      window.location.reload();
     } catch (error) {}
   };
 
