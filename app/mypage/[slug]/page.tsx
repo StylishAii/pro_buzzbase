@@ -49,11 +49,7 @@ export default function MyPage() {
   const { userAwards, isLoadingAwards } = getUserAwards();
   const { currentUserId, isLoadingCurrentUserId } = useCurrentUserId();
 
-  const isLoading =
-    isLoadingUsers ||
-    isLoadingTeams ||
-    isLoadingAwards ||
-    isLoadingCurrentUserId;
+  const isLoading = isLoadingUsers;
   const isError = isErrorUser;
 
   if (isLoading) {
@@ -72,7 +68,7 @@ export default function MyPage() {
     );
   }
 
-  const isCurrentUserPage = currentUserId.id === userData?.user.id;
+  const isCurrentUserPage = currentUserId?.id === userData?.user.id;
 
   const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
     setErrors(newErrors);

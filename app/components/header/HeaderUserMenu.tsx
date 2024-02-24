@@ -27,9 +27,12 @@ export default function HeaderUserMenu() {
     : "/signin";
 
   const imageUrl =
-    process.env.NODE_ENV === "production"
-      ? currentUserData?.image.url
-      : `${process.env.NEXT_PUBLIC_S3_API_URL}${currentUserData?.image.url}`;
+    currentUserData && currentUserData.image
+      ? process.env.NODE_ENV === "production"
+        ? currentUserData.image.url
+        : `${process.env.NEXT_PUBLIC_S3_API_URL}${currentUserData.image.url}`
+      : "/images/user-default-yellow.svg";
+
   return (
     <>
       <Link
@@ -40,9 +43,7 @@ export default function HeaderUserMenu() {
       >
         <UserImage
           src={
-            currentUserData?.image.url
-              ? `${imageUrl}`
-              : "/images/user-default-yellow.svg"
+            currentUserData ? `${imageUrl}` : "/images/user-default-yellow.svg"
           }
           width={22}
           height={22}

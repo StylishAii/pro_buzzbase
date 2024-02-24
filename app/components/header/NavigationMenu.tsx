@@ -1,12 +1,9 @@
 "use client";
 import "@app/globals.css";
-import { UserImage } from "@app/components/user/UserImage";
 import NavigationItems from "./NavigationItems";
 import { usePathname } from "next/navigation";
-import { useAuthContext } from "@app/contexts/useAuthContext";
 import Image from "next/image";
 import Link from "next/link";
-import useCurrentUserImageId from "@app/hooks/user/useCurrentUserImageId";
 import HeaderUserMenu from "@app/components/header/HeaderUserMenu";
 
 type currentUserData = {
