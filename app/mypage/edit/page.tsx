@@ -364,6 +364,9 @@ export default function ProfileEdit() {
     if (category) {
       setSelectedCategoryId(category.id);
       setBaseballCategoryValue(category.name);
+    } else {
+      setSelectedCategoryId(undefined);
+      setBaseballCategoryValue("");
     }
   };
 
