@@ -677,7 +677,7 @@ export default function GameRecord() {
                   className="grid justify-between items-center grid-cols-[auto_110px]"
                   selectedKeys={
                     existingDefensivePosition
-                      ? existingDefensivePosition
+                      ? [existingDefensivePosition]
                       : myPosition
                   }
                 >
