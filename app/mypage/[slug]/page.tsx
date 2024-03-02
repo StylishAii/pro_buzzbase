@@ -100,7 +100,7 @@ export default function MyPage() {
                       <GloveIcon width="18" height="18" fill="#F4F4F4d0" />
                     </li>
                     <li>
-                      <ul className="flex items-center">
+                      <ul className="flex items-center flex-wrap">
                         {userData.user.positions.map(
                           (position: Position, index: number) => (
                             <React.Fragment key={position.id}>
