@@ -2,6 +2,7 @@
 
 import Header from "@app/components/header/Header";
 import { PlusIcon } from "@app/components/icon/PlusIcon";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import MatchResultList from "@app/components/user/MatchResultList";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import {
@@ -22,6 +23,7 @@ export default function GameResultList() {
   const [gameResultIndex, setGameResultIndex] = useState<GameResult[]>([]);
   const [plateAppearance, setPlateAppearance] = useState<GameResult[]>([]);
   const [currentUserId, setCurrentUserId] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { isLoggedIn } = useAuthContext();
 
@@ -54,6 +56,7 @@ export default function GameResultList() {
   }, []);
 
   const handleNewRecord = async () => {
+    setIsSubmitting(true);
     try {
       const newGameResult = await createGameResult();
       localStorage.setItem("gameResultId", JSON.stringify(newGameResult.id));
@@ -65,6 +68,7 @@ export default function GameResultList() {
   return (
     <>
       <Header />
+      {isSubmitting && <LoadingSpinner />}
       <main className="h-full max-w-[720px] mx-auto w-full lg:m-[0_auto_0_28%]">
         <div className="pb-32 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:pb-0 lg:mb-14">
           <div className="pt-16 px-4 lg:px-6 lg:pb-6">
@@ -74,8 +78,9 @@ export default function GameResultList() {
               variant="solid"
               radius="full"
               endContent={<PlusIcon width="22" height="22" fill="#F4F4F4" />}
-              className="fixed top-16 right-4 z-100 font-medium lg:absolute lg:z-10"
+              className="fixed top-16 right-4 z-50 font-medium lg:absolute lg:z-10"
               onClick={handleNewRecord}
+              isDisabled={isSubmitting}
             >
               新規追加
             </Button>

@@ -2,6 +2,7 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderResult from "@app/components/header/HeaderResult";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { updatePitchingResultId } from "@app/services/gameResultsService";
 import {
@@ -83,6 +84,7 @@ export default function PitchingRecord() {
   const [hitByPitches, setHitByPitches] = useState(0);
   const [existingHitByPitches, setExistingHitByPitches] = useState(0);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [localStorageGameResultId, setLocalStorageGameResultId] = useState<
     number | null
   >(null);
@@ -261,10 +263,14 @@ export default function PitchingRecord() {
   // データ送信
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (localStorageGameResultId == null || currentUserId == null) {
+    if (
+      localStorageGameResultId == null ||
+      currentUserId == null ||
+      isSubmitting
+    ) {
       return;
     }
-
+    setIsSubmitting(true);
     let changeExistingFractions =
       existingSelectedFractions == 0
         ? 0
@@ -338,6 +344,7 @@ export default function PitchingRecord() {
   return (
     <>
       <HeaderResult />
+      {isSubmitting && <LoadingSpinner />}
       <main className="h-full">
         <div className="pb-32 relative w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <ErrorMessages errors={errors} />

@@ -2,6 +2,7 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderResult from "@app/components/header/HeaderResult";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { updateGameResult } from "@app/services/gameResultsService";
 import {
@@ -78,6 +79,7 @@ export default function GameRecord() {
   const [myPosition, setMyPosition] = useState("");
   const [matchType, setMatchType] = useState("regular");
   const [opponentTeam, setOpponentTeam] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [existingOpponentTeam, setExistingOpponentTeam] = useState<
     number | undefined
   >(undefined);
@@ -362,9 +364,10 @@ export default function GameRecord() {
   // フォームデータ送信
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (!validateForm()) {
+    if (!validateForm() || isSubmitting) {
       return;
     }
+    setIsSubmitting(true);
     setErrors([]);
     try {
       const userId = userData?.id;
@@ -480,6 +483,7 @@ export default function GameRecord() {
   return (
     <>
       <HeaderResult />
+      {isSubmitting && <LoadingSpinner />}
       <main className="h-full">
         <div className="pb-40 relative w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <ErrorMessages errors={errors} />
@@ -711,6 +715,7 @@ export default function GameRecord() {
                   className="ml-auto mr-0 px-6 font-bold text-base flex items-center"
                   onClick={handleSubmit}
                   endContent={<NextArrowIcon stroke="#F4F4F4" />}
+                  isDisabled={isSubmitting}
                 >
                   打撃結果
                 </Button>

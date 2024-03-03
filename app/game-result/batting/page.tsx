@@ -4,6 +4,7 @@ import PlusButton from "@app/components/button/PlusButton";
 import HeaderResult from "@app/components/header/HeaderResult";
 import { DeleteIcon } from "@app/components/icon/DeleteIcon";
 import { NextArrowIcon } from "@app/components/icon/NextArrowIcon";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import {
   checkExistingBattingAverage,
@@ -150,6 +151,7 @@ export default function BattingRecord() {
   const [isLocalStorageId, setIsLocalStorageId] = useState(true);
   const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
   const [selectedResults, setSelectedResults] = useState<number[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [battingBoxes, setBattingBoxes] = useState<
     Array<{ position: number; result: number; text: string }>
   >([
@@ -413,9 +415,10 @@ export default function BattingRecord() {
   // データ送信
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (!validateForm()) {
+    if (!validateForm() || isSubmitting) {
       return;
     }
+    setIsSubmitting(true);
     setErrors([]);
     if (localStorageGameResultId == null || currentUserId == null) {
       return;
@@ -519,16 +522,23 @@ export default function BattingRecord() {
   return (
     <>
       <HeaderResult />
+      {isSubmitting && <LoadingSpinner />}
       <main className="h-full ">
         <div className="pb-32 relative w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <ErrorMessages errors={errors} />
           <div className="pt-12 px-4 lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6">
             <div className="flex items-center justify-center gap-x-2">
-              <p className="text-xl font-medium opacity-40 lg:text-2xl">試合結果</p>
+              <p className="text-xl font-medium opacity-40 lg:text-2xl">
+                試合結果
+              </p>
               <span className="opacity-40 lg:text-lg">→</span>
-              <p className="text-xl font-medium text-yellow-500 lg:text-2xl">打撃結果</p>
+              <p className="text-xl font-medium text-yellow-500 lg:text-2xl">
+                打撃結果
+              </p>
               <span className="opacity-40 lg:text-lg">→</span>
-              <p className="text-xl font-medium opacity-40 lg:text-2xl">投手結果</p>
+              <p className="text-xl font-medium opacity-40 lg:text-2xl">
+                投手結果
+              </p>
             </div>
             <h2 className="text-base text-center mt-5 lg:text-lg">
               打撃結果を入力しよう！
@@ -710,6 +720,7 @@ export default function BattingRecord() {
                   className="ml-auto mr-0 px-6 font-bold text-base flex items-center"
                   onClick={handleSubmit}
                   endContent={<NextArrowIcon stroke="#F4F4F4" />}
+                  isDisabled={isSubmitting}
                 >
                   投手結果
                 </Button>
