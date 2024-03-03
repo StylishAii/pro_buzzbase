@@ -154,6 +154,7 @@ interface HeaderSaveProps {
 }
 interface HeaderMatchResultsProps {
   onMatchResultNext: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled: boolean | undefined;
   text: string;
 }
 

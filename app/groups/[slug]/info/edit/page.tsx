@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import {
   getGroupDetailUsers,
   updateGroupInfo,
@@ -15,6 +16,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [errors, setErrors] = useState<string[]>([]);
   const [isGroupName, setIsGroupName] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [group, setGroup] = useState<{
     name: string;
     icon: { url: string };
@@ -104,9 +106,10 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (!validateForm()) {
+    if (!validateForm() || isSubmitting) {
       return;
     }
+    setIsSubmitting(true);
     setErrors([]);
     const formData = new FormData();
     formData.append("group[name]", group.name);
@@ -124,7 +127,12 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
   return (
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen">
-        <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"更新"} />
+        {isSubmitting && <LoadingSpinner />}
+        <HeaderMatchResultNext
+          onMatchResultNext={handleSubmit}
+          disabled={isSubmitting}
+          text={"更新"}
+        />
         <div className="h-full bg-main">
           <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
             <div className="px-4 py-14 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6 lg:mb-10">

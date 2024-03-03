@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { getGroupDetailUsers, updateGroup } from "@app/services/groupService";
 import { Avatar, Checkbox, Input, User } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
@@ -12,6 +13,7 @@ export default function GroupMember({ params }: { params: { slug: string } }) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isGroupUsers, setIsGroupUsers] = useState(true);
   const [groupMember, setGroupMember] = useState<AcceptedUsers[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -69,9 +71,10 @@ export default function GroupMember({ params }: { params: { slug: string } }) {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (!validateForm()) {
+    if (!validateForm() || isSubmitting) {
       return;
     }
+    setIsSubmitting(true);
     setErrors([]);
     const formData = new FormData();
     selectedUserIds.forEach((userId) => {
@@ -88,8 +91,10 @@ export default function GroupMember({ params }: { params: { slug: string } }) {
   return (
     <>
       <div className="buzz-dark">
+        {isSubmitting && <LoadingSpinner />}
         <HeaderMatchResultNext
           onMatchResultNext={handleSubmit}
+          disabled={isSubmitting}
           text={"メンバー退会"}
         />
         <div className="h-full bg-main">

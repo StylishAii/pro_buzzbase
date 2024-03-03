@@ -1,5 +1,6 @@
 "use client";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import {
   createInviteMembers,
   getGroupDetailUsers,
@@ -19,6 +20,7 @@ export default function GroupMemberAdd({
   const [following, setFollowing] = useState<FollowingUser[]>([]);
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
   const [groupMemberIds, setGroupMemberIds] = useState<number[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -73,6 +75,10 @@ export default function GroupMemberAdd({
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    if (isSubmitting) {
+      return;
+    }
+    setIsSubmitting(true);
     const formData = new FormData();
     selectedUserIds.forEach((userId) => {
       formData.append("invite_user_ids[]", userId.toString());
@@ -88,7 +94,12 @@ export default function GroupMemberAdd({
   return (
     <>
       <div className="buzz-dark">
-        <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"招待"} />
+        {isSubmitting && <LoadingSpinner />}
+        <HeaderMatchResultNext
+          onMatchResultNext={handleSubmit}
+          disabled={isSubmitting}
+          text={"招待"}
+        />
         <div className="h-full bg-main">
           <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
             <div className="px-4 py-14 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6 lg:mb-10">

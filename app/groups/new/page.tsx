@@ -1,6 +1,7 @@
 "use client";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
+import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { createGroup } from "@app/services/groupService";
 import { getCurrentUserId, getFollowingUser } from "@app/services/userService";
 import { Avatar, Checkbox, Input, User } from "@nextui-org/react";
@@ -14,6 +15,7 @@ export default function GroupNew() {
   const [errors, setErrors] = useState<string[]>([]);
   const [isGroupName, setIsGroupName] = useState(true);
   const [isGroupUsers, setIsGroupUsers] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [group, setGroup] = useState<{ name: string; icon: string | null }>({
     name: "",
     icon: null,
@@ -110,9 +112,10 @@ export default function GroupNew() {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    if (!validateForm()) {
+    if (!validateForm() || isSubmitting) {
       return;
     }
+    setIsSubmitting(true);
     setErrors([]);
     const formData = new FormData();
     formData.append("group[name]", group.name);
@@ -133,7 +136,12 @@ export default function GroupNew() {
   return (
     <>
       <div className="buzz-dark">
-        <HeaderMatchResultNext onMatchResultNext={handleSubmit} text={"作成"} />
+        {isSubmitting && <LoadingSpinner />}
+        <HeaderMatchResultNext
+          onMatchResultNext={handleSubmit}
+          disabled={isSubmitting}
+          text={"作成"}
+        />
         <div className="h-full bg-main">
           <main className="h-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
             <div className="px-4 py-14 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:px-6 lg:pb-6 lg:mb-10">

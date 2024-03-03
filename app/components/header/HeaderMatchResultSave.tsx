@@ -3,6 +3,7 @@ import { Button } from "@nextui-org/react";
 
 export default function HeaderMatchResultNext({
   onMatchResultNext,
+  disabled,
   text,
 }: HeaderMatchResultsProps) {
   const handleBackClick = () => {
@@ -21,6 +22,7 @@ export default function HeaderMatchResultNext({
             variant="solid"
             size="sm"
             radius="full"
+            isDisabled={disabled}
           >
             {text}
           </Button>
