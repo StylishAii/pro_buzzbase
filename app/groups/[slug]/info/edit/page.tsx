@@ -7,7 +7,16 @@ import {
   updateGroupInfo,
 } from "@app/services/groupService";
 import { getCurrentUserId } from "@app/services/userService";
-import { Avatar, Input } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Input,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -17,6 +26,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isGroupName, setIsGroupName] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [group, setGroup] = useState<{
     name: string;
     icon: { url: string };
@@ -104,6 +114,15 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
     return isValid;
   };
 
+  const handleOpen = () => {
+    onOpen();
+  };
+
+  const handleDeleteGroup = async () => {
+    try {
+    } catch (error) {}
+  };
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     if (!validateForm() || isSubmitting) {
@@ -180,6 +199,46 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                   </div>
                 </div>
               </form>
+              <Button
+                size="sm"
+                color="danger"
+                onPress={() => handleOpen()}
+                className="block ml-auto mr-0 mt-12"
+              >
+                グループ削除
+              </Button>
+              <Modal
+                size="lg"
+                isOpen={isOpen}
+                onClose={onClose}
+                placement="center"
+                className="w-11/12"
+              >
+                <ModalContent>
+                  {(onClose) => (
+                    <>
+                      <ModalHeader className="flex gap-1 text-base text-white pb-0">
+                        本当にグループを削除してもよろしいですか？
+                      </ModalHeader>
+                      <ModalFooter>
+                        <Button
+                          variant="light"
+                          onPress={onClose}
+                          className="text-white"
+                        >
+                          キャンセル
+                        </Button>
+                        <Button
+                          color="danger"
+                          onPress={() => handleDeleteGroup()}
+                        >
+                          削除する
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  )}
+                </ModalContent>
+              </Modal>
             </div>
           </main>
         </div>
