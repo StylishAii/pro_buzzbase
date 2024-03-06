@@ -89,3 +89,13 @@ export const createInviteMembers = async (
     throw error;
   }
 };
+
+export const deleteGroup = async (groupId: number) => {
+  try {
+    const response = await axiosInstance.delete(`/api/v1/groups/${groupId}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

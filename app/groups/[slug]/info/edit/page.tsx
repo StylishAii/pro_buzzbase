@@ -3,6 +3,7 @@ import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import {
+  deleteGroup,
   getGroupDetailUsers,
   updateGroupInfo,
 } from "@app/services/groupService";
@@ -26,13 +27,16 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isGroupName, setIsGroupName] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [groupCreatorId, setGroupCreatorId] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [group, setGroup] = useState<{
     name: string;
     icon: { url: string };
+    group_creator_id: number | null;
   }>({
     name: "",
     icon: { url: "" },
+    group_creator_id: null,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -55,6 +59,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                 url: `${data.group.icon.url}`,
               }
             : { url: "" },
+        group_creator_id: data.group_creator_id,
       });
     } catch (error) {
       console.error("グループの詳細を取得できませんでした。", error);
@@ -118,8 +123,11 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
     onOpen();
   };
 
-  const handleDeleteGroup = async () => {
+  const handleDeleteGroup = async (groupId: number) => {
     try {
+      await deleteGroup(groupId);
+      onClose();
+      router.push("/groups");
     } catch (error) {}
   };
 
@@ -142,7 +150,6 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
       console.log(error);
     }
   };
-
   return (
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen">
@@ -199,14 +206,16 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                   </div>
                 </div>
               </form>
-              <Button
-                size="sm"
-                color="danger"
-                onPress={() => handleOpen()}
-                className="block ml-auto mr-0 mt-12"
-              >
-                グループ削除
-              </Button>
+              {group.group_creator_id === currentUserId && (
+                <Button
+                  size="sm"
+                  color="danger"
+                  onPress={() => handleOpen()}
+                  className="block ml-auto mr-0 mt-12"
+                >
+                  グループ削除
+                </Button>
+              )}
               <Modal
                 size="lg"
                 isOpen={isOpen}
@@ -230,7 +239,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                         </Button>
                         <Button
                           color="danger"
-                          onPress={() => handleDeleteGroup()}
+                          onPress={() => handleDeleteGroup(groupId)}
                         >
                           削除する
                         </Button>
