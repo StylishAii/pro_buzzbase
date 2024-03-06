@@ -233,6 +233,36 @@ export default function Top() {
               </video>
             </div>
           </Container>
+          <Container size="lg" className="pt-10 lg:pt-16">
+            <div className={classes.wrapper}>
+              <div className={classes.body}>
+                <p className="py-1 px-4 bg-yellow-500 rounded-full text-sm font-medium w-fit">
+                  つかいかた
+                </p>
+                <Title className={`${classes.sectionTitle} pt-3`}>
+                  プロフィールを作成
+                </Title>
+                <Text fw={500} fz="lg" mt={12} mb={8}>
+                  ポジション・所属チーム・受賞タイトルを設定
+                </Text>
+                <Text fz="sm" className="!text-zinc-400">
+                  プロフィールにポジションと所属チームを設定することで、<br />
+                  成績記録画面の、「守備位置」と「自チーム名」に初期値として設定されます。
+                </Text>
+              </div>
+              <video
+                width="284"
+                height="160"
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full mx-auto rounded-xl lg:w-auto"
+              >
+                <source src="/video/profile.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </Container>
           <div className="mt-56 mb-20 px-6 lg:mb-40">
             <div>
               <h3 className="text-2xl font-bold text-center lg:text-5xl">
