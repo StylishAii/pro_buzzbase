@@ -90,7 +90,7 @@ export default function GroupMember({ params }: { params: { slug: string } }) {
 
   return (
     <>
-      <div className="buzz-dark">
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
         {isSubmitting && <LoadingSpinner />}
         <HeaderMatchResultNext
           onMatchResultNext={handleSubmit}
