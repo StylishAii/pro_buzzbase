@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function GroupEdit({ params }: { params: { slug: string } }) {
+  const [isLoading, setIsLoading] = useState(true);
   const groupId = Number(params.slug);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [errors, setErrors] = useState<string[]>([]);
@@ -43,7 +44,8 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     if (groupId) {
-      fetchGroupDetails(groupId);
+      setIsLoading(true);
+      fetchGroupDetails(groupId).finally(() => setIsLoading(false));
     }
     fetchData();
   }, [currentUserId]);
@@ -206,7 +208,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                   </div>
                 </div>
               </form>
-              {group.group_creator_id === currentUserId && (
+              {!isLoading && group.group_creator_id === currentUserId && (
                 <Button
                   size="sm"
                   color="danger"
