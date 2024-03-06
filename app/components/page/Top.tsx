@@ -240,7 +240,7 @@ export default function Top() {
                   つかいかた
                 </p>
                 <Title className={`${classes.sectionTitle} pt-3`}>
-                  プロフィールを作成
+                  プロフィールを設定
                 </Title>
                 <Text fw={500} fz="lg" mt={12} mb={8}>
                   ポジション・所属チーム・受賞タイトルを設定
