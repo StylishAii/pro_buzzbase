@@ -3,11 +3,21 @@ import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderMatchResultNext from "@app/components/header/HeaderMatchResultSave";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import {
+  deleteGroup,
   getGroupDetailUsers,
   updateGroupInfo,
 } from "@app/services/groupService";
 import { getCurrentUserId } from "@app/services/userService";
-import { Avatar, Input } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Input,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -17,12 +27,16 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
   const [errors, setErrors] = useState<string[]>([]);
   const [isGroupName, setIsGroupName] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [groupCreatorId, setGroupCreatorId] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [group, setGroup] = useState<{
     name: string;
     icon: { url: string };
+    group_creator_id: number | null;
   }>({
     name: "",
     icon: { url: "" },
+    group_creator_id: null,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -45,6 +59,7 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                 url: `${data.group.icon.url}`,
               }
             : { url: "" },
+        group_creator_id: data.group_creator_id,
       });
     } catch (error) {
       console.error("グループの詳細を取得できませんでした。", error);
@@ -104,6 +119,18 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
     return isValid;
   };
 
+  const handleOpen = () => {
+    onOpen();
+  };
+
+  const handleDeleteGroup = async (groupId: number) => {
+    try {
+      await deleteGroup(groupId);
+      onClose();
+      router.push("/groups");
+    } catch (error) {}
+  };
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     if (!validateForm() || isSubmitting) {
@@ -123,7 +150,6 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
       console.log(error);
     }
   };
-
   return (
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen">
@@ -180,6 +206,48 @@ export default function GroupEdit({ params }: { params: { slug: string } }) {
                   </div>
                 </div>
               </form>
+              {group.group_creator_id === currentUserId && (
+                <Button
+                  size="sm"
+                  color="danger"
+                  onPress={() => handleOpen()}
+                  className="block ml-auto mr-0 mt-12"
+                >
+                  グループ削除
+                </Button>
+              )}
+              <Modal
+                size="lg"
+                isOpen={isOpen}
+                onClose={onClose}
+                placement="center"
+                className="w-11/12"
+              >
+                <ModalContent>
+                  {(onClose) => (
+                    <>
+                      <ModalHeader className="flex gap-1 text-base text-white pb-0">
+                        本当にグループを削除してもよろしいですか？
+                      </ModalHeader>
+                      <ModalFooter>
+                        <Button
+                          variant="light"
+                          onPress={onClose}
+                          className="text-white"
+                        >
+                          キャンセル
+                        </Button>
+                        <Button
+                          color="danger"
+                          onPress={() => handleDeleteGroup(groupId)}
+                        >
+                          削除する
+                        </Button>
+                      </ModalFooter>
+                    </>
+                  )}
+                </ModalContent>
+              </Modal>
             </div>
           </main>
         </div>
