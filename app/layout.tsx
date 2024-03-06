@@ -11,7 +11,7 @@ import { UserProvider } from "@app/contexts/userContext";
 
 const siteName = "BUZZ BASE 野球の個人成績を記録してランキングで共有";
 const description =
-  "野球の個人成績を記録して、チーム内外の友達とランキング形式で成績を共有することができるアプリです。";
+  "BUZZ BASEは、野球の選手自身で試合の結果や個人の打率や防御率などの打撃・投手成績を記録することができ、チーム内外の野球友達とグループを作成することで、個人成績をランキングで共有することができるアプリです。友達と打率や打点数・防御率や奪三振率などの成績をランキングで比較することができます。";
 const url = "https://buzzbase.jp";
 
 export const metadata: Metadata = {
