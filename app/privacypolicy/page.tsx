@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "プライバシーポリシー",
+  description: "「BUZZ BASE」のプライバシーポリシーになります。",
 };
 
 import Header from "@app/components/header/Header";
