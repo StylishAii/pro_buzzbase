@@ -62,7 +62,7 @@ export default function Group() {
                 友達とグループを作成しよう！
               </p>
               <p className="text-sm text-zinc-400 mt-2">
-                グループ機能は、成績をランキング形式で共有することができます。
+                グループ機能は、フォローしているユーザーを招待して成績をランキング形式で共有することができます。
               </p>
               <div className="flex justify-center mt-4">
                 <Button

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "お問い合わせ",
+  description: "「BUZZ BASE」のお問い合わせページです。不具合の報告・ご意見・ご要望・使い方についてなど、お気軽にお問い合わせください。",
 };
 
 import Header from "@app/components/header/Header";

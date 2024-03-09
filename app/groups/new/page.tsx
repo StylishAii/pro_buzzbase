@@ -135,7 +135,7 @@ export default function GroupNew() {
 
   return (
     <>
-      <div className="buzz-dark">
+      <div className="buzz-dark flex flex-col w-full min-h-screen">
         {isSubmitting && <LoadingSpinner />}
         <HeaderMatchResultNext
           onMatchResultNext={handleSubmit}

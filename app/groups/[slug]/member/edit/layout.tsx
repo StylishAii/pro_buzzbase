@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "メンバー一覧",
+  description:
+    "現在のグループに参加しているユーザーの一覧になります。ユーザーのチェックを外して「メンバー退会」ボタンをクリックすることで、そのユーザーをグループから退会させることができます。",
 };
 interface GroupLayoutProps {
   children: React.ReactNode;
