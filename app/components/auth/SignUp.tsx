@@ -97,7 +97,7 @@ export default function SignUp() {
         <EmailInput
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="caret-zinc-400"
+          className="caret-zinc-400 bg-main rounded-2xl"
           type="email"
           label="メールアドレス"
           placeholder="buzzbase@example.com"
@@ -112,7 +112,7 @@ export default function SignUp() {
         <PasswordInput
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="caret-zinc-400"
+          className="caret-zinc-400 bg-main rounded-2xl"
           label="パスワード"
           placeholder="6文字以上半角英数字のみ"
           labelPlacement="outside"
@@ -129,7 +129,7 @@ export default function SignUp() {
         <PasswordConfirmInput
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)}
-          className="caret-zinc-400"
+          className="caret-zinc-400 bg-main rounded-2xl"
           label="パスワード（確認用）"
           placeholder="パスワード再入力"
           labelPlacement="outside"
