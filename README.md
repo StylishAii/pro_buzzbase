@@ -1,4 +1,4 @@
-# BuzzBase
+# BUZZ BASE
 
 ### 画面遷移図
 Figma https://www.figma.com/file/zwyB9tqtr1JrFWsStPnk91/BuzzBase?type=design&node-id=0%3A1&mode=design&t=jMRCRPuenaHnDUAJ-1
