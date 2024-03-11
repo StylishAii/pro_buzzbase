@@ -27,7 +27,7 @@ export default function Footer() {
                 />
               </Link>
             </div>
-            <ul className="grid grid-cols-1 gap-y-4 max-w-[692px] mx-auto lg:flex items-baseline lg:gap-x-10 lg:max-w-full">
+            <ul className="grid grid-cols-1 gap-y-4 max-w-[692px] mx-auto lg:flex items-baseline lg:gap-x-10 lg:max-w-full lg:flex-wrap">
               <li>
                 {isLoggedIn ? (
                   <>
@@ -36,6 +36,16 @@ export default function Footer() {
                 ) : (
                   <></>
                 )}
+              </li>
+              <li>
+                <Link href="/contact" className="text-sm">
+                  お問い合わせ
+                </Link>
+              </li>
+              <li>
+                <Link href="/notice-from-management" className="text-sm">
+                  運営からのお知らせ
+                </Link>
               </li>
               <li>
                 <Link
@@ -48,11 +58,6 @@ export default function Footer() {
                     <XIcon fill="#f4f4f4" width="14" height="14" />
                     @ippei_111
                   </span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-sm">
-                  お問い合わせ
                 </Link>
               </li>
               <li>
