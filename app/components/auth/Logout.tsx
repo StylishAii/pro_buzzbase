@@ -1,3 +1,4 @@
+"use client";
 import { useAuthContext } from "@app/contexts/useAuthContext";
 import { signOut } from "@app/services/authService";
 import { useRouter } from "next/navigation";
