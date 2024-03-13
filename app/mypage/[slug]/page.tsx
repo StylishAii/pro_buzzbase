@@ -206,7 +206,7 @@ export default function MyPage() {
                   </div>
                 </Link>
               </div>
-              <div className="flex items-center gap-x-4 mt-4">
+              <div className="grid grid-cols-2 items-center gap-x-4 mt-4">
                 {isLoggedIn ? (
                   <>
                     {isCurrentUserPage ? (
