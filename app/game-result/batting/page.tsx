@@ -15,6 +15,7 @@ import { updateBattingAverageId } from "@app/services/gameResultsService";
 import {
   checkExistingPlateAppearance,
   createPlateAppearance,
+  deletePlateAppearance,
   getCurrentPlateAppearance,
   updatePlateAppearance,
 } from "@app/services/plateAppearanceService";
@@ -79,6 +80,7 @@ const resultShortForms: Record<string, string> = {
 };
 
 type BattingBox = {
+  id: number;
   position: number;
   result: number;
   text: string;
@@ -157,10 +159,14 @@ export default function BattingRecord() {
   const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
   const [selectedResults, setSelectedResults] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletedPlateAppearanceIds, setDeletedPlateAppearanceIds] = useState<
+    number[]
+  >([]);
   const [battingBoxes, setBattingBoxes] = useState<
-    Array<{ position: number; result: number; text: string }>
+    Array<{ id: number; position: number; result: number; text: string }>
   >([
     {
+      id: 0,
       position: 0,
       result: 0,
       text: battingResultsPositions[0].direction + battingResultsList[0].result,
@@ -168,6 +174,7 @@ export default function BattingRecord() {
   ]);
   const [existingBattingBoxes, setExistingBattingBoxes] = useState<
     Array<{
+      plateId: number;
       positionId: number;
       positionName: string;
       resultId: number;
@@ -176,6 +183,7 @@ export default function BattingRecord() {
     }>
   >([
     {
+      plateId: 0,
       positionId: 0,
       positionName: "",
       resultId: 0,
@@ -238,6 +246,7 @@ export default function BattingRecord() {
     ) {
       const updatedBattingBoxes = existingBattingBoxes.map((box) => {
         return {
+          id: box.plateId,
           position: box.positionId,
           result: box.resultId,
           text: box.text,
@@ -272,6 +281,7 @@ export default function BattingRecord() {
       );
       if (existingPlateAppearances.length > 0) {
         const newBattingBoxes = existingPlateAppearances.map((plate: any) => {
+          const plateId = plate.id;
           const positionId =
             battingResultsPositions.find(
               (p) => p.id === plate.batting_position_id
@@ -288,8 +298,8 @@ export default function BattingRecord() {
               ?.result || "";
           const shortFormResult = resultShortForms[resultName] || resultName;
           const text = `${positionName}${shortFormResult}`;
-
           return {
+            plateId,
             positionId,
             positionName,
             resultId,
@@ -309,6 +319,7 @@ export default function BattingRecord() {
     setBattingBoxes([
       ...battingBoxes,
       {
+        id: 0,
         position: 0,
         result: 0,
         text:
@@ -318,7 +329,13 @@ export default function BattingRecord() {
   };
 
   // 打席削除
-  const handleDeleteBox = (index: number) => {
+  const handleDeletePlateAppearance = async (
+    plateAppearanceId: number,
+    index: number
+  ) => {
+    if (plateAppearanceId > 0) {
+      setDeletedPlateAppearanceIds((prev) => [...prev, plateAppearanceId]);
+    }
     const newBoxes = battingBoxes.filter((_, boxIndex) => boxIndex !== index);
     setBattingBoxes(newBoxes);
   };
@@ -382,6 +399,7 @@ export default function BattingRecord() {
           battingResultsList.find((r) => r.id === resultIndex)?.result || "";
         const shortFormResult = resultShortForms[resultText] || resultText;
         return {
+          id: box.id,
           position: positionIndex,
           result: resultIndex,
           text: `${positionText}${shortFormResult}`,
@@ -487,8 +505,17 @@ export default function BattingRecord() {
           );
         } else {
           await createPlateAppearance(plateAppearanceData);
-          console.log(plateAppearanceData);
         }
+        try {
+          for (const plateAppearanceId of deletedPlateAppearanceIds) {
+            await deletePlateAppearance(plateAppearanceId);
+          }
+          setDeletedPlateAppearanceIds([]);
+        } catch (error) {
+          console.error("打席結果の削除に失敗しました", error);
+        }
+
+        setIsSubmitting(false);
       } catch (error) {
         console.log(`plate error :${error}`);
       }
@@ -616,7 +643,9 @@ export default function BattingRecord() {
                             variant="faded"
                             size="sm"
                             isIconOnly
-                            onClick={() => handleDeleteBox(index)}
+                            onClick={() =>
+                              handleDeletePlateAppearance(box.id, index)
+                            }
                             endContent={
                               <DeleteIcon
                                 width="24"

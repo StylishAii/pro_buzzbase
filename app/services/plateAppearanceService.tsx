@@ -39,6 +39,18 @@ export const updatePlateAppearance = async (
   }
 };
 
+export const deletePlateAppearance = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/v1/plate_appearances/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export const checkExistingPlateAppearance = async (
   gameResultId: number | null,
   userId: number | null,
@@ -69,9 +81,7 @@ export const getCurrentPlateAppearance = async (
   }
 };
 
-export const getUserPlateAppearance = async (
-  gameResultId: number | null
-) => {
+export const getUserPlateAppearance = async (gameResultId: number | null) => {
   try {
     const response = await axiosInstance.get(
       `/api/v1/user_plate_search?game_result_id=${gameResultId}`
