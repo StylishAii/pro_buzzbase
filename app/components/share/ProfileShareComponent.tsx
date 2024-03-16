@@ -110,7 +110,7 @@ export default function ProfileShareComponent({
   return (
     <>
       <Button
-        className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 font-bold"
+        className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 font-bold flex-1"
         onClick={handleShareMobile}
       >
         シェアする

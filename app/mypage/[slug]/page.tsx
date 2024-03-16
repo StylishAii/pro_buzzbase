@@ -206,14 +206,14 @@ export default function MyPage() {
                   </div>
                 </Link>
               </div>
-              <div className="grid grid-cols-2 items-center gap-x-4 mt-4">
+              <div className="flex items-center gap-x-4 mt-4">
                 {isLoggedIn ? (
                   <>
                     {isCurrentUserPage ? (
                       <>
                         <Link
                           href="/mypage/edit"
-                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 text-center"
+                          className="text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 text-center flex-1"
                         >
                           プロフィール編集
                         </Link>

@@ -25,9 +25,9 @@ export default function FollowButton({
   };
 
   const followingButtonStyle =
-    "text-main bg-zinc-200 rounded-full text-xs border-1 border-zinc-400 w-full h-auto py-1.5 px-6 font-bold";
+    "text-main bg-zinc-200 rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 font-bold flex-1";
   const followedButtonStyle =
-    "text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto py-1.5 px-6 font-bold";
+    "text-zinc-300 bg-transparent rounded-full text-xs border-1 border-zinc-400 w-full h-auto p-1.5 font-bold flex-1";
   return (
     <>
       <Button
