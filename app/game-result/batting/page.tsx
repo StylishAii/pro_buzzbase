@@ -48,14 +48,15 @@ const battingResultsList = [
   { id: 8, result: "二塁打" },
   { id: 9, result: "三塁打" },
   { id: 10, result: "本塁打" },
-  { id: 11, result: "犠打/犠飛" },
-  { id: 12, result: "三振" },
-  { id: 13, result: "振り逃げ" },
-  { id: 14, result: "四球" },
-  { id: 15, result: "死球" },
-  { id: 16, result: "打撃妨害" },
-  { id: 17, result: "走塁妨害" },
-  { id: 18, result: "併殺打" },
+  { id: 11, result: "犠打" },
+  { id: 12, result: "犠飛" },
+  { id: 13, result: "三振" },
+  { id: 14, result: "振り逃げ" },
+  { id: 15, result: "四球" },
+  { id: 16, result: "死球" },
+  { id: 17, result: "打撃妨害" },
+  { id: 18, result: "走塁妨害" },
+  { id: 19, result: "併殺打" },
 ];
 
 const resultShortForms: Record<string, string> = {
@@ -69,7 +70,8 @@ const resultShortForms: Record<string, string> = {
   二塁打: "二",
   三塁打: "三",
   本塁打: "本",
-  "犠打/犠飛": "犠",
+  犠打: "犠打",
+  犠飛: "犠飛",
   振り逃げ: "振逃",
   打撃妨害: "打妨",
   走塁妨害: "走妨",
@@ -90,11 +92,12 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
     let baseOnBalls = 0;
     let hitByPitch = 0;
     let sacrificeHit = 0;
+    let sacrificeFly = 0;
 
     const validBoxes = battingBoxes.filter(
       (box) => box.position !== 0 || box.result !== 0
     );
-    const excludedResults = [14, 15, 11, 16, 17];
+    const excludedResults = [15, 16, 11, 12, 17, 18];
     const excludedCount = battingBoxes.filter((box) =>
       excludedResults.includes(box.result)
     ).length;
@@ -112,10 +115,11 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
       if (box.result === 9) totalBases += 3;
       if (box.result === 10) totalBases += 4;
 
-      if (box.result === 12 || box.result === 13) strikeOuts += 1;
+      if (box.result === 13 || box.result === 14) strikeOuts += 1;
       if (box.result === 14) baseOnBalls += 1;
       if (box.result === 15) hitByPitch += 1;
       if (box.result === 11) sacrificeHit += 1;
+      if (box.result === 12) sacrificeFly += 1;
     });
 
     return {
@@ -130,6 +134,7 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
       baseOnBalls,
       hitByPitch,
       sacrificeHit,
+      sacrificeFly,
     };
   };
   return useMemo(calculateStatistics, [battingBoxes]);
@@ -212,6 +217,7 @@ export default function BattingRecord() {
     baseOnBalls,
     hitByPitch,
     sacrificeHit,
+    sacrificeFly,
   } = useBattingStatistics(battingBoxes);
 
   useEffect(() => {
@@ -443,6 +449,7 @@ export default function BattingRecord() {
         base_on_balls: baseOnBalls, //四球
         hit_by_pitch: hitByPitch, // 死球
         sacrifice_hit: sacrificeHit, //犠打
+        sacrifice_fly: sacrificeFly, //犠飛
         error: existingDefensiveError ? existingDefensiveError : defensiveError,
         stealing_base: existingStealingBase
           ? existingStealingBase

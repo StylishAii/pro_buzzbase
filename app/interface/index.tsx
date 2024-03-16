@@ -298,6 +298,7 @@ interface BattingAverage {
   run: number | null;
   runs_batted_in: number | null;
   sacrifice_hit: number | null;
+  sacrifice_fly: number | null;
   stealing_base: number | null;
   strike_out: number | null;
   three_base_hit: number | null;
