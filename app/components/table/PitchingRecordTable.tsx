@@ -100,7 +100,7 @@ export default function PitchingRecordTable(props: Props) {
               </span>
             </div>
             <div className={styleTableBox}>
-              <p className={styleTableTitle}>被安打数</p>
+              <p className={styleTableTitle}>被安打</p>
               <span className={styleTableData}>
                 {displayValue(pitchingResult?.hits_allowed)}
               </span>
