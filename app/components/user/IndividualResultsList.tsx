@@ -5,6 +5,7 @@ import { getPersonalBattingStatus } from "@app/hooks/batting/getPersonalBattingS
 import { getPersonalPitchingResult } from "@app/hooks/pitching/getPersonalPitchingResult";
 import { getPersonalPitchingResultStats } from "@app/hooks/pitching/getPersonalPitchingResultStats";
 import { Skeleton } from "@nextui-org/react";
+import Link from "next/link";
 
 type UserId = {
   userId: number;
@@ -127,6 +128,12 @@ export default function IndividualResultsList(props: UserId) {
           personalPitchingResults={personalPitchingResults}
           personalPitchingStatus={personalPitchingStatus}
         />
+        <Link
+          href="/calculation-of-grades"
+          className="text-xs font-normal border-b mt-4 ml-auto mr-0 block w-fit"
+        >
+          成績の算出方法について
+        </Link>
       </div>
     </>
   );

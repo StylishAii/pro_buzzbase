@@ -38,6 +38,11 @@ export default function Footer() {
                 )}
               </li>
               <li>
+                <Link href="/calculation-of-grades" className="text-sm">
+                  成績の算出方法
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="text-sm">
                   お問い合わせ
                 </Link>
