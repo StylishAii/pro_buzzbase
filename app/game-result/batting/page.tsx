@@ -445,6 +445,7 @@ export default function BattingRecord() {
     setIsSubmitting(true);
     setErrors([]);
     if (localStorageGameResultId == null || currentUserId == null) {
+      setIsSubmitting(false);
       return;
     }
     const battingAverageData = {
@@ -514,8 +515,6 @@ export default function BattingRecord() {
         } catch (error) {
           console.error("打席結果の削除に失敗しました", error);
         }
-
-        setIsSubmitting(false);
       } catch (error) {
         console.log(`plate error :${error}`);
       }
