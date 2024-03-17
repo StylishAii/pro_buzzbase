@@ -15,6 +15,7 @@ import { updateBattingAverageId } from "@app/services/gameResultsService";
 import {
   checkExistingPlateAppearance,
   createPlateAppearance,
+  deletePlateAppearance,
   getCurrentPlateAppearance,
   updatePlateAppearance,
 } from "@app/services/plateAppearanceService";
@@ -48,14 +49,15 @@ const battingResultsList = [
   { id: 8, result: "二塁打" },
   { id: 9, result: "三塁打" },
   { id: 10, result: "本塁打" },
-  { id: 11, result: "犠打/犠飛" },
-  { id: 12, result: "三振" },
-  { id: 13, result: "振り逃げ" },
-  { id: 14, result: "四球" },
-  { id: 15, result: "死球" },
-  { id: 16, result: "打撃妨害" },
-  { id: 17, result: "走塁妨害" },
-  { id: 18, result: "併殺打" },
+  { id: 11, result: "犠打" },
+  { id: 12, result: "犠飛" },
+  { id: 13, result: "三振" },
+  { id: 14, result: "振り逃げ" },
+  { id: 15, result: "四球" },
+  { id: 16, result: "死球" },
+  { id: 17, result: "打撃妨害" },
+  { id: 18, result: "走塁妨害" },
+  { id: 19, result: "併殺打" },
 ];
 
 const resultShortForms: Record<string, string> = {
@@ -69,7 +71,8 @@ const resultShortForms: Record<string, string> = {
   二塁打: "二",
   三塁打: "三",
   本塁打: "本",
-  "犠打/犠飛": "犠",
+  犠打: "犠打",
+  犠飛: "犠飛",
   振り逃げ: "振逃",
   打撃妨害: "打妨",
   走塁妨害: "走妨",
@@ -77,6 +80,7 @@ const resultShortForms: Record<string, string> = {
 };
 
 type BattingBox = {
+  id: number;
   position: number;
   result: number;
   text: string;
@@ -90,11 +94,12 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
     let baseOnBalls = 0;
     let hitByPitch = 0;
     let sacrificeHit = 0;
+    let sacrificeFly = 0;
 
     const validBoxes = battingBoxes.filter(
       (box) => box.position !== 0 || box.result !== 0
     );
-    const excludedResults = [14, 15, 11, 16, 17];
+    const excludedResults = [15, 16, 11, 12, 17, 18];
     const excludedCount = battingBoxes.filter((box) =>
       excludedResults.includes(box.result)
     ).length;
@@ -112,10 +117,11 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
       if (box.result === 9) totalBases += 3;
       if (box.result === 10) totalBases += 4;
 
-      if (box.result === 12 || box.result === 13) strikeOuts += 1;
+      if (box.result === 13 || box.result === 14) strikeOuts += 1;
       if (box.result === 14) baseOnBalls += 1;
       if (box.result === 15) hitByPitch += 1;
       if (box.result === 11) sacrificeHit += 1;
+      if (box.result === 12) sacrificeFly += 1;
     });
 
     return {
@@ -130,6 +136,7 @@ const useBattingStatistics = (battingBoxes: BattingBox[]) => {
       baseOnBalls,
       hitByPitch,
       sacrificeHit,
+      sacrificeFly,
     };
   };
   return useMemo(calculateStatistics, [battingBoxes]);
@@ -152,10 +159,14 @@ export default function BattingRecord() {
   const [selectedPositions, setSelectedPositions] = useState<number[]>([]);
   const [selectedResults, setSelectedResults] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletedPlateAppearanceIds, setDeletedPlateAppearanceIds] = useState<
+    number[]
+  >([]);
   const [battingBoxes, setBattingBoxes] = useState<
-    Array<{ position: number; result: number; text: string }>
+    Array<{ id: number; position: number; result: number; text: string }>
   >([
     {
+      id: 0,
       position: 0,
       result: 0,
       text: battingResultsPositions[0].direction + battingResultsList[0].result,
@@ -163,6 +174,7 @@ export default function BattingRecord() {
   ]);
   const [existingBattingBoxes, setExistingBattingBoxes] = useState<
     Array<{
+      plateId: number;
       positionId: number;
       positionName: string;
       resultId: number;
@@ -171,6 +183,7 @@ export default function BattingRecord() {
     }>
   >([
     {
+      plateId: 0,
       positionId: 0,
       positionName: "",
       resultId: 0,
@@ -212,6 +225,7 @@ export default function BattingRecord() {
     baseOnBalls,
     hitByPitch,
     sacrificeHit,
+    sacrificeFly,
   } = useBattingStatistics(battingBoxes);
 
   useEffect(() => {
@@ -232,6 +246,7 @@ export default function BattingRecord() {
     ) {
       const updatedBattingBoxes = existingBattingBoxes.map((box) => {
         return {
+          id: box.plateId,
           position: box.positionId,
           result: box.resultId,
           text: box.text,
@@ -266,6 +281,7 @@ export default function BattingRecord() {
       );
       if (existingPlateAppearances.length > 0) {
         const newBattingBoxes = existingPlateAppearances.map((plate: any) => {
+          const plateId = plate.id;
           const positionId =
             battingResultsPositions.find(
               (p) => p.id === plate.batting_position_id
@@ -282,8 +298,8 @@ export default function BattingRecord() {
               ?.result || "";
           const shortFormResult = resultShortForms[resultName] || resultName;
           const text = `${positionName}${shortFormResult}`;
-
           return {
+            plateId,
             positionId,
             positionName,
             resultId,
@@ -303,6 +319,7 @@ export default function BattingRecord() {
     setBattingBoxes([
       ...battingBoxes,
       {
+        id: 0,
         position: 0,
         result: 0,
         text:
@@ -312,7 +329,13 @@ export default function BattingRecord() {
   };
 
   // 打席削除
-  const handleDeleteBox = (index: number) => {
+  const handleDeletePlateAppearance = async (
+    plateAppearanceId: number,
+    index: number
+  ) => {
+    if (plateAppearanceId > 0) {
+      setDeletedPlateAppearanceIds((prev) => [...prev, plateAppearanceId]);
+    }
     const newBoxes = battingBoxes.filter((_, boxIndex) => boxIndex !== index);
     setBattingBoxes(newBoxes);
   };
@@ -376,6 +399,7 @@ export default function BattingRecord() {
           battingResultsList.find((r) => r.id === resultIndex)?.result || "";
         const shortFormResult = resultShortForms[resultText] || resultText;
         return {
+          id: box.id,
           position: positionIndex,
           result: resultIndex,
           text: `${positionText}${shortFormResult}`,
@@ -421,6 +445,7 @@ export default function BattingRecord() {
     setIsSubmitting(true);
     setErrors([]);
     if (localStorageGameResultId == null || currentUserId == null) {
+      setIsSubmitting(false);
       return;
     }
     const battingAverageData = {
@@ -443,6 +468,7 @@ export default function BattingRecord() {
         base_on_balls: baseOnBalls, //四球
         hit_by_pitch: hitByPitch, // 死球
         sacrifice_hit: sacrificeHit, //犠打
+        sacrifice_fly: sacrificeFly, //犠飛
         error: existingDefensiveError ? existingDefensiveError : defensiveError,
         stealing_base: existingStealingBase
           ? existingStealingBase
@@ -480,7 +506,14 @@ export default function BattingRecord() {
           );
         } else {
           await createPlateAppearance(plateAppearanceData);
-          console.log(plateAppearanceData);
+        }
+        try {
+          for (const plateAppearanceId of deletedPlateAppearanceIds) {
+            await deletePlateAppearance(plateAppearanceId);
+          }
+          setDeletedPlateAppearanceIds([]);
+        } catch (error) {
+          console.error("打席結果の削除に失敗しました", error);
         }
       } catch (error) {
         console.log(`plate error :${error}`);
@@ -609,7 +642,9 @@ export default function BattingRecord() {
                             variant="faded"
                             size="sm"
                             isIconOnly
-                            onClick={() => handleDeleteBox(index)}
+                            onClick={() =>
+                              handleDeletePlateAppearance(box.id, index)
+                            }
                             endContent={
                               <DeleteIcon
                                 width="24"

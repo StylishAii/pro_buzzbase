@@ -120,12 +120,21 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
     const walks = [
       "四球",
       "死球",
-      "投犠",
-      "捕犠",
-      "一犠",
-      "二犠",
-      "三犠",
-      "遊犠",
+      "投犠打",
+      "捕犠打",
+      "一犠打",
+      "二犠打",
+      "三犠打",
+      "遊犠打",
+      "投犠飛",
+      "捕犠飛",
+      "一犠飛",
+      "二犠飛",
+      "三犠飛",
+      "遊犠飛",
+      "左犠飛",
+      "中犠飛",
+      "右犠飛",
       "打妨",
     ];
 
@@ -156,7 +165,6 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
     localStorage.setItem("gameResultId", JSON.stringify(gameResultId));
     router.push(`/game-result/summary/${gameResultId}`);
   };
-
   return (
     <>
       {gameResult.map((game, index) => (
@@ -223,77 +231,95 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
               </div>
             </CardHeader>
             <Divider className="my-3" />
-            <CardBody className="p-0">
-              <p className="text-sm font-normal text-zinc-400">打撃</p>
-              <ul className="flex flex-wrap gap-2 ">
+            <CardBody className="p-0 table-column-group gap-y-1">
+              <div>
                 {plateAppearance
                   .flat()
                   .filter(
                     (plate: PlateAppearance) =>
-                      plate.game_result_id == game.game_result_id
-                  ).length > 0 ? (
-                  plateAppearance
+                      plate.game_result_id === game.game_result_id
+                  ).length > 0 && (
+                  <p className="text-sm font-normal text-zinc-400">打撃</p>
+                )}
+                <ul className="flex flex-wrap gap-2 ">
+                  {plateAppearance
                     .flat()
                     .filter(
                       (plate: PlateAppearance) =>
                         plate.game_result_id == game.game_result_id
-                    )
-                    .map((plate: PlateAppearance) => (
-                      <li
-                        key={plate.id}
-                        className={`font-bold ${getBattingResultClassName(
-                          plate.batting_result
-                        )}`}
-                      >
-                        {plate.batting_result}
-                      </li>
-                    ))
-                ) : (
+                    ).length > 0 ? (
+                    plateAppearance
+                      .flat()
+                      .filter(
+                        (plate: PlateAppearance) =>
+                          plate.game_result_id == game.game_result_id
+                      )
+                      .sort(
+                        (
+                          a: { batter_box_number: number },
+                          b: { batter_box_number: number }
+                        ) => a.batter_box_number - b.batter_box_number
+                      )
+                      .map((plate: PlateAppearance) => (
+                        <li
+                          key={plate.id}
+                          className={`font-bold ${getBattingResultClassName(
+                            plate.batting_result
+                          )}`}
+                        >
+                          {plate.batting_result}
+                        </li>
+                      ))
+                  ) : (
+                    <></>
+                  )}
+                </ul>
+              </div>
+              <div>
+                {game.pitching_result &&
+                  game.pitching_result.innings_pitched > 0 && (
+                    <p className="text-sm font-normal text-zinc-400">投手</p>
+                  )}
+                {game.pitching_result &&
+                game.pitching_result.innings_pitched > 0 ? (
                   <>
-                    <span>-</span>
-                  </>
-                )}
-              </ul>
-              <p className="text-sm font-normal text-zinc-400 mt-2">投手</p>
-              {game.pitching_result &&
-              game.pitching_result.innings_pitched > 0 ? (
-                <>
-                  <ul className="flex flex-wrap gap-2 ">
-                    {game.pitching_result &&
-                    game.pitching_result.innings_pitched != null ? (
-                      <>
-                        <li className="font-light">
-                          {getInningPitched(
-                            game.pitching_result.innings_pitched
+                    <ul className="flex flex-wrap gap-2 ">
+                      {game.pitching_result &&
+                      game.pitching_result.innings_pitched != null ? (
+                        <>
+                          <li className="font-light">
+                            {getInningPitched(
+                              game.pitching_result.innings_pitched
+                            )}
+                          </li>
+                          <li className="font-light">
+                            {game.pitching_result.run_allowed}失点
+                          </li>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      {game.pitching_result ? (
+                        <>
+                          {game.pitching_result.win === 1 ? (
+                            <li className="text-red-500 font-bold">勝利投手</li>
+                          ) : game.pitching_result.loss === 1 ? (
+                            <li className="text-blue-400 font-bold">
+                              敗戦投手
+                            </li>
+                          ) : (
+                            ""
                           )}
-                        </li>
-                        <li className="font-light">
-                          {game.pitching_result.run_allowed}失点
-                        </li>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                    {game.pitching_result ? (
-                      <>
-                        {game.pitching_result.win === 1 ? (
-                          <li className="text-red-500 font-bold">勝利投手</li>
-                        ) : game.pitching_result.loss === 1 ? (
-                          <li className="text-blue-400 font-bold">敗戦投手</li>
-                        ) : (
-                          ""
-                        )}
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                  </ul>
-                </>
-              ) : (
-                <>
-                  <span>-</span>
-                </>
-              )}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </ul>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
             </CardBody>
           </Card>
         </div>
