@@ -17,7 +17,7 @@ export default function NavigationMenu() {
   const navigationItems = NavigationItems();
 
   const isActive = (path: string, itemHref: string) => {
-    const activePaths = ["/", "/game-result/lists", "/everyone", "/groups"];
+    const activePaths = ["/", "/game-result/lists", "/note", "/groups"];
     return path === itemHref && activePaths.includes(path);
   };
 
