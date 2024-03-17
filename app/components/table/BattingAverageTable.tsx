@@ -10,6 +10,7 @@ type PersonalBattingAverages = {
   run: number;
   runs_batted_in: number;
   sacrifice_hit: number;
+  sacrifice_fly: number;
   stealing_base: number;
   strike_out: number;
   three_base_hit: number;
@@ -20,12 +21,14 @@ type PersonalBattingAverages = {
 };
 
 type PersonalBattingStatus = {
+  total_hits: number;
   batting_average: number;
   bb_per_k: number;
   iso: number;
   isod: number;
   on_base_percentage: number;
   ops: number;
+  slugging_percentage: number;
 };
 
 type Props = {
@@ -48,10 +51,10 @@ export default function BattingAverageTable(props: Props) {
     return value.toFixed(3);
   }
 
-  const displayValue = (value: number | undefined) =>
-    value === undefined ? "-" : value.toString();
-  const displayFormattedValue = (value: number | undefined) =>
-    value === undefined ? "-" : formatNumber(value);
+  const displayValue = (value: number | undefined | null) =>
+    value == null ? "-" : value.toString();
+  const displayFormattedValue = (value: number | undefined | null) =>
+    value == null ? "-" : formatNumber(value);
 
   const styleTableBox = "grid grid-cols-2 text-center";
   const styleTableTitle =
@@ -78,7 +81,7 @@ export default function BattingAverageTable(props: Props) {
             <div className={styleTableBox}>
               <p className={styleTableTitle}>安打</p>
               <span className={styleTableData}>
-                {displayValue(battingAverage?.hit)}
+                {displayValue(battingStatus?.total_hits)}
               </span>
             </div>
             <div className={styleTableBox}>
@@ -103,6 +106,12 @@ export default function BattingAverageTable(props: Props) {
               <p className={styleTableTitle}>四球</p>
               <span className={styleTableData}>
                 {displayValue(battingAverage?.base_on_balls)}
+              </span>
+            </div>
+            <div className={styleTableBox}>
+              <p className={styleTableTitle}>犠打</p>
+              <span className={styleTableData}>
+                {displayValue(battingAverage?.sacrifice_hit)}
               </span>
             </div>
             <div className={styleTableBox}>
@@ -175,9 +184,21 @@ export default function BattingAverageTable(props: Props) {
               </span>
             </div>
             <div className={styleTableBox}>
+              <p className={styleTableTitle}>犠飛</p>
+              <span className={styleTableData}>
+                {displayValue(battingAverage?.sacrifice_fly)}
+              </span>
+            </div>
+            <div className={styleTableBox}>
               <p className={styleTableTitle}>盗塁死</p>
               <span className={styleTableData}>
                 {displayValue(battingAverage?.caught_stealing)}
+              </span>
+            </div>
+            <div className={styleTableBox}>
+              <p className={styleTableTitle}>長打率</p>
+              <span className={styleTableData}>
+                {displayFormattedValue(battingStatus?.slugging_percentage)}
               </span>
             </div>
             <div className={styleTableBox}>
@@ -188,13 +209,9 @@ export default function BattingAverageTable(props: Props) {
             </div>
             <div className={styleTableBox}>
               <p className={styleTableTitle}>BB/K</p>
-              <span className={styleTableData}>
+              <span className={`${styleTableData} rounded-br-md`}>
                 {displayFormattedValue(battingStatus?.bb_per_k)}
               </span>
-            </div>
-            <div className={styleTableBox}>
-              <p className={styleTableTitle}>---</p>
-              <span className={`${styleTableData} rounded-br-md`}>---</span>
             </div>
           </div>
         </div>
