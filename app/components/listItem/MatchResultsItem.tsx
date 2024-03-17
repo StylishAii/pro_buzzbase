@@ -254,6 +254,12 @@ export default function MatchResultsItem(props: MatchResultsItemProps) {
                         (plate: PlateAppearance) =>
                           plate.game_result_id == game.game_result_id
                       )
+                      .sort(
+                        (
+                          a: { batter_box_number: number },
+                          b: { batter_box_number: number }
+                        ) => a.batter_box_number - b.batter_box_number
+                      )
                       .map((plate: PlateAppearance) => (
                         <li
                           key={plate.id}
