@@ -415,6 +415,7 @@ interface userData {
 interface HeaderNoteSaveProps {
   onNoteSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
   isSubmitting: boolean;
+  hasChanges: boolean;
 }
 
 interface createNoteProps {

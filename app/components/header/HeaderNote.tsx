@@ -6,8 +6,15 @@ import { Button } from "@nextui-org/react";
 export default function HeaderNote({
   onNoteSave,
   isSubmitting,
+  hasChanges,
 }: HeaderNoteSaveProps) {
   const handleBackClick = () => {
+    if (
+      hasChanges &&
+      !window.confirm("変更が保存されていません。このページから離れますか？")
+    ) {
+      return;
+    }
     window.history.back();
   };
   useEffect(() => {

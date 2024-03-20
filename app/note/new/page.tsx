@@ -2,14 +2,13 @@
 import NoteEditor from "@app/components/note/NoteEditor";
 import { Input } from "@nextui-org/react";
 import HeaderNote from "@app/components/header/HeaderNote";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { createBaseballNote } from "@app/services/baseballNoteService";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 
 export default function NoteNew() {
-  const [date, setDate] = useState("");
   const [title, setTitle] = useState("");
   const [memo, setMemo] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,7 +20,26 @@ export default function NoteNew() {
     const day = today.getDate().toString().padStart(2, "0");
     return `${year}-${month}-${day}`;
   });
+  const [date, setDate] = useState(memoDate);
   const router = useRouter();
+  const [initialValues, setInitialValues] = useState({
+    date: "",
+    title: "",
+    memo: "",
+  });
+
+  useEffect(() => {
+    setInitialValues({
+      date: memoDate,
+      title: "",
+      memo: "",
+    });
+  }, [memoDate]);
+
+  const hasChanges =
+    date !== initialValues.date ||
+    title !== initialValues.title ||
+    memo !== initialValues.memo;
 
   // バリデーション
   const setErrorsWithTimeout = (newErrors: React.SetStateAction<string[]>) => {
@@ -78,7 +96,11 @@ export default function NoteNew() {
   return (
     <>
       <div className="buzz-dark flex flex-col w-full min-h-screen bg-main">
-        <HeaderNote onNoteSave={handleSubmit} isSubmitting={isSubmitting} />
+        <HeaderNote
+          onNoteSave={handleSubmit}
+          isSubmitting={isSubmitting}
+          hasChanges={hasChanges}
+        />
         {isSubmitting && <LoadingSpinner />}
         <main className="h-full w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <div className="pb-32 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:pb-0 lg:mb-14">
