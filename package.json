@@ -16,12 +16,16 @@
     "@vercel/analytics": "^1.2.1",
     "axios": "^1.6.2",
     "framer-motion": "^10.16.12",
+    "immutable": "^5.0.0-beta.5",
     "js-cookie": "^3.0.5",
     "next": "14.0.3",
     "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-dom": "^18",
+    "slate": "^0.102.0",
+    "slate-history": "^0.100.0",
+    "slate-react": "^0.102.0",
     "swr": "^2.2.5"
   },
   "devDependencies": {
