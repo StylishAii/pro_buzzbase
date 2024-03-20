@@ -411,3 +411,19 @@ interface userData {
   followers_count: number;
   following_count: number;
 }
+
+interface HeaderNoteSaveProps {
+  onNoteSave: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  isSubmitting: boolean;
+}
+
+interface createNoteProps {
+  date: string;
+  title: string;
+  memo: string;
+}
+
+interface NoteEditorProps {
+  memo: string;
+  setMemo: (memo: string) => void;
+}
