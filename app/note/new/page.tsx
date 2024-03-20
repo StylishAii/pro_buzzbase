@@ -124,7 +124,7 @@ export default function NoteNew() {
                       type="text"
                       size="lg"
                       variant="underlined"
-                      className="w-full [&>div]:pt-0.5 [&>div]:h-12"
+                      className="w-full [&>div]:pt-0.5 [&>div]:h-12 font-bold"
                       placeholder="タイトル"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}

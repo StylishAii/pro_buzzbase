@@ -428,3 +428,10 @@ interface NoteEditorProps {
   memo: string;
   setMemo: (memo: string) => void;
 }
+
+interface getNoteProps {
+  id: number;
+  title: string;
+  date: string;
+  memo: string[];
+}

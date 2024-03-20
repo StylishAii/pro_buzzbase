@@ -1,5 +1,6 @@
 import NoteAddButton from "@app/components/button/NoteAddButton";
 import Header from "@app/components/header/Header";
+import NoteListComponent from "@app/components/note/NoteListComponent";
 
 export default function NoteList() {
   return (
@@ -10,6 +11,9 @@ export default function NoteList() {
           <div className="pb-32 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:pb-0 lg:mb-14">
             <div className="pt-20 px-4 lg:px-6">
               <h2 className="text-2xl font-bold">野球ノート</h2>
+              <div className="my-6">
+                <NoteListComponent />
+              </div>
               <NoteAddButton />
             </div>
           </div>
