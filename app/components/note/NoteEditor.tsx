@@ -40,7 +40,7 @@ export default function NoteEditor({ memo, setMemo }: NoteEditorProps) {
           onChange={handleChange}
         >
           <Editable
-            className="p-2 focus:outline-none h-full !min-h-[620px]"
+            className="p-2 focus:outline-none h-full !min-h-[620px] text-sm leading-6"
             placeholder="メモする...."
           />
         </Slate>
