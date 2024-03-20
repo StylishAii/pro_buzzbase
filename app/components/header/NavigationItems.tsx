@@ -9,7 +9,7 @@ const NavigationItems = () => {
 
   return [
     { href: "/", label: "トップ", icon: HomeIcon },
-    { href: "/note", label: "ノート", icon: NoteIcon },
+    { href: "/note", label: "野球ノート", icon: NoteIcon },
     {
       href: isLoggedIn ? "/game-result/lists" : "/signin",
       label: "記録",
