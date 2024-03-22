@@ -13,3 +13,18 @@ export const createBaseballNote = async (data: createNoteProps) => {
     throw error;
   }
 };
+
+export const updateBaseballNote = async (
+  id: number,
+  data: { date: string; title: string; memo: string }
+) => {
+  try {
+    const response = await axiosInstance.put(`/api/v1/baseball_notes/${id}`, {
+      baseball_note: data,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

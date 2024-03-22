@@ -19,7 +19,7 @@ export default function NoteListComponent() {
       </p>
     );
   }
-  console.log(notes);
+
   return (
     <>
       <div>
