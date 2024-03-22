@@ -96,7 +96,7 @@ export default function NoteDetail({ params }: { params: { slulg: string } }) {
         <main className="h-full w-full max-w-[720px] mx-auto lg:m-[0_auto_0_28%]">
           <div className="pb-32 relative lg:border-x-1 lg:border-b-1 lg:border-zinc-500 lg:pb-0 lg:mb-14">
             <ErrorMessages errors={errors} />
-            <div className="pt-20 px-4 lg:px-6">
+            <div className="pt-14 px-4 lg:px-6 lg:pb-14">
               <form>
                 <div>
                   <div>
