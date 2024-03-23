@@ -27,14 +27,6 @@ export default function NoteDetail({ params }: { params: { slulg: string } }) {
 
   const { note, isLoading, isError } = showBaseballNote(noteId);
 
-  if (isError) {
-    return (
-      <p className="text-sm text-zinc-400 text-center">
-        野球ノートの読み込みに失敗しました。
-      </p>
-    );
-  }
-
   useEffect(() => {
     if (note) {
       setDate(note.date);
@@ -47,6 +39,16 @@ export default function NoteDetail({ params }: { params: { slulg: string } }) {
       });
     }
   }, [note]);
+
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-sm text-zinc-400 text-center">
+          野球ノートの読み込みに失敗しました。
+        </p>
+      </div>
+    );
+  }
 
   const hasChanges =
     date !== initialValues.date ||
