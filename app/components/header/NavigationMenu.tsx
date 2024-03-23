@@ -17,8 +17,17 @@ export default function NavigationMenu() {
   const navigationItems = NavigationItems();
 
   const isActive = (path: string, itemHref: string) => {
-    const activePaths = ["/", "/game-result/lists", "/everyone", "/groups"];
-    return path === itemHref && activePaths.includes(path);
+    if (path === "/signin") {
+      return false;
+    }
+    const basePath = ["/note", "/game-result", "/groups"];
+    const isBasePath = basePath.some((base) => itemHref.startsWith(base));
+
+    if (isBasePath) {
+      return path.startsWith(itemHref);
+    } else {
+      return path === itemHref;
+    }
   };
 
   const shouldHideNavigationMenu = pathName.includes("/register-username");
