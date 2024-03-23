@@ -13,7 +13,7 @@ export default function NoteAddButton() {
         variant="bordered"
         aria-label="Add Baseball Note"
         size="lg"
-        className="fixed bottom-20 right-4 z-100"
+        className="fixed bottom-20 right-4 z-[110] lg:absolute lg:top-16"
         onClick={() => router.push("/note/new")}
       >
         <NoteAddIcon fill="#C4841D" width="56" height="56" />
