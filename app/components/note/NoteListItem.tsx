@@ -8,7 +8,7 @@ interface NoteListItemProps {
 export default function NoteListItem({ note }: NoteListItemProps) {
   return (
     <div key={note.id}>
-      <Link href={`/note/${note.id}`}>
+      <Link href={`/note/${note.id}`} className="block pt-4">
         <div>
           <p className="text-base font-bold truncate">{note.title}</p>
           <div className="flex gap-x-2 mt-0.5">
