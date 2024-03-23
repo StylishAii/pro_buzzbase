@@ -2,6 +2,7 @@
 import ErrorMessages from "@app/components/auth/ErrorMessages";
 import HeaderNote from "@app/components/header/HeaderNote";
 import NoteEditor from "@app/components/note/NoteEditor";
+import NoteMenu from "@app/components/note/NoteMenu";
 import LoadingSpinner from "@app/components/spinner/LoadingSpinner";
 import showBaseballNote from "@app/hooks/note/showBaseballNote";
 import { updateBaseballNote } from "@app/services/baseballNoteService";
@@ -99,26 +100,29 @@ export default function NoteDetail({ params }: { params: { slulg: string } }) {
             <div className="pt-14 px-4 lg:px-6 lg:pb-14">
               <form>
                 <div>
-                  <div>
-                    {isLoading ? (
-                      <>
-                        <Skeleton className="w-28 rounded-lg ml-auto mr-0 mt-4">
-                          <div className="h-8 w-28 rounded-lg bg-default-200"></div>
-                        </Skeleton>
-                      </>
-                    ) : (
-                      <>
-                        <Input
-                          isRequired
-                          type="date"
-                          size="sm"
-                          variant="underlined"
-                          className="w-28 ml-auto mr-0 [&>div&>div]:p-0"
-                          value={date}
-                          onChange={handleDateChange}
-                        />
-                      </>
-                    )}
+                  <div className="flex justify-between items-center">
+                    <div>
+                      {isLoading ? (
+                        <>
+                          <Skeleton className="w-28 rounded-lg mt-4">
+                            <div className="h-8 w-28 rounded-lg bg-default-200"></div>
+                          </Skeleton>
+                        </>
+                      ) : (
+                        <>
+                          <Input
+                            isRequired
+                            type="date"
+                            size="sm"
+                            variant="underlined"
+                            className="w-28 [&>div&>div]:p-0"
+                            value={date}
+                            onChange={handleDateChange}
+                          />
+                        </>
+                      )}
+                    </div>
+                    <NoteMenu noteId={noteId} />
                   </div>
                   <div>
                     {isLoading ? (

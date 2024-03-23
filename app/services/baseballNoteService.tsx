@@ -28,3 +28,13 @@ export const updateBaseballNote = async (
     throw error;
   }
 };
+
+export const deleteBaseballNote = async (id: number) => {
+  try {
+    const response = await axiosInstance.delete(`/api/v1/baseball_notes/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

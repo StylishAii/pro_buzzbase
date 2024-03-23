@@ -114,7 +114,7 @@ export default function NoteNew() {
                       type="date"
                       size="sm"
                       variant="underlined"
-                      className="w-28 ml-auto mr-0 [&>div&>div]:p-0"
+                      className="w-28 [&>div&>div]:p-0"
                       value={date ? date : memoDate}
                       onChange={handleDateChange}
                     />
