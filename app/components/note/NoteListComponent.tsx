@@ -26,7 +26,7 @@ export default function NoteListComponent() {
         <Card className="pt-6 pb-4 px-6">
           {notes.length > 0 ? (
             notes.map((note: getNoteProps) => (
-              <div key={note.id}>
+              <div key={note.id} className="mb-4">
                 {note.date && <NoteListItem note={note} />}
               </div>
             ))

@@ -18,7 +18,7 @@ export default function NoteListItem({ note }: NoteListItemProps) {
             <p className="text-sm text-zinc-400 truncate">{note.memo}</p>
           </div>
         </div>
-        <Divider className="my-4" />
+        <Divider className="mt-4" />
       </Link>
     </div>
   );
