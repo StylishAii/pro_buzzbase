@@ -17,6 +17,9 @@ export default function NavigationMenu() {
   const navigationItems = NavigationItems();
 
   const isActive = (path: string, itemHref: string) => {
+    if (path === "/signin") {
+      return false;
+    }
     const basePath = ["/note", "/game-result", "/groups"];
     const isBasePath = basePath.some((base) => itemHref.startsWith(base));
 
